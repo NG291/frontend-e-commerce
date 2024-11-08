@@ -13,20 +13,18 @@ const RegisterPage = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        // Kiểm tra mật khẩu có khớp không
         if (password !== confirmPassword) {
             setErrorMessage('Mật khẩu không khớp');
             return;
         }
 
         try {
-            // Gửi yêu cầu đăng ký tới backend
+
             await axios.post('http://localhost:8080/api/auth/register', {
                 username,
                 password,
             });
 
-            // Chuyển hướng về trang đăng nhập sau khi đăng ký thành công
             navigate('/login');
         } catch (error) {
             setErrorMessage('Đã có lỗi xảy ra, vui lòng thử lại sau');

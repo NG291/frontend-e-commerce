@@ -9,6 +9,7 @@ import Footer from "./components/Footer/Footer";
 import store from "./store/store";
 import {Provider} from "react-redux";
 import LoginPage from "./components/Auth/LoginPage";
+import RegisterPage from "./components/Auth/RegisterPage";
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
             <Route path = "/search/:searchTerm" element = {<Search />} />
             {/* Login*/}
             <Route path="/login" element={<LoginPage/>}></Route>
+          {/*  Register*/}
+            <Route path="/register" element={<RegisterPage/>}></Route>
           </Routes>
-
           <Footer />
         </BrowserRouter>
       </Provider>
