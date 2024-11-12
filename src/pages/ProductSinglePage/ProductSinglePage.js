@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import "./ProductSinglePage.scss";
 import {useParams} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import { fetchAsyncProductSingle, getProductSingle, getSingleProductStatus } from '../../store/productSlice';

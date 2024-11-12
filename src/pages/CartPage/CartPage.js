@@ -1,5 +1,4 @@
 import React from 'react';
-import "./CartPage.scss";
 import { useSelector, useDispatch } from 'react-redux';
 import { shopping_cart } from '../../utils/images';
 import { Link } from 'react-router-dom';

@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import "./HomePage.scss";
 import HeaderSlider from "../../components/Slider/HeaderSlider";
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories } from '../../store/categorySlice';
@@ -7,6 +6,7 @@ import ProductList from "../../components/ProductList/ProductList";
 import { fetchAsyncProducts, getAllProducts, getAllProductsStatus } from '../../store/productSlice';
 import Loader from "../../components/Loader/Loader";
 import { STATUS } from '../../utils/status';
+import Header from "../../components/Header/Header";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -38,10 +38,9 @@ const HomePage = () => {
   let catProductsFour = products.filter(product => product.category === categories[3]);
 
   return (
+      <>
+        <Header />
     <main>
-      <div className='slider-wrapper'>
-        <HeaderSlider />
-      </div>
       <div className='main-content bg-whitesmoke'>
         <div className='container'>
           <div className='categories py-5'>
@@ -83,6 +82,7 @@ const HomePage = () => {
         </div>
       </div>
     </main>
+      </>
   )
 }
 

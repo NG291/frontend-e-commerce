@@ -1,5 +1,4 @@
 import React from 'react';
-import "./CartModal.scss";
 import { shopping_cart } from '../../utils/images';
 import { formatPrice } from '../../utils/helpers';
 

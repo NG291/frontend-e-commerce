@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import "./Navbar.scss";
 import {Link} from "react-router-dom";
 import { useSelector, useDispatch} from 'react-redux';
 import { setSidebarOn } from '../../store/sidebarSlice';
