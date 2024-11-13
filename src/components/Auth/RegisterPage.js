@@ -14,7 +14,7 @@ const RegisterPage = () => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setErrorMessage('Mật khẩu không khớp');
+            setErrorMessage('Password does not match');
             return;
         }
 
@@ -27,18 +27,18 @@ const RegisterPage = () => {
 
             navigate('/login');
         } catch (error) {
-            setErrorMessage('Đã có lỗi xảy ra, vui lòng thử lại sau');
+            setErrorMessage('Error, try again!');
         }
     };
 
     return (
         <div className="register-page">
             <div className="register-form-container">
-                <h2 className="register-title">Đăng ký tài khoản</h2>
+                <h2 className="register-title">Register</h2>
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
                 <form onSubmit={handleRegister} className="register-form">
                     <div className="input-field">
-                        <label htmlFor="username">Tên đăng nhập</label>
+                        <label htmlFor="username">Username</label>
                         <input
                             type="text"
                             id="username"
@@ -49,7 +49,7 @@ const RegisterPage = () => {
                         />
                     </div>
                     <div className="input-field">
-                        <label htmlFor="password">Mật khẩu</label>
+                        <label htmlFor="password">Password</label>
                         <input
                             type="password"
                             id="password"
@@ -60,7 +60,7 @@ const RegisterPage = () => {
                         />
                     </div>
                     <div className="input-field">
-                        <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                        <label htmlFor="confirmPassword">Confirm password</label>
                         <input
                             type="password"
                             id="confirmPassword"
@@ -70,10 +70,10 @@ const RegisterPage = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="register-btn">Đăng ký</button>
+                    <button type="submit" className="register-btn">Register</button>
                 </form>
                 <div className="login-link">
-                    <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
+                    <p>Already have account? <a href="/login">Login now!</a></p>
                 </div>
             </div>
         </div>

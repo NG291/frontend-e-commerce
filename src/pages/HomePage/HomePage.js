@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import HeaderSlider from "../../components/Slider/HeaderSlider";
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllCategories } from '../../store/categorySlice';
 import ProductList from "../../components/ProductList/ProductList";

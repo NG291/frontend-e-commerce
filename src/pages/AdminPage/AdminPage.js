@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from "../../utils/apiURL";
 
 const AdminPage = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();  // Use useNavigate instead of useHistory
+    const navigate = useNavigate();
 
-    // Fetch list of employees
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await axios.get("/api/admin/employees", {
+                console.log("Authorization Header:", `Bearer ${localStorage.getItem("jwtToken")}`);
+                const response = await axios.get(`${BASE_URL}/api/admin/employees`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     },
@@ -19,6 +20,7 @@ const AdminPage = () => {
                 setEmployees(response.data);
             } catch (error) {
                 console.error("Error fetching employees:", error);
+                alert("Failed to fetch employee data.");
             } finally {
                 setLoading(false);
             }
@@ -26,15 +28,11 @@ const AdminPage = () => {
         fetchEmployees();
     }, []);
 
-    // Handle Create Employee
-    const handleCreateEmployee = () => {
-        navigate("/create-employee");  // Use navigate for redirection
-    };
+    const handleCreateEmployee = () => navigate("/create-employee");
 
-    // Handle Reset Password
     const handleResetPassword = async (id) => {
         try {
-            await axios.put(`/api/admin/reset-password/${id}`, null, {
+            await axios.put(`${BASE_URL}/api/admin/reset-password/${id}`, null, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                 },
@@ -46,11 +44,8 @@ const AdminPage = () => {
         }
     };
 
-    // Render Employees
     const renderEmployees = () => {
-        if (employees.length === 0) {
-            return <p>No employees found.</p>;
-        }
+        if (employees.length === 0) return <p>No employees found.</p>;
 
         return employees.map((employee) => (
             <tr key={employee.id}>
@@ -58,7 +53,7 @@ const AdminPage = () => {
                 <td>{employee.email}</td>
                 <td>{employee.name}</td>
                 <td>{employee.age}</td>
-                <td>{employee.phoneNumber}</td>
+                <td>{employee.contactphone}</td>
                 <td>{employee.address}</td>
                 <td>{employee.salary}</td>
                 <td>
@@ -71,13 +66,7 @@ const AdminPage = () => {
     return (
         <div>
             <h1>Admin Page - Employee List</h1>
-
-            {/* Buttons */}
-            <div>
-                <button onClick={handleCreateEmployee}>Create New Employee</button>
-            </div>
-
-            {/* Employee List */}
+            <button onClick={handleCreateEmployee}>Create New Employee</button>
             {loading ? (
                 <p>Loading...</p>
             ) : (

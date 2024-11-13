@@ -10,6 +10,10 @@ import RegisterPage from "./components/Auth/RegisterPage";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {Home} from "./pages";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import Header from "./components/Header/Header";
+import React from "react";
+import Footer from "./components/Footer/Footer";
 
 function App() {
     return (
@@ -20,8 +24,10 @@ function App() {
                         <Route path="/login" element={<LoginPage/>}></Route>
                         {/*  Register*/}
                         <Route path="/register" element={<RegisterPage/>}></Route>
-                        {/* home page route */}
+                        {/* Home page route */}
                         <Route path="/" element={<Home />} />
+                        {/* Admin page route */}
+                        <Route path="/admin" element={<AdminPage />} />
                     </Routes>
                     <ToastContainer />
                 </BrowserRouter>
