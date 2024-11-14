@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { Table, Button, Container, Spinner, Alert } from "react-bootstrap";
 import { BASE_URL } from "../../utils/apiURL";
 
 const AdminPage = () => {
@@ -11,7 +12,6 @@ const AdminPage = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                console.log("Authorization Header:", `Bearer ${localStorage.getItem("jwtToken")}`);
                 const response = await axios.get(`${BASE_URL}/api/admin/employees`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -44,8 +44,13 @@ const AdminPage = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("jwtToken");
+        navigate("/login");
+    };
+
     const renderEmployees = () => {
-        if (employees.length === 0) return <p>No employees found.</p>;
+        if (employees.length === 0) return <Alert variant="warning">No employees found.</Alert>;
 
         return employees.map((employee) => (
             <tr key={employee.id}>
@@ -53,24 +58,36 @@ const AdminPage = () => {
                 <td>{employee.email}</td>
                 <td>{employee.name}</td>
                 <td>{employee.age}</td>
-                <td>{employee.contactphone}</td>
+                <td>{employee.phone}</td>
                 <td>{employee.address}</td>
                 <td>{employee.salary}</td>
                 <td>
-                    <button onClick={() => handleResetPassword(employee.id)}>Reset Password</button>
+                    <Button variant="warning" size="sm" onClick={() => handleResetPassword(employee.id)}>
+                        Reset Password
+                    </Button>
                 </td>
             </tr>
         ));
     };
 
     return (
-        <div>
-            <h1>Admin Page - Employee List</h1>
-            <button onClick={handleCreateEmployee}>Create New Employee</button>
+        <Container className="mt-5">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h1>Admin Page - Employee List</h1>
+                <Button variant="danger" onClick={handleLogout}>
+                    Logout
+                </Button>
+            </div>
+            <Button variant="primary" className="mb-3" onClick={handleCreateEmployee}>
+                Create New Employee
+            </Button>
             {loading ? (
-                <p>Loading...</p>
+                <div className="text-center">
+                    <Spinner animation="border" variant="primary" />
+                    <p>Loading...</p>
+                </div>
             ) : (
-                <table border="1" style={{ marginTop: "20px" }}>
+                <Table striped bordered hover responsive>
                     <thead>
                     <tr>
                         <th>Username</th>
@@ -84,9 +101,9 @@ const AdminPage = () => {
                     </tr>
                     </thead>
                     <tbody>{renderEmployees()}</tbody>
-                </table>
+                </Table>
             )}
-        </div>
+        </Container>
     );
 };
 
