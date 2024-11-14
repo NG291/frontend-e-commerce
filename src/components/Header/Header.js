@@ -1,76 +1,65 @@
-import React from 'react';
-import "./Header.scss";
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import Navbar from "../Navbar/Navbar";
+import {FaShoppingCart, FaHome, FaSignInAlt} from "react-icons/fa";
+import {Button, Modal} from "react-bootstrap";
+
 
 const Header = () => {
-  return (
-    <header className='header text-white'>
-      <div className='container'>
-        <div className='header-cnt'>
-          <div className='header-cnt-top fs-13 py-2 flex align-center justify-between'>
-            <div className='header-cnt-top-l'>
-              <ul className='flex top-links align-center'>
-                <li>
-                  {/* dummy links */}
-                  <Link to = "/seller">Seller Center</Link>
-                </li>
-                <li className='vert-line'></li>
-                <li>
-                  {/* dummy links */}
-                  <Link to = "/download">Download</Link>
-                </li>
-                <li className='vert-line'></li>
-                <li className='flex align-center'>
-                  <span className='fs-13'>Follow us on</span>
-                  <ul className='social-links flex align-center'>
-                    <li className='mx-2'>
-                      <a href = "www.facebook.com" className='fs-15'>
-                        <i className='fab fa-facebook'></i>
-                      </a>
-                    </li>
-                    <li className='mx-2'>
-                      <a href = "www.instagram.com" className='fs-15'>
-                        <i className='fab fa-instagram'></i>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-            <div className='header-cnt-top-r'>
-              <ul className='top-links flex align-center'>
-                <li>
-                  <Link to = "/" className='top-link-itm'>
-                    <span className='top-link-itm-ico mx-2'>
-                      <i className='fa-solid fa-circle-question'></i>
-                    </span>
-                    <span className='top-link-itm-txt'>Support</span>
-                  </Link>
-                </li>
-                <li className='vert-line'></li>
-                <li>
-                  <Link to = "/register">
-                    <span className='top-link-itm-txt'>Register</span>
-                  </Link>
-                </li>
-                <li className='vert-line'></li>
-                <li>
-                  <Link to = "/login">
-                    <span className='top-link-itm-txt'>Log in</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+    const [show, setShow] = useState(false);
 
-          <div className='header-cnt-bottom'>
-            <Navbar />
-          </div>
-        </div>
-      </div>
-    </header>
-  )
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    return (
+        <>
+            <nav className="py-2 bg-body-tertiary border-bottom">
+                <div className="container d-flex flex-wrap">
+                    <ul className="nav me-auto">
+                        <li className="nav-item"><Link to="/"
+                                                       className="nav-link link-body-emphasis px-2 d-flex align-items-center active"
+                                                       aria-current="page"><FaHome className="me-1"/> Home</Link></li>
+                        <li className="nav-item"><a href="#" className="nav-link link-body-emphasis px-2">Features</a>
+                        </li>
+                    </ul>
+                    <ul className="nav">
+                        <li className="nav-item"><Link to="/login"
+                                                       className="nav-link link-body-emphasis px-2"><FaSignInAlt/> Login</Link>
+                        </li>
+                        <li className="nav-item"><a href="#" className="nav-link link-body-emphasis px-2">Sign up</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <header className="py-3 mb-4 border-bottom">
+                <div className="container d-flex flex-wrap justify-content-center">
+                    <a href="/"
+                       className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+                        <span className="fs-4">Double header</span>
+                    </a>
+                    <form className="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search"/>
+                    </form>
+                    <Button className="ms-2" variant="outline-primary" onClick={handleShow}>
+                        <FaShoppingCart/>
+                    </Button>
+                </div>
+            </header>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleClose}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
 }
 
 export default Header
