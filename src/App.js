@@ -3,23 +3,21 @@ import './App.scss';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 // pages
 // components
-import store from "./store/store";
 import {Provider} from "react-redux";
 import LoginPage from "./components/Auth/LoginPage";
 import RegisterPage from "./components/Auth/RegisterPage";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import {Home} from "./pages";
 import AdminPage from "./pages/AdminPage/AdminPage";
-import Header from "./components/Header/Header";
 import React from "react";
-import Footer from "./components/Footer/Footer";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CreatePage from "./pages/AdminPage/CreatePage";
+import HomePage from "./pages/HomePage/HomePage";
 
 
 function App() {
     return (
-            <Provider store={store}>
+            <>
                 <BrowserRouter>
                     <Routes>
                         {/* Login*/}
@@ -27,13 +25,14 @@ function App() {
                         {/*  Register*/}
                         <Route path="/register" element={<RegisterPage/>}></Route>
                         {/* Home page route */}
-                        <Route path="/" element={<Home />} />
+                        <Route path="/" element={<HomePage />} />
                         {/* Admin page route */}
                         <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/create-employee" element={<CreatePage />} />
                     </Routes>
                     <ToastContainer />
                 </BrowserRouter>
-            </Provider>
+            </>
     );
 }
 
