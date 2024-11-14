@@ -6,6 +6,7 @@ import { fetchAsyncProducts, getAllProducts, getAllProductsStatus } from '../../
 import Loader from "../../components/Loader/Loader";
 import { STATUS } from '../../utils/status';
 import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -81,6 +82,7 @@ const HomePage = () => {
         </div>
       </div>
     </main>
+        <Footer />
       </>
   )
 }
