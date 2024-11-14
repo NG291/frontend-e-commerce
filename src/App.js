@@ -13,6 +13,7 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreatePage from "./pages/AdminPage/CreatePage";
 import HomePage from "./pages/HomePage/HomePage";
+import EditEmployeePage from "./pages/AdminPage/EditEmployeePage";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                         {/* Admin page route */}
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/create-employee" element={<CreatePage />} />
+                        <Route path="/edit-employee/:id" element={<EditEmployeePage />} /> {/* Add route */}
                     </Routes>
                     <ToastContainer />
                 </BrowserRouter>

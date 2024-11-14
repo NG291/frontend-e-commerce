@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from "../Navbar/Navbar";
 import { FaShoppingCart, FaHome, FaSignInAlt } from "react-icons/fa";
 import { Button, Modal } from "react-bootstrap";
 
@@ -55,7 +54,7 @@ const Header = () => {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/signup" className="nav-link link-body-emphasis px-2">Sign up</Link>
+                                    <Link to="/register" className="nav-link link-body-emphasis px-2">Sign up</Link>
                                 </li>
                             </>
                         )}
@@ -65,7 +64,7 @@ const Header = () => {
             <header className="py-3 mb-4 border-bottom">
                 <div className="container d-flex flex-wrap justify-content-center">
                     <Link to="/" className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
-                        <span className="fs-4">Double header</span>
+                        <span className="fs-4 bold">E-commerce</span>
                     </Link>
                     <form className="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
                         <input type="search" className="form-control" placeholder="Search..." aria-label="Search" />

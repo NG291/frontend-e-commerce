@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './RegisterPage.scss';
+import { BASE_URL } from "../../utils/apiURL";
 
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
@@ -19,12 +20,7 @@ const RegisterPage = () => {
         }
 
         try {
-
-            await axios.post('http://localhost:8080/api/auth/register', {
-                username,
-                password,
-            });
-
+            await axios.post(`${BASE_URL}/api/auth/register`, { username, password });
             navigate('/login');
         } catch (error) {
             setErrorMessage('Error, try again!');
@@ -32,12 +28,12 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="register-page">
-            <div className="register-form-container">
-                <h2 className="register-title">Register</h2>
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+        <div className="register-page d-flex align-items-center justify-content-center vh-100">
+            <div className="register-form-container container p-4 border rounded shadow" style={{ maxWidth: '400px' }}>
+                <h2 className="register-title text-center">Register</h2>
+                {errorMessage && <div className="error-message alert alert-danger">{errorMessage}</div>}
                 <form onSubmit={handleRegister} className="register-form">
-                    <div className="input-field">
+                    <div className="input-field mb-3">
                         <label htmlFor="username">Username</label>
                         <input
                             type="text"
@@ -45,10 +41,11 @@ const RegisterPage = () => {
                             name="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            className="form-control"
                             required
                         />
                     </div>
-                    <div className="input-field">
+                    <div className="input-field mb-3">
                         <label htmlFor="password">Password</label>
                         <input
                             type="password"
@@ -56,24 +53,29 @@ const RegisterPage = () => {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            className="form-control"
                             required
                         />
                     </div>
-                    <div className="input-field">
-                        <label htmlFor="confirmPassword">Confirm password</label>
+                    <div className="input-field mb-3">
+                        <label htmlFor="confirmPassword">Confirm Password</label>
                         <input
                             type="password"
                             id="confirmPassword"
                             name="confirmPassword"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="form-control"
                             required
                         />
                     </div>
-                    <button type="submit" className="register-btn">Register</button>
+                    <button type="submit" className="register-btn w-100">Register</button>
                 </form>
-                <div className="login-link">
-                    <p>Already have account? <a href="/login">Login now!</a></p>
+                <div className="text-center mt-3">
+                    <p>Already have an account? <Link to="/login">Login now!</Link></p>
+                </div>
+                <div className="text-center mt-2">
+                    <Link to="/" className="text-decoration-none">&larr; Back to Homepage</Link>
                 </div>
             </div>
         </div>
