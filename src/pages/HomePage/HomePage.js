@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axiosClient from "../../utils/axiosClient";
-import {BASE_URL} from '../../utils/apiURL';
-import {Card, Container, Row, Col, Button, Spinner} from 'react-bootstrap';
+import { BASE_URL } from '../../utils/apiURL';
 import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import {Carousel} from 'antd';
+import ProductList from "../../components/Product/ProductList";
+import {Button, Container} from "react-bootstrap";
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const onChange = (currentSlide) => {
-        console.log(currentSlide);
-    };
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axiosClient.get(`${BASE_URL}/api/products/all`);
                 setProducts(response.data);
             } catch (error) {
+                setError("Error fetching products.");
                 console.error("Error fetching products:", error);
             } finally {
                 setLoading(false);
@@ -31,7 +31,7 @@ const HomePage = () => {
 
     return (
         <>
-            <Header/>
+            <Header />
             <Container className="home-page">
                 <div className="hero-section text-center my-4">
                     <h1>Welcome to E-commerce</h1>
@@ -42,46 +42,11 @@ const HomePage = () => {
                 </div>
 
                 <h2 className="text-center my-4">Featured Products</h2>
-                {loading ? (
-                    <div className="text-center">
-                        <Spinner animation="border" variant="primary"/>
-                        <p>Loading products...</p>
-                    </div>
-                ) : (
-                    <Row>
-                        {products.length > 0 ? (
-                            products.map((product) => (
-                                <Col md={4} key={product.id} className="mb-4">
-                                    <Card>
-                                        <Carousel afterChange={onChange}>
-                                            {product.images.map((image, index) => (
-                                                <Card.Img
-                                                    key={index}
-                                                    variant="top"
-                                                    src={`${BASE_URL}/images/${image.fileName}`}
-                                                    alt={product.name}
-                                                    style={{marginBottom: '10px'}}
-                                                />
-                                            ))}
-                                        </Carousel>
-                                        <Card.Body>
-                                            <Card.Title>{product.name}</Card.Title>
-                                            <Card.Text>{product.description}</Card.Text>
-                                            <Card.Text className="text-muted">${product.price}</Card.Text>
-                                            <Link to={`/product/${product.id}`}>
-                                                <Button variant="primary">View Product</Button>
-                                            </Link>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))
-                        ) : (
-                            <p className="text-center">No products available.</p>
-                        )}
-                    </Row>
-                )}
+
+                <ProductList products={products} loading={loading} error={error} />
+
             </Container>
-            <Footer/>
+            <Footer />
         </>
     );
 };
