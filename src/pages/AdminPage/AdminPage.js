@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {Link, useNavigate} from "react-router-dom";
-import { Table, Button, Container, Spinner, Alert, Row, Col, Card, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { Table, Button, Container, Spinner, Alert, Row, Col, Card, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { BASE_URL } from "../../utils/apiURL";
 
 const AdminPage = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -80,6 +82,7 @@ const AdminPage = () => {
                 },
             });
             setEmployees(response.data);
+            setCurrentPage(1); // Reset to first page on search
         } catch (error) {
             console.error("Error searching employees:", error);
             alert("Failed to search employees.");
@@ -88,8 +91,13 @@ const AdminPage = () => {
         }
     };
 
+    const totalPages = Math.ceil(employees.length / itemsPerPage);
+
     const renderEmployees = () => {
-        if (employees.length === 0) {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const currentEmployees = employees.slice(startIndex, startIndex + itemsPerPage);
+
+        if (currentEmployees.length === 0) {
             return (
                 <tr>
                     <td colSpan="9">
@@ -99,7 +107,7 @@ const AdminPage = () => {
             );
         }
 
-        return employees.map((employee) => (
+        return currentEmployees.map((employee) => (
             <tr key={employee.id}>
                 <td>{employee.username}</td>
                 <td>{employee.email}</td>
@@ -108,11 +116,11 @@ const AdminPage = () => {
                 <td>{employee.phone}</td>
                 <td>{employee.address}</td>
                 <td>{employee.salary}</td>
-                <td className="d-flex justify-content-around">
+                <td className="d-flex justify-content-center gap-2">
                     <Button variant="warning" size="sm" onClick={() => handleResetPassword(employee.id)}>
                         Reset Password
                     </Button>
-                    <Button variant="info" size="sm" className="mx-2" onClick={() => handleEditEmployee(employee.id)}>
+                    <Button variant="info" size="sm" onClick={() => handleEditEmployee(employee.id)}>
                         Edit
                     </Button>
                     <Button variant="danger" size="sm" onClick={() => handleDeleteEmployee(employee.id)}>
@@ -123,21 +131,36 @@ const AdminPage = () => {
         ));
     };
 
+    const handlePreviousPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    const handleNextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
+    const handleItemsPerPageChange = (value) => {
+        setItemsPerPage(value);
+        setCurrentPage(1); // Reset to first page whenever items per page changes
+    };
+
     return (
         <Container fluid className="mt-5">
             <Row className="mb-4">
-                <Col md={8} className="d-flex justify-content-between align-items-center">
+                <Col md={8}>
                     <h1>Admin Page - Employee List</h1>
                 </Col>
-                <Col md={4} className="d-flex justify-content-end">
+                <Col md={4} className="d-flex justify-content-end gap-2">
+                    <Button variant="primary" onClick={() => navigate("/")}>
+                        HomePage
+                    </Button>
+                    <Button variant="primary" onClick={() => navigate("/user-seller-list")}>
+                        User & Seller List
+                    </Button>
                     <Button variant="danger" onClick={handleLogout}>
                         Logout
                     </Button>
                 </Col>
+
             </Row>
 
-            <Row>
-                <Col md={6}>
+            <Row className="align-items-center mb-3">
+                <Col md={5}>
                     <Form.Control
                         type="text"
                         placeholder="Search by name or username"
@@ -150,8 +173,19 @@ const AdminPage = () => {
                         Search
                     </Button>
                 </Col>
-                <Col className="d-flex justify-content-end mb-3">
-                    <Button variant="primary" onClick={handleCreateEmployee} className="mt-2">
+                <Col md={3} className="d-flex align-items-center justify-content-end">
+                    <DropdownButton
+                        id="dropdown-items-per-page"
+                        title={`Show ${itemsPerPage} per page`}
+                        onSelect={(value) => handleItemsPerPageChange(Number(value))}
+                    >
+                        <Dropdown.Item eventKey="5">5</Dropdown.Item>
+                        <Dropdown.Item eventKey="10">10</Dropdown.Item>
+                        <Dropdown.Item eventKey="15">15</Dropdown.Item>
+                    </DropdownButton>
+                </Col>
+                <Col md={2} className="d-flex justify-content-end">
+                    <Button variant="primary" onClick={handleCreateEmployee}>
                         Create New Employee
                     </Button>
                 </Col>
@@ -180,6 +214,15 @@ const AdminPage = () => {
                             </thead>
                             <tbody>{renderEmployees()}</tbody>
                         </Table>
+                        <div className="d-flex justify-content-between mt-3">
+                            <Button variant="secondary" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                Previous
+                            </Button>
+                            <span>Page {currentPage} of {totalPages}</span>
+                            <Button variant="secondary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                                Next
+                            </Button>
+                        </div>
                     </Card.Body>
                 </Card>
             )}
@@ -187,7 +230,6 @@ const AdminPage = () => {
             <div className="text-center mt-2">
                 <Link to="/" className="text-decoration-none">&larr; Back to Homepage</Link>
             </div>
-
         </Container>
     );
 };

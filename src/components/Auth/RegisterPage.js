@@ -7,20 +7,19 @@ import { BASE_URL } from "../../utils/apiURL";
 const RegisterPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            setErrorMessage('Password does not match');
-            return;
-        }
+        // Reset error message
+        setErrorMessage('');
 
         try {
-            await axios.post(`${BASE_URL}/api/auth/register`, { username, password });
+            // Proceed with registration without checking username or email availability
+            await axios.post(`${BASE_URL}/api/auth/register`, { username, password, email });
             navigate('/login');
         } catch (error) {
             setErrorMessage('Error, try again!');
@@ -46,6 +45,18 @@ const RegisterPage = () => {
                         />
                     </div>
                     <div className="input-field mb-3">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="form-control"
+                            required
+                        />
+                    </div>
+                    <div className="input-field mb-3">
                         <label htmlFor="password">Password</label>
                         <input
                             type="password"
@@ -53,18 +64,6 @@ const RegisterPage = () => {
                             name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="form-control"
-                            required
-                        />
-                    </div>
-                    <div className="input-field mb-3">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
                             className="form-control"
                             required
                         />

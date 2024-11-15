@@ -3,7 +3,6 @@ import './App.scss';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 // pages
 // components
-import {Provider} from "react-redux";
 import LoginPage from "./components/Auth/LoginPage";
 import RegisterPage from "./components/Auth/RegisterPage";
 import {ToastContainer} from "react-toastify";
@@ -14,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import CreatePage from "./pages/AdminPage/CreatePage";
 import HomePage from "./pages/HomePage/HomePage";
 import EditEmployeePage from "./pages/AdminPage/EditEmployeePage";
+import UserSellerPage from "./pages/AdminPage/UserSellerPage";
 
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
                         <Route path="/admin" element={<AdminPage />} />
                         <Route path="/create-employee" element={<CreatePage />} />
                         <Route path="/edit-employee/:id" element={<EditEmployeePage />} /> {/* Add route */}
+                        <Route path="/user-seller-list" element={<UserSellerPage />} /> {/* Add route */}
                     </Routes>
                     <ToastContainer />
                 </BrowserRouter>
