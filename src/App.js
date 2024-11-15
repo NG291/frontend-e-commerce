@@ -16,6 +16,8 @@ import CreatePage from "./pages/AdminPage/CreatePage";
 import HomePage from "./pages/HomePage/HomePage";
 import ProductList from "./components/Product/ProductList";
 import ProductDetailPage from "./components/Product/ProductDetailPage";
+import EditEmployeePage from "./pages/AdminPage/EditEmployeePage";
+import UserSellerPage from "./pages/AdminPage/UserSellerPage";
 
 
 function App() {
