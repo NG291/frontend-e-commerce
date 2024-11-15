@@ -78,31 +78,31 @@ const AdminPage = () => {
                     Logout
                 </Button>
             </div>
-            <Button variant="primary" className="mb-3" onClick={handleCreateEmployee}>
-                Create New Employee
-            </Button>
-            {loading ? (
-                <div className="text-center">
-                    <Spinner animation="border" variant="primary" />
-                    <p>Loading...</p>
-                </div>
-            ) : (
-                <Table striped bordered hover responsive>
-                    <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Salary</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>{renderEmployees()}</tbody>
-                </Table>
-            )}
+                <Button variant="primary" className="mb-3" onClick={handleCreateEmployee}>
+                    Create New Employee
+                </Button>
+                {loading ? (
+                    <div className="text-center">
+                        <Spinner animation="border" variant="primary" />
+                        <p>Loading...</p>
+                    </div>
+                ) : (
+                    <Table striped bordered hover responsive>
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Salary</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>{renderEmployees()}</tbody>
+                    </Table>
+                )}
         </Container>
     );
 };

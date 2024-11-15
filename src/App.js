@@ -1,9 +1,10 @@
 import './App.scss';
 // react router v6
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+
 // pages
 // components
-import {Provider} from "react-redux";
 import LoginPage from "./components/Auth/LoginPage";
 import RegisterPage from "./components/Auth/RegisterPage";
 import {ToastContainer} from "react-toastify";
@@ -18,6 +19,7 @@ import HomePage from "./pages/HomePage/HomePage";
 function App() {
     return (
             <>
+                <ToastContainer />
                 <BrowserRouter>
                     <Routes>
                         {/* Login*/}
