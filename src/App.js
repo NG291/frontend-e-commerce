@@ -35,7 +35,9 @@ function App() {
                     {/* Admin page route */}
                     <Route path="/admin" element={<AdminPage />} />
                     <Route path="/create-employee" element={<CreatePage />} />
-                    <Route path="/product/:id" element={<ProductDetailPage />}></Route> {/* Sửa đổi ở đây */}
+                    <Route path="/product/:id" element={<ProductDetailPage />}></Route>
+                    <Route path="/edit-employee/:id" element={<EditEmployeePage />} />
+                    <Route path="/user-seller-list" element={<UserSellerPage />} />
                 </Routes>
                 <ToastContainer />
             </BrowserRouter>
