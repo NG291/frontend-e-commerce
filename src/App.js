@@ -18,6 +18,8 @@ import ProductList from "./components/Product/ProductList";
 import ProductDetailPage from "./components/Product/ProductDetailPage";
 import EditEmployeePage from "./pages/AdminPage/EditEmployeePage";
 import UserSellerPage from "./pages/AdminPage/UserSellerPage";
+import SellerPage from "./pages/SellerPage/SellerPage";
+import AddProduct from "./pages/SellerPage/AddProduct";
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
                     <Route path="/product/:id" element={<ProductDetailPage />}></Route>
                     <Route path="/edit-employee/:id" element={<EditEmployeePage />} />
                     <Route path="/user-seller-list" element={<UserSellerPage />} />
+                    <Route path="/seller-page" element={<SellerPage />} />
+                    <Route path="/add-product" element={<AddProduct />} />
                 </Routes>
                 <ToastContainer />
             </BrowserRouter>
