@@ -7,6 +7,7 @@ const Header = () => {
     const [show, setShow] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isSeller, setIsSeller] = useState(false);
     const navigate = useNavigate();
 
     // Check if user is logged in by verifying the presence of a JWT token
@@ -19,6 +20,12 @@ const Header = () => {
         const token = localStorage.getItem('jwtToken');
         setIsLoggedIn(!!token);
         setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN'); // Check if admin
+    }, []);
+
+    useEffect(() => {
+        const token = localStorage.getItem('jwtToken');
+        setIsLoggedIn(!!token);
+        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER'); // Check if seller
     }, []);
 
     const handleClose = () => setShow(false);
@@ -59,6 +66,20 @@ const Header = () => {
                             </li>
                         )}
                     </ul>
+                    <ul className="nav me-auto">
+                        {isSeller && (
+                            <li className="nav-item">
+                                <Button
+                                    variant="link"
+                                    onClick={() => navigate('/seller-page')}
+                                    className="nav-link link-body-emphasis px-2"
+                                >
+                                    <FaUserShield className="me-1"/> Seller Page
+                                </Button>
+                            </li>
+                        )}
+                    </ul>
+
                     <ul className="nav">
                         {isLoggedIn ? (
                             <li className="nav-item">

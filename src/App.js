@@ -14,6 +14,8 @@ import CreatePage from "./pages/AdminPage/CreatePage";
 import HomePage from "./pages/HomePage/HomePage";
 import EditEmployeePage from "./pages/AdminPage/EditEmployeePage";
 import UserSellerPage from "./pages/AdminPage/UserSellerPage";
+import SellerPage from "./pages/SellerPage/SellerPage";
+import AddProduct from "./pages/SellerPage/AddProduct";
 
 
 function App() {
@@ -29,9 +31,12 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         {/* Admin page route */}
                         <Route path="/admin" element={<AdminPage />} />
+                        <Route path="/seller-page" element={<SellerPage />} />
+                        <Route path="/add-product" element={<AddProduct />} />
                         <Route path="/create-employee" element={<CreatePage />} />
                         <Route path="/edit-employee/:id" element={<EditEmployeePage />} /> {/* Add route */}
                         <Route path="/user-seller-list" element={<UserSellerPage />} /> {/* Add route */}
+
                     </Routes>
                     <ToastContainer />
                 </BrowserRouter>
