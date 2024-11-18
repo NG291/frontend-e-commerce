@@ -1,0 +1,16 @@
+.product-detail-page {
+  padding: 20px;
+}
+
+
+.product-detail-container {
+  max-width: 600px; /* Giới hạn chiều rộng tối đa */
+  margin-left: 0; /* Đặt sang bên trái */
+  padding-right: 20px; /* Căn chỉnh bên phải để tránh bị dính sát */
+}
+
+.product-detail-container {
+  max-width:350px;
+  height: auto;
+  object-fit: contain;
+}
