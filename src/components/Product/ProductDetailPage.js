@@ -7,6 +7,8 @@ import { Carousel } from 'antd';
 import Header from "../../components/Header/Header"; // Import Header
 import Footer from "../../components/Footer/Footer"; // Import Footer
 import './ProductDetailPage.scss';
+import AddToCartButton from "../Cart/AddToCartButton";
+
 
 const ProductDetailPage = () => {
     const { id } = useParams(); // Lấy ID của sản phẩm từ URL
@@ -38,43 +40,31 @@ const ProductDetailPage = () => {
                         <p>Loading product...</p>
                     </div>
                 ) : product ? (
-                    <div className="product-detail-page">
-                        {loading ? (
-                            <div className="text-center">
-                                <Spinner animation="border" variant="primary"/>
-                                <p>Loading product...</p>
-                            </div>
-                        ) : product ? (
-                            <div className="container product-detail-container">
-                                <Card className="mb-4">
-                                    <Carousel>
-                                        {product.images.map((image, index) => (
-                                            <Card.Img
-                                                key={index}
-                                                variant="top"
-                                                src={`${BASE_URL}/images/${image.fileName}`}
-                                                alt={product.name}
-
-                                            />
-                                        ))}
-                                    </Carousel>
-                                    <Card.Body>
-                                        <Card.Title>{product.name}</Card.Title>
-                                        <Card.Text>{product.description}</Card.Text>
-                                        <Card.Text className="text-muted">${product.price}</Card.Text>
-                                        <Button variant="primary">Add to Cart</Button>
-                                    </Card.Body>
-                                </Card>
-                            </div>
-                        ) : (
-                            <p className="text-center">Product not found</p>
-                        )}
+                    <div className="container product-detail-container">
+                        <Card className="mb-4">
+                            <Carousel>
+                                {product.images.map((image, index) => (
+                                    <Card.Img
+                                        key={index}
+                                        variant="top"
+                                        src={`${BASE_URL}/images/${image.fileName}`}
+                                        alt={product.name}
+                                    />
+                                ))}
+                            </Carousel>
+                            <Card.Body>
+                                <Card.Title>{product.name}</Card.Title>
+                                <Card.Text>{product.description}</Card.Text>
+                                <Card.Text className="text-muted">${product.price}</Card.Text>
+                                <AddToCartButton productId={product.id} /> {/* Thêm component AddToCartButton */}
+                            </Card.Body>
+                        </Card>
                     </div>
                 ) : (
                     <p className="text-center">Product not found</p>
                 )}
             </div>
-            <Footer/> {/* Thêm Footer */}
+            <Footer /> {/* Thêm Footer */}
         </>
     );
 };
