@@ -23,7 +23,7 @@ const AddToCartButton = ({ productId }) => {
             // Gửi yêu cầu POST để thêm sản phẩm vào giỏ hàng
             const response = await axiosClient.post(
                 `${BASE_URL}/api/cart/add/${productId}`, // Địa chỉ API để thêm sản phẩm vào giỏ
-                null, // Không có body trong yêu cầu
+                null,
                 {
                     params: { quantity }, // Gửi số lượng sản phẩm
                     headers: {
