@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import axiosClient from "../../utils/axiosClient";
-import { BASE_URL } from '../../utils/apiURL';
+import {BASE_URL} from '../../utils/apiURL';
 import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ProductList from "../../components/Product/ProductList";
-import { Button, Container, Modal, Badge } from "react-bootstrap";
-import { FaShoppingCart } from "react-icons/fa";
+import {Button, Container, Modal, Badge} from "react-bootstrap";
+import {FaShoppingCart} from "react-icons/fa";
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -53,7 +53,42 @@ const HomePage = () => {
 
     return (
         <>
-            <Header />
+            <Header/>
+            <div className="py-3 mb-4 border-bottom"> {/* Search and Cart button container */}
+                <div className="container d-flex flex-wrap justify-content-between align-items-center">
+                    {/* Logo */}
+                    <Link to="/"
+                          className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+                        <span className="fs-4 fw-bold">E-commerce</span>
+                    </Link>
+
+                    {/* Search form and Cart button */}
+                    <div className="d-flex align-items-center">
+                        <form onSubmit={handleSearch} className="d-flex flex-grow-1" style={{maxWidth: '500px'}}>
+                            <input
+                                type="search"
+                                className="form-control"
+                                placeholder="Search products..."
+                                aria-label="Search"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <Button type="submit" variant="outline-primary" className="ms-2">
+                                Search
+                            </Button>
+                        </form>
+
+                        {/* Cart button */}
+                        <Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>
+                            <Link to="/cart" className="text-decoration-none text-dark">
+                                <FaShoppingCart/>
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+
+
             <Container className="home-page">
                 <div className="hero-section text-center my-4">
                     <h1>Welcome to E-commerce</h1>
@@ -65,34 +100,8 @@ const HomePage = () => {
 
                 <h2 className="text-center my-4">Featured Products</h2>
 
-                {/* Search and Cart button container */}
-                <div className="d-flex justify-content-center align-items-center mb-4">
-                    <form onSubmit={handleSearch} className="d-flex w-50">
-                        <input
-                            type="search"
-                            className="form-control"
-                            placeholder="Search products..."
-                            aria-label="Search"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                        <Button type="submit" variant="outline-primary" className="ms-2">
-                            Search
-                        </Button>
-                    </form>
 
-                    {/* Cart button next to the search button with square shape */}
-                    <Button className="cart-button ms-3 position-relative" variant="outline-primary" onClick={handleShow}>
-                        <FaShoppingCart />
-                        {cartItems > 0 && (
-                            <Badge pill bg="danger" className="cart-badge">
-                                {cartItems}
-                            </Badge>
-                        )}
-                    </Button>
-                </div>
-
-                <ProductList products={products} loading={loading} error={error} />
+                <ProductList products={products} loading={loading} error={error}/>
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -104,13 +113,14 @@ const HomePage = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Close</Button>
-                        <Button variant="primary" onClick={() => { /* Handle checkout action here */ }}>
+                        <Button variant="primary" onClick={() => { /* Handle checkout action here */
+                        }}>
                             Proceed to Checkout
                         </Button>
                     </Modal.Footer>
                 </Modal>
             </Container>
-            <Footer />
+            <Footer/>
         </>
     );
 };
