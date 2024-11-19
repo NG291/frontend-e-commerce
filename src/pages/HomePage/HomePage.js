@@ -6,7 +6,7 @@ import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ProductList from "../../components/Product/ProductList";
-import {Button, Container, Modal, Badge} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import {FaShoppingCart} from "react-icons/fa";
 
 const HomePage = () => {
@@ -35,7 +35,6 @@ const HomePage = () => {
         fetchProducts();
     }, []);
 
-    // Handle the search functionality
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchTerm === '') {
@@ -87,8 +86,6 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-
-
             <Container className="home-page">
                 <div className="hero-section text-center my-4">
                     <h1>Welcome to E-commerce</h1>
@@ -99,7 +96,6 @@ const HomePage = () => {
                 </div>
 
                 <h2 className="text-center my-4">Featured Products</h2>
-
 
                 <ProductList products={products} loading={loading} error={error}/>
 

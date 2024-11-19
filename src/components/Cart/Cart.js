@@ -28,10 +28,16 @@ const Cart = () => {
         }
 
         try {
-            await axiosClient.put(`${BASE_URL}/api/cart/update/${productId}`, {
-                productId,
-                quantity,  // Đảm bảo 'quantity' được gửi ở đây
-            });
+            await axiosClient.put(`${BASE_URL}/api/cart/update/${productId}`,
+                { productId },
+                {
+                    params: { quantity }, // Params đúng vị trí
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                }
+            );
             fetchCartItems();
             toast.success("Cart updated successfully!");
         } catch (error) {
@@ -43,7 +49,7 @@ const Cart = () => {
     const removeItemFromCart = async (productId) => {
         try {
             await axiosClient.delete(`${BASE_URL}/api/cart/remove/${productId}`);
-            fetchCartItems(); // Cập nhật lại giỏ hàng sau khi xóa sản phẩm
+            fetchCartItems();
             toast.success("Product removed from cart!"); // Thông báo thành công
         } catch (error) {
             console.error('Error removing item from cart:', error);
