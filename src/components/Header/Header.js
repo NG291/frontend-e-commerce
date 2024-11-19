@@ -113,25 +113,12 @@ const Header = () => {
                         <input type="search" className="form-control" placeholder="Search..." aria-label="Search"/>
                     </form>
                     <Button className="ms-2" variant="outline-primary" onClick={handleShow}>
-                        <FaShoppingCart/>
+                        <Link to="/cart" className="text-decoration-none text-dark">
+                            <FaShoppingCart />
+                        </Link>
                     </Button>
                 </div>
             </header>
-            <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                    <Modal.Title>Your Cart</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {/* Replace with dynamic cart items when available */}
-                    <p>Your cart is currently empty.</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Close</Button>
-                    <Button variant="primary" onClick={() => { /* Handle checkout action here */ }}>
-                        Proceed to Checkout
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </>
     );
 }

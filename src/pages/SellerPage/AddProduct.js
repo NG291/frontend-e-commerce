@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { BASE_URL } from "../../utils/apiURL";
+import CategoryDropdown from "./CategoryDropdown";
 
 const AddProduct = () => {
     const [name, setName] = useState("");
@@ -103,26 +104,35 @@ const AddProduct = () => {
                                 required
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="formCategory">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter product category"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
-
+                        <CategoryDropdown category={category} setCategory={setCategory} />
+                        {/*<Form.Group className="mb-3" controlId="formCategory">*/}
+                        {/*    <Form.Label>Category</Form.Label>*/}
+                        {/*    <Form.Control*/}
+                        {/*        type="text"*/}
+                        {/*        placeholder="Enter product category"*/}
+                        {/*        value={category}*/}
+                        {/*        onChange={(e) => setCategory(e.target.value)}*/}
+                        {/*        required*/}
+                        {/*    />*/}
+                        {/*</Form.Group>*/}
                         <Form.Group className="mb-3" controlId="formImages">
                             <Form.Label>Images</Form.Label>
                             <Form.Control
                                 type="file"
                                 multiple
+                                accept="images/*"
                                 onChange={handleFileChange}
                                 required
                             />
+                            <div className="mt-2">
+                                {images.length > 0 && (
+                                    <ul>
+                                        {Array.from(images).map((file, index) => (
+                                            <li key={index}>{file.name}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
                         </Form.Group>
 
                         <div className="d-flex justify-content-between">
