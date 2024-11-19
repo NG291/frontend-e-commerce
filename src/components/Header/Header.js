@@ -4,6 +4,7 @@ import { FaHome, FaSignInAlt, FaUserShield } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 
 const Header = () => {
+    const [show, setShow] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
@@ -88,6 +89,22 @@ const Header = () => {
                     </ul>
                 </div>
             </nav>
+            <header className="py-3 mb-4 border-bottom">
+                <div className="container d-flex flex-wrap justify-content-center">
+                    <Link to="/"
+                          className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+                        <span className="fs-4 bold">E-commerce</span>
+                    </Link>
+                    <form className="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search"/>
+                    </form>
+                    <Button className="ms-2" variant="outline-primary" onClick={handleShow}>
+                        <Link to="/cart" className="text-decoration-none text-dark">
+                            <FaShoppingCart />
+                        </Link>
+                    </Button>
+                </div>
+            </header>
         </>
     );
 }
