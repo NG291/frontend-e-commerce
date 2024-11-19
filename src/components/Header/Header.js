@@ -1,35 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaHome, FaSignInAlt, FaUserShield } from "react-icons/fa";
-import { Button, Modal } from "react-bootstrap";
+import { FaHome, FaSignInAlt, FaUserShield } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 const Header = () => {
-    const [show, setShow] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
     const navigate = useNavigate();
 
-    // Check if user is logged in by verifying the presence of a JWT token
-    // useEffect(() => {
-    //     const token = localStorage.getItem('jwtToken');
-    //     setIsLoggedIn(!!token); // Set true if token exists, else false
-    // }, []);
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         setIsLoggedIn(!!token);
-        setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN'); // Check if admin
+        setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN');
+        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER');
     }, []);
-
-    useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
-        setIsLoggedIn(!!token);
-        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER'); // Check if seller
-    }, []);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
@@ -103,35 +88,6 @@ const Header = () => {
                     </ul>
                 </div>
             </nav>
-            <header className="py-3 mb-4 border-bottom">
-                <div className="container d-flex flex-wrap justify-content-center">
-                    <Link to="/"
-                          className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
-                        <span className="fs-4 bold">E-commerce</span>
-                    </Link>
-                    <form className="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
-                        <input type="search" className="form-control" placeholder="Search..." aria-label="Search"/>
-                    </form>
-                    <Button className="ms-2" variant="outline-primary" onClick={handleShow}>
-                        <FaShoppingCart/>
-                    </Button>
-                </div>
-            </header>
-            <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                    <Modal.Title>Your Cart</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {/* Replace with dynamic cart items when available */}
-                    <p>Your cart is currently empty.</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Close</Button>
-                    <Button variant="primary" onClick={() => { /* Handle checkout action here */ }}>
-                        Proceed to Checkout
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </>
     );
 }

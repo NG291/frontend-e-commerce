@@ -32,6 +32,11 @@ const SellerPage = () => {
         fetchProducts();
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem("jwtToken");
+        navigate("/"); // Điều hướng về trang chủ
+    };
+
     const handleAddProduct = () => navigate("/add-product");
 
     const handleEditProduct = (id) => {
@@ -124,7 +129,7 @@ const SellerPage = () => {
                     <Button variant="primary" onClick={() => navigate("/")}>
                         HomePage
                     </Button>
-                    <Button variant="danger" onClick={() => localStorage.removeItem("jwtToken") && navigate("/login")}>
+                    <Button variant="danger" onClick={handleLogout}>
                         Logout
                     </Button>
                 </Col>
