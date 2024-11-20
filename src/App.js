@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminPage from "./pages/AdminPage/AdminPage";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CreatePage from "./pages/AdminPage/CreatePage";
+import CreateEmployee from "./pages/AdminPage/CreateEmployee";
 import HomePage from "./pages/HomePage/HomePage";
 
 import ProductDetailPage from "./components/Product/ProductDetailPage";
@@ -38,7 +38,7 @@ function App() {
                     <Route path="/" element={<HomePage/>}/>
                     {/* Admin page route */}
                     <Route path="/admin" element={<AdminPage/>}/>
-                    <Route path="/create-employee" element={<CreatePage/>}/>
+                    <Route path="/create-employee" element={<CreateEmployee/>}/>
                     <Route path="/product/:id" element={<ProductDetailPage/>}></Route>
                     <Route path="/edit-employee/:id" element={<EditEmployeePage/>}/>
                     <Route path="/user-seller-list" element={<UserSellerPage/>}/>

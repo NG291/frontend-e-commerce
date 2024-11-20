@@ -1,157 +1,178 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Alert, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../../utils/apiURL";
 import CategoryDropdown from "./CategoryDropdown";
 
 const AddProduct = () => {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [quantity, setQuantity] = useState("");
-    const [category, setCategory] = useState("");
-    const [images, setImages] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
 
-    const handleFileChange = (e) => {
-        setImages(e.target.files);
-    };
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            description: "",
+            price: "",
+            quantity: "",
+            category: "",
+            images: [],
+        },
+        validationSchema: Yup.object({
+            name: Yup.string()
+                .required("Product name is required")
+                .max(255, "Name cannot exceed 255 characters"),
+            description: Yup.string()
+                .required("Description is required")
+                .max(1000, "Description cannot exceed 1000 characters"),
+            price: Yup.number()
+                .required("Price is required")
+                .positive("Price must be greater than 0")
+                .max(9999999999, "Price cannot exceed 10 digits"),
+            quantity: Yup.number()
+                .required("Quantity is required")
+                .min(1, "Quantity must be greater than 0")
+                .integer("Quantity must be an integer"),
+            category: Yup.string().required("Category is required"),
+            images: Yup.mixed().required("At least one image is required"),
+        }),
+        onSubmit: async (values) => {
+            const formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("description", values.description);
+            formData.append("price", values.price);
+            formData.append("quantity", values.quantity);
+            formData.append("category", values.category);
+            Array.from(values.images).forEach((image) => formData.append("images", image));
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
-        setSuccess("");
+            try {
+                await axios.post(`${BASE_URL}/api/products/addProduct`, formData, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                toast.success("Product added successfully!", { position: toast.POSITION.TOP_RIGHT });
+                setTimeout(() => navigate("/seller-page"), 2000);
+            } catch (error) {
+                toast.error("Failed to add product. Please try again.", { position: toast.POSITION.TOP_RIGHT });
+            }
+        },
+    });
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("description", description);
-        formData.append("price", price);
-        formData.append("quantity", quantity);
-        formData.append("category", category);
-        Array.from(images).forEach((image) => formData.append("images", image));
-
-        try {
-            await axios.post(`${BASE_URL}/api/products/addProduct`, formData, {
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            setSuccess("Product added successfully!");
-            setTimeout(() => navigate("/seller-page"), 2000); // Redirect after 2 seconds
-        } catch (err) {
-            setError("Failed to add product. Please check your input and try again.");
-        } finally {
-            setLoading(false);
-        }
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        formik.setFieldValue("images", files);
+        const previews = files.map((file) => URL.createObjectURL(file));
+        setImagePreviews(previews);
     };
 
     return (
         <Container className="mt-5">
-            <Row>
-                <Col md={{ span: 6, offset: 3 }}>
-                    <h1>Add Product</h1>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    {success && <Alert variant="success">{success}</Alert>}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="formName">
+            <h1 className="mb-4 text-center">Add Product</h1>
+            <Form onSubmit={formik.handleSubmit}>
+                <Row>
+                    <Col md={6}>
+                        <Form.Group controlId="name" className="mb-3">
                             <Form.Label>Product Name</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Enter product name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                required
+                                {...formik.getFieldProps("name")}
+                                isInvalid={!!formik.errors.name && formik.touched.name}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.name}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formDescription">
+                        <Form.Group controlId="description" className="mb-3">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
                                 placeholder="Enter product description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                required
+                                {...formik.getFieldProps("description")}
+                                isInvalid={!!formik.errors.description && formik.touched.description}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.description}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formPrice">
+                        <Form.Group controlId="price" className="mb-3">
                             <Form.Label>Price</Form.Label>
                             <Form.Control
                                 type="number"
                                 step="0.01"
                                 placeholder="Enter product price"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
-                                required
+                                {...formik.getFieldProps("price")}
+                                isInvalid={!!formik.errors.price && formik.touched.price}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.price}
+                            </Form.Control.Feedback>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formQuantity">
+                        <Form.Group controlId="quantity" className="mb-3">
                             <Form.Label>Quantity</Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="Enter product quantity"
-                                value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
-                                required
+                                {...formik.getFieldProps("quantity")}
+                                isInvalid={!!formik.errors.quantity && formik.touched.quantity}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.quantity}
+                            </Form.Control.Feedback>
                         </Form.Group>
-                        <CategoryDropdown category={category} setCategory={setCategory} />
-                        {/*<Form.Group className="mb-3" controlId="formCategory">*/}
-                        {/*    <Form.Label>Category</Form.Label>*/}
-                        {/*    <Form.Control*/}
-                        {/*        type="text"*/}
-                        {/*        placeholder="Enter product category"*/}
-                        {/*        value={category}*/}
-                        {/*        onChange={(e) => setCategory(e.target.value)}*/}
-                        {/*        required*/}
-                        {/*    />*/}
-                        {/*</Form.Group>*/}
-                        <Form.Group className="mb-3" controlId="formImages">
-                            <Form.Label>Images</Form.Label>
+                    </Col>
+
+                    <Col md={6}>
+                        <CategoryDropdown
+                            category={formik.values.category}
+                            setCategory={(value) => formik.setFieldValue("category", value)}
+                        />
+                        {formik.errors.category && formik.touched.category && (
+                            <div className="text-danger">{formik.errors.category}</div>
+                        )}
+
+                        <Form.Group controlId="images" className="mb-3">
+                            <Form.Label>Upload Images</Form.Label>
                             <Form.Control
                                 type="file"
                                 multiple
-                                accept="images/*"
-                                onChange={handleFileChange}
-                                required
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                isInvalid={!!formik.errors.images && formik.touched.images}
                             />
-                            <div className="mt-2">
-                                {images.length > 0 && (
-                                    <ul>
-                                        {Array.from(images).map((file, index) => (
-                                            <li key={index}>{file.name}</li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.images}
+                            </Form.Control.Feedback>
+                            <Row className="mt-3">
+                                {imagePreviews.map((src, idx) => (
+                                    <Col xs={4} key={idx} className="mb-3">
+                                        <img src={src} alt={`preview-${idx}`} className="img-fluid rounded" />
+                                    </Col>
+                                ))}
+                            </Row>
                         </Form.Group>
+                    </Col>
+                </Row>
 
-                        <div className="d-flex justify-content-between">
-                            <Button variant="secondary" onClick={() => navigate("/seller-page")}>
-                                Back to Seller Page
-                            </Button>
-                            <Button variant="primary" type="submit" disabled={loading}>
-                                {loading ? (
-                                    <>
-                                        <Spinner animation="border" size="sm" /> Adding...
-                                    </>
-                                ) : (
-                                    "Add Product"
-                                )}
-                            </Button>
-                        </div>
-                    </Form>
-                </Col>
-            </Row>
+                <div className="d-flex justify-content-between">
+                    <Button variant="secondary" onClick={() => navigate("/seller-page")}>
+                        Back to Seller Page
+                    </Button>
+                    <Button variant="primary" type="submit">
+                        Add Product
+                    </Button>
+                </div>
+            </Form>
         </Container>
     );
 };
