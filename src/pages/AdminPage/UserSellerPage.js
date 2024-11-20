@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { Table, Button, Container, Spinner, Alert, Row, Col, Card, Form, Pagination, DropdownButton, Dropdown } from "react-bootstrap";
-import { BASE_URL } from "../../utils/apiURL";
+import {Link, useNavigate} from "react-router-dom";
+import {
+    Table,
+    Button,
+    Container,
+    Spinner,
+    Alert,
+    Row,
+    Col,
+    Card,
+    Form,
+    Pagination,
+    DropdownButton,
+    Dropdown
+} from "react-bootstrap";
+import {BASE_URL} from "../../utils/apiURL";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 const UserSellerPage = () => {
     const [users, setUsers] = useState([]);
@@ -35,7 +50,7 @@ const UserSellerPage = () => {
     const approveSeller = async (userId) => {
         try {
             await axios.post(`${BASE_URL}/api/admin/approve-seller/${userId}`, {}, {
-                headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+                headers: {"Authorization": `Bearer ${localStorage.getItem("jwtToken")}`},
             });
             setUsers(prevUsers =>
                 prevUsers.map(user => {
@@ -43,7 +58,7 @@ const UserSellerPage = () => {
                         return {
                             ...user,
                             roles: [...user.roles.filter(role => role.name !== 'ROLE_USER'),
-                                { name: 'ROLE_SELLER' }]
+                                {name: 'ROLE_SELLER'}]
                         };
                     }
                     return user;
@@ -59,7 +74,7 @@ const UserSellerPage = () => {
     const rejectSeller = async (userId) => {
         try {
             await axios.post(`${BASE_URL}/api/admin/reject-seller/${userId}`, {}, {
-                headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+                headers: {"Authorization": `Bearer ${localStorage.getItem("jwtToken")}`},
             });
             alert("Seller rejected successfully.");
         } catch (error) {
@@ -161,73 +176,86 @@ const UserSellerPage = () => {
     };
 
     return (
-        <Container fluid className="mt-5">
-            <Row className="mb-4">
-                <Col md={8}>
-                    <h1>User & Seller List</h1>
-                </Col>
-                <Col md={4} className="d-flex justify-content-end gap-2">
-                    <Button variant="primary" onClick={() => navigate("/admin")}>
-                        Admin Page
-                    </Button>
-                    <Link
-                        to="/"
-                        className="btn btn-outline-secondary fw-bold d-flex justify-content-center align-items-center"
-                        style={{ borderRadius: '20px', minWidth: '100px' }}
-                    >
-                        Homepage
-                    </Link>
-                </Col>
-            </Row>
-            <Row className="mb-4">
-                <Col md={4}>
-                    <Form.Control
-                        type="text"
-                        placeholder="Search by Username or Name"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </Col>
-                <Col md={4}>
-                    <DropdownButton title={`Users per page: ${usersPerPage}`} variant="secondary">
-                        <Dropdown.Item onClick={() => setUsersPerPage(5)}>5</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setUsersPerPage(10)}>10</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setUsersPerPage(15)}>15</Dropdown.Item>
-                    </DropdownButton>
-                </Col>
-            </Row>
-            {loading ? (
-                <div className="text-center">
-                    <Spinner animation="border" variant="primary" />
-                    <p>Loading...</p>
+        <>
+            <Header/>
+            <Container fluid className="mt-5">
+                <Row className="mb-4">
+                    <Col md={8}>
+                        <h1>User & Seller List</h1>
+                    </Col>
+                    {/*<Col md={4} className="d-flex justify-content-end gap-2">*/}
+                    {/*    <Button variant="primary" onClick={() => navigate("/admin")}>*/}
+                    {/*        Admin Page*/}
+                    {/*    </Button>*/}
+                    {/*    <Link*/}
+                    {/*        to="/"*/}
+                    {/*        className="btn btn-outline-secondary fw-bold d-flex justify-content-center align-items-center"*/}
+                    {/*        style={{borderRadius: '20px', minWidth: '100px'}}*/}
+                    {/*    >*/}
+                    {/*        Homepage*/}
+                    {/*    </Link>*/}
+                    {/*</Col>*/}
+                </Row>
+                <Row className="mb-4">
+                    <Col md={4}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Search by Username or Name"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </Col>
+                    <Col md={4}>
+                        <DropdownButton title={`Items per page: ${usersPerPage}`} variant="secondary">
+                            <Dropdown.Item onClick={() => {
+                                setUsersPerPage(5);
+                                setCurrentPage(1);
+                            }}>5</Dropdown.Item>
+                            <Dropdown.Item onClick={() => {
+                                setUsersPerPage(10);
+                                setCurrentPage(1);
+                            }}>10</Dropdown.Item>
+                            <Dropdown.Item onClick={() => {
+                                setUsersPerPage(15);
+                                setCurrentPage(1);
+                            }}>15</Dropdown.Item>
+                        </DropdownButton>
+                    </Col>
+                </Row>
+                {loading ? (
+                    <div className="text-center">
+                        <Spinner animation="border" variant="primary"/>
+                        <p>Loading...</p>
+                    </div>
+                ) : (
+                    <Card className="shadow-sm">
+                        <Card.Body>
+                            <Table striped bordered hover responsive>
+                                <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Salary</th>
+                                    <th>Roles</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>{renderUsers()}</tbody>
+                            </Table>
+                            {renderPagination()}
+                        </Card.Body>
+                    </Card>
+                )}
+                <div className="text-center mt-2">
+                    <Link to="/" className="text-decoration-none text-primary fw-bold">&larr; Back to Homepage</Link>
                 </div>
-            ) : (
-                <Card className="shadow-sm">
-                    <Card.Body>
-                        <Table striped bordered hover responsive>
-                            <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Name</th>
-                                <th>Age</th>
-                                <th>Phone</th>
-                                <th>Address</th>
-                                <th>Salary</th>
-                                <th>Roles</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>{renderUsers()}</tbody>
-                        </Table>
-                        {renderPagination()}
-                    </Card.Body>
-                </Card>
-            )}
-            <div className="text-center mt-2">
-                <Link to="/" className="text-decoration-none text-primary fw-bold">&larr; Back to Homepage</Link>
-            </div>
-        </Container>
+            </Container>
+            <Footer/>
+        </>
     );
 };
 

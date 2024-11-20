@@ -6,7 +6,7 @@ import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ProductList from "../../components/Product/ProductList";
-import {Button, Container} from "react-bootstrap";
+import {Button, Container } from "react-bootstrap";
 import {FaShoppingCart} from "react-icons/fa";
 
 const HomePage = () => {
@@ -47,7 +47,6 @@ const HomePage = () => {
         }
     };
 
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     return (
@@ -90,31 +89,15 @@ const HomePage = () => {
                 <div className="hero-section text-center my-4">
                     <h1>Welcome to E-commerce</h1>
                     <p>Find the best products here!</p>
-                    <Link to="/products">
-                        <Button variant="primary" size="lg">Shop Now</Button>
-                    </Link>
+                    {/*<Link to="/products">*/}
+                    {/*    <Button variant="primary" size="lg">Shop Now</Button>*/}
+                    {/*</Link>*/}
                 </div>
 
                 <h2 className="text-center my-4">Featured Products</h2>
 
                 <ProductList products={products} loading={loading} error={error}/>
 
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Your Cart</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {/* Replace with dynamic cart items when available */}
-                        <p>Your cart is currently empty.</p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>Close</Button>
-                        <Button variant="primary" onClick={() => { /* Handle checkout action here */
-                        }}>
-                            Proceed to Checkout
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
             </Container>
             <Footer/>
         </>
