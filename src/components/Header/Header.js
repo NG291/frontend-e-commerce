@@ -1,35 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaHome, FaSignInAlt, FaUserShield } from "react-icons/fa";
-import { Button, Modal } from "react-bootstrap";
+import {FaHome, FaSignInAlt, FaUserShield} from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 const Header = () => {
-    const [show, setShow] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
     const navigate = useNavigate();
 
-    // Check if user is logged in by verifying the presence of a JWT token
-    // useEffect(() => {
-    //     const token = localStorage.getItem('jwtToken');
-    //     setIsLoggedIn(!!token); // Set true if token exists, else false
-    // }, []);
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
         setIsLoggedIn(!!token);
-        setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN'); // Check if admin
+        setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN');
+        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER');
     }, []);
-
-    useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
-        setIsLoggedIn(!!token);
-        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER'); // Check if seller
-    }, []);
-
-
-    const handleShow = () => setShow(true);
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');

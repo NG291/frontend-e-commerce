@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Spinner, Alert } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../../utils/apiURL";
 
 const EditEmployeePage = () => {
     const { id } = useParams();
-    const [employee, setEmployee] = useState({
+    const [loading, setLoading] = useState(true);
+    const [initialValues, setInitialValues] = useState({
         username: "",
         email: "",
         name: "",
@@ -15,8 +20,6 @@ const EditEmployeePage = () => {
         address: "",
         salary: "",
     });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,10 +30,10 @@ const EditEmployeePage = () => {
                         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                     },
                 });
-                setEmployee(response.data);
+                setInitialValues(response.data);
             } catch (error) {
+                toast.error("Failed to load employee data.");
                 console.error("Error fetching employee:", error);
-                setError("Failed to load employee data.");
             } finally {
                 setLoading(false);
             }
@@ -38,29 +41,43 @@ const EditEmployeePage = () => {
         fetchEmployee();
     }, [id]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setEmployee((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    };
+    const validationSchema = Yup.object({
+        username: Yup.string().required("Username is required").max(255).matches(/^\S*$/, "No spaces allowed"),
+        email: Yup.string().email("Invalid email format").required("Email is required"),
+        name: Yup.string().required("Name is required").max(255),
+        age: Yup.number()
+            .required("Age is required")
+            .min(18, "Age must be at least 18")
+            .max(60, "Age must be at most 60"),
+        phone: Yup.string()
+            .required("Phone is required")
+            .matches(/^\d{10,15}$/, "Phone number must be between 10 and 15 digits"),
+        address: Yup.string().required("Address is required").max(500),
+        salary: Yup.number()
+            .required("Salary is required")
+            .min(1, "Salary must be greater than 0")
+            .max(100000000, "Salary cannot exceed 100,000,000"),
+    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.put(`${BASE_URL}/api/admin/employees/${id}`, employee, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                },
-            });
-            alert("Employee updated successfully!");
-            navigate("/admin"); // Redirect back to the Admin page
-        } catch (error) {
-            console.error("Error updating employee:", error);
-            setError("Failed to update employee.");
-        }
-    };
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues,
+        validationSchema,
+        onSubmit: async (values) => {
+            try {
+                await axios.put(`${BASE_URL}/api/admin/employees/${id}`, values, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                });
+                toast.success("Employee updated successfully!", { position: toast.POSITION.TOP_RIGHT });
+                setTimeout(() => navigate("/admin"), 2000);
+            } catch (error) {
+                toast.error("Failed to update employee. Please try again.");
+                console.error("Error updating employee:", error);
+            }
+        },
+    });
 
     if (loading) {
         return (
@@ -73,89 +90,122 @@ const EditEmployeePage = () => {
 
     return (
         <Container className="mt-5">
-            <h1>Edit Employee</h1>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="username">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter username"
-                        name="username"
-                        value={employee.username}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+            <h1 className="mb-4 text-center">Edit Employee</h1>
+            <Form onSubmit={formik.handleSubmit}>
+                <Row>
+                    <Col md={6}>
+                        <Form.Group controlId="username" className="mb-3">
+                            <Form.Label>Username (non-editable)</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="username"
+                                value={formik.values.username}
+                                disabled
+                            />
+                        </Form.Group>
 
-                <Form.Group controlId="email">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        type="email"
-                        placeholder="Enter email"
-                        name="email"
-                        value={employee.email}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                        <Form.Group controlId="email" className="mb-3">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.email && formik.touched.email}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.email}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                <Form.Group controlId="name">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter name"
-                        name="name"
-                        value={employee.name}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                        <Form.Group controlId="name" className="mb-3">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.name && formik.touched.name}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.name}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
 
-                <Form.Group controlId="age">
-                    <Form.Label>Age</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter age"
-                        name="age"
-                        value={employee.age}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                    <Col md={6}>
+                        <Form.Group controlId="age" className="mb-3">
+                            <Form.Label>Age</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="age"
+                                value={formik.values.age}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.age && formik.touched.age}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.age}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                <Form.Group controlId="phone">
-                    <Form.Label>Phone</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter phone"
-                        name="phone"
-                        value={employee.phone}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                        <Form.Group controlId="phone" className="mb-3">
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="phone"
+                                value={formik.values.phone}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.phone && formik.touched.phone}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.phone}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                <Form.Group controlId="address">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter address"
-                        name="address"
-                        value={employee.address}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                        <Form.Group controlId="address" className="mb-3">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="address"
+                                value={formik.values.address}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.address && formik.touched.address}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.address}
+                            </Form.Control.Feedback>
+                        </Form.Group>
 
-                <Form.Group controlId="salary">
-                    <Form.Label>Salary</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter salary"
-                        name="salary"
-                        value={employee.salary}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                        <Form.Group controlId="salary" className="mb-3">
+                            <Form.Label>Salary</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="salary"
+                                value={formik.values.salary}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                isInvalid={!!formik.errors.salary && formik.touched.salary}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {formik.errors.salary}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
 
-                <Button variant="primary" type="submit" className="mt-3">
-                    Save Changes
-                </Button>
+                <div className="d-flex justify-content-between">
+                    <Button variant="secondary" onClick={() => navigate("/admin")}>
+                        Back to Admin Page
+                    </Button>
+                    <Button variant="primary" type="submit">
+                        Save Changes
+                    </Button>
+                </div>
             </Form>
         </Container>
     );

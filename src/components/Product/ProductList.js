@@ -1,15 +1,12 @@
-// src/components/ProductList/ProductList.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { Carousel } from 'antd';
 import { BASE_URL } from '../../utils/apiURL';
+import AddToCartButton from '../Cart/AddToCartButton'; // Import AddToCartButton
+import './ProductList.scss';
 
 const ProductList = ({ products, loading, error }) => {
-    const onChange = (currentSlide) => {
-        console.log(currentSlide);
-    };
-
     if (loading) {
         return (
             <div className="text-center">
@@ -27,34 +24,37 @@ const ProductList = ({ products, loading, error }) => {
         );
     }
 
+    const handleProductClick = (productId) => {
+        window.location.href = `/product/${productId}`; // Redirect to ProductDetailPage
+    };
+
     return (
-        <Row  className="g-0">
+        <Row className="g-4 justify-content-center">
             {products.length > 0 ? (
                 products.map((product) => (
-                    <Col md={3} key={product.id} className="mb-4">
-                        <Card className="product-card">
+                    <Col lg={3} md={4} sm={6} xs={12} key={product.id} className="mb-4">
+                        <Card className="product-card" onClick={() => handleProductClick(product.id)}>
                             {product.images && product.images.length > 0 ? (
-                                <Carousel afterChange={onChange}>
-                                    {product.images.map((image, index) => (
-                                        <Card.Img
-                                            key={index}
-                                            variant="top"
-                                            src={`${BASE_URL}/images/${image.fileName}`}
-                                            alt={product.name}
-                                            style={{ marginBottom: '10px', maxHeight: '200px', objectFit: 'cover' }}
-                                        />
-                                    ))}
-                                </Carousel>
+                                <div className="carousel">
+                                    <Carousel autoplay>
+                                        {product.images.map((image, index) => (
+                                            <Card.Img
+                                                key={index}
+                                                variant="top"
+                                                src={`${BASE_URL}/images/${image.fileName}`}
+                                                alt={product.name}
+                                            />
+                                        ))}
+                                    </Carousel>
+                                </div>
                             ) : (
                                 <Card.Img variant="top" src="/path/to/default-image.jpg" alt="Default image" />
                             )}
                             <Card.Body>
-                                <Card.Title>{product.name}</Card.Title>
+                                <Card.Title as="h5">{product.name}</Card.Title>
                                 <Card.Text>{product.description}</Card.Text>
-                                <Card.Text className="text-muted">${product.price || 'Price not available'}</Card.Text>
-                                <Link to={`/product/${product.id}`}>
-                                    <Button variant="primary">View Product</Button>
-                                </Link>
+                                <Card.Text className="price">${product.price || 'N/A'}</Card.Text>
+                                <AddToCartButton productId={product.id} /> {/* Add to Cart button */}
                             </Card.Body>
                         </Card>
                     </Col>
