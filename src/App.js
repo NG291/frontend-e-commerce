@@ -22,6 +22,7 @@ import SellerPage from "./pages/SellerPage/SellerPage";
 import AddProduct from "./pages/SellerPage/AddProduct";
 import UpdateProduct from "./pages/SellerPage/UpdateProduct";
 import Cart from "./components/Cart/Cart";
+import PaymentPage from "./components/Cart/PaymentPage";
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
                     <Route path="/add-product" element={<AddProduct/>}/>
                     <Route path="/edit-product/:id" element={<UpdateProduct/>}/>
                     <Route path="/cart" element={<Cart/>}/>
+                    <Route path="/payment" element={<PaymentPage/>}/>
                 </Routes>
                 <ToastContainer/>
             </BrowserRouter>

@@ -13,7 +13,6 @@ const AddToCartButton = ({ productId }) => {
         try {
             setAddingToCart(true);
             const token = localStorage.getItem('jwtToken'); // Lấy token từ localStorage
-           console.log(token)
             // Kiểm tra nếu không có token, yêu cầu người dùng đăng nhập
             if (!token) {
                 alert("Token not found. Please login.");
