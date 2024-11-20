@@ -15,7 +15,7 @@ const SellerPage = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/api/products/all`, {
+                const response = await axios.get(`${BASE_URL}/api/products/seller`, {
                     headers: {
                         "Content-type": "application/json",
                         "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,

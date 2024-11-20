@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'; // Dùng useNavigate để chuyển hướng
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
-import { toast } from 'react-toastify'; // Import toast để hiển thị thông báo
+import { toast } from 'react-toastify';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [paymentMethod, setPaymentMethod] = useState('CREDIT_CARD'); // Phương thức thanh toán
+    const navigate = useNavigate();
 
     // Hàm lấy thông tin giỏ hàng từ API
     const fetchCartItems = async () => {
@@ -59,6 +62,17 @@ const Cart = () => {
 
     const calculateTotalAmount = () => {
         return cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    };
+
+    const handleCheckout = () => {
+        const totalAmount = calculateTotalAmount();
+
+        if (totalAmount > 0) {
+            // Chuyển hướng tới trang thanh toán với thông tin giỏ hàng
+            navigate('/payment', { state: { totalAmount, paymentMethod } });
+        } else {
+            toast.warning("Giỏ hàng của bạn đang trống!");
+        }
     };
 
     useEffect(() => {
@@ -120,8 +134,17 @@ const Cart = () => {
                     <div className="cart-total">
                         <h4>Total Amount: ${calculateTotalAmount().toFixed(2)}</h4>
                     </div>
-                    <Button variant="primary" onClick={() => toast.info("Proceeding to checkout...")}>
-                        Proceed to Checkout
+                    <div className="payment-method">
+                        <label>
+                            Phương thức thanh toán:
+                            <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                                <option value="CREDIT_CARD">Thẻ tín dụng</option>
+                                <option value="PAYPAL">PayPal</option>
+                            </select>
+                        </label>
+                    </div>
+                    <Button variant="primary" onClick={handleCheckout}>
+                        Thanh toán
                     </Button>
                 </>
             )}

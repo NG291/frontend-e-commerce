@@ -47,7 +47,6 @@ const HomePage = () => {
         }
     };
 
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     return (
