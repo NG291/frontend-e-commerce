@@ -7,6 +7,7 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
+    const [isUser, setIsUser] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,6 +15,7 @@ const Header = () => {
         setIsLoggedIn(!!token);
         setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN');
         setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER');
+        setIsUser(localStorage.getItem('role') === 'ROLE_USER');
     }, []);
 
     const handleLogout = () => {
@@ -37,6 +39,11 @@ const Header = () => {
                         <li className="nav-item">
                             <Link to="/features" className="nav-link link-body-emphasis px-2">Features</Link>
                         </li>
+                        {isUser && (<li className="nav-item">
+                            <Link to="/change-password" className="nav-link link-body-emphasis px-2">
+                                Change Password
+                            </Link>
+                        </li>)}
                     </ul>
                     <ul className="nav me-auto">
                         {isAdmin && (

@@ -17,6 +17,8 @@ import {
 import {BASE_URL} from "../../utils/apiURL";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import {toast} from "react-toastify";
+import Swal from 'sweetalert2';
 
 const SellerPage = () => {
     const [products, setProducts] = useState([]);
@@ -40,7 +42,7 @@ const SellerPage = () => {
                 setFilteredProducts(response.data);
             } catch (error) {
                 console.error("Error fetching products:", error);
-                alert("Failed to fetch product data.");
+                toast.success("Failed to fetch product data.");
             } finally {
                 setLoading(false);
             }
@@ -57,11 +59,6 @@ const SellerPage = () => {
         setCurrentPage(1); // Reset lại trang khi tìm kiếm
     }, [searchTerm, products]);
 
-    const handleLogout = () => {
-        localStorage.removeItem("jwtToken");
-        navigate("/"); // Điều hướng về trang chủ
-    };
-
     const handleAddProduct = () => navigate("/add-product");
 
     const handleEditProduct = (id) => {
@@ -69,18 +66,28 @@ const SellerPage = () => {
     };
 
     const handleDeleteProduct = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this product?")) return;
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
             await axios.delete(`${BASE_URL}/api/products/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                 },
             });
-            alert("Product deleted successfully!");
+            toast.success("Product deleted successfully!");
             setProducts((prev) => prev.filter((product) => product.id !== id));
         } catch (error) {
             console.error("Error deleting product:", error);
-            alert("Failed to delete product.");
+            toast.error("Failed to delete product.");
         }
     };
 

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import './LoginPage.scss';
-import { Alert, Button } from "react-bootstrap";
-import { BASE_URL } from "../../utils/apiURL";
-import { toast } from "react-toastify";
+import {Alert, Button} from "react-bootstrap";
+import {BASE_URL} from "../../utils/apiURL";
+import {toast} from "react-toastify";
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -22,7 +22,7 @@ const LoginPage = () => {
             });
 
             if (response.data && response.data.token) {
-                const { id, token, username, authorities } = response.data;
+                const {id, token, username, authorities} = response.data;
                 const role = authorities && authorities.length > 0 && authorities[0].authority;
                 toast.success("Logged in successfully!");
                 localStorage.setItem('userId', id);
@@ -46,8 +46,23 @@ const LoginPage = () => {
         }
     };
 
+    const handleResetPassword = async () => {
+        const email = prompt("Enter your registered email address:");
+
+        if (email) {
+            try {
+                const response = await axios.get(`${BASE_URL}/api/users/reset?email=${email}`);
+                toast.success(response.data || "Reset password email sent successfully!");
+            } catch (error) {
+                console.error(error);
+                toast.error("Failed to reset password. Please try again.");
+            }
+        }
+    };
+
+
     return (
-        <main className="form-signin w-100 m-auto p-3" style={{ maxWidth: '400px' }}>
+        <main className="form-signin w-100 m-auto p-3" style={{maxWidth: '400px'}}>
             <form onSubmit={handleLogin} className="border p-4 rounded shadow">
                 <h1 className="h3 mb-3 fw-normal text-center">Please sign in</h1>
                 {errorMessage && <Alert key="danger" variant="danger">{errorMessage}</Alert>}
@@ -80,6 +95,23 @@ const LoginPage = () => {
                     <Button variant="primary" type="submit">Sign in</Button>
                 </div>
                 <p className="text-center mt-2">Do not have an account? <Link to="/register">Register now!</Link></p>
+                {/* Forgot Password and Reset Password links */}
+                <div>
+                    <div className="text-center d-flex justify-content-center my-4">
+                        <Link to="/forgot-password" className="btn btn-link">Forgot Password?</Link>
+                        <br/>
+                        <div className="text-center d-flex justify-content-center my-4">
+                            <button
+                                className="btn btn-link"
+                                onClick={handleResetPassword}
+                                style={{cursor: "pointer", textDecoration: "underline"}}
+                            >
+                                Reset Password
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
                 <div className="text-center mt-3">
                     <Link to="/" className="text-decoration-none">&larr; Back to Homepage</Link>
                 </div>

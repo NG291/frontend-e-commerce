@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom'; // Dùng useLocation và useNavigate để lấy thông tin và chuyển hướng
+import React, { useState } from 'react';
+import { Button, Card, Container, Row, Col } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import './PaymentPage.scss'; // Import file SCSS tùy chỉnh
 
 const PaymentPage = () => {
-    const location = useLocation(); // Để lấy thông tin từ đường dẫn
-    const navigate = useNavigate();
-    const { totalAmount, paymentMethod } = location.state || {}; // Lấy thông tin totalAmount và paymentMethod từ đường dẫn
+    const location = useLocation();
+    const { totalAmount, paymentMethod } = location.state || {};
 
     const [paymentStatus, setPaymentStatus] = useState('');
 
     const handlePayment = async () => {
         const userId = localStorage.getItem('userId');
-        console.log(userId)
+        console.log(userId);
 
         try {
-            // Gọi API thanh toán với phương thức thanh toán và tổng số tiền
             const response = await axiosClient.post(`${BASE_URL}/api/payments/process`, null, {
                 params: {
                     userId,
@@ -29,27 +30,47 @@ const PaymentPage = () => {
                 },
             });
 
-            toast.success("Thanh toán thành công!");
-            setPaymentStatus('Thanh toán thành công!');
+            toast.success("Payment successful!");
+            setPaymentStatus('Payment successful!');
         } catch (error) {
             console.error('Error during payment:', error);
             toast.error("Payment failed. Please try again.");
-            setPaymentStatus('Thanh toán thất bại!');
+            setPaymentStatus('Payment failed!');
         }
     };
 
     return (
-        <div className="payment-page">
-            <h2>Thanh toán</h2>
-            <p>Tổng tiền: ${totalAmount}</p>
-            <p>Phương thức thanh toán: {paymentMethod}</p>
-
-            <Button variant="primary" onClick={handlePayment}>
-                Xác nhận thanh toán
-            </Button>
-
-            {paymentStatus && <p>{paymentStatus}</p>}
-        </div>
+        <>
+            <Header />
+            <Container className="payment-page">
+                <Row className="justify-content-center">
+                    <Col md={8} lg={6}>
+                        <Card className="payment-card">
+                            <Card.Body>
+                                <h2 className="text-center mb-4">Payment</h2>
+                                <div className="payment-details">
+                                    <p><strong>Total Amount:</strong> ${totalAmount}</p>
+                                    <p><strong>Payment Method:</strong> {paymentMethod}</p>
+                                </div>
+                                <Button
+                                    variant="primary"
+                                    className="w-100"
+                                    onClick={handlePayment}
+                                >
+                                    Confirm Payment
+                                </Button>
+                                {paymentStatus && (
+                                    <p className={`payment-status mt-3 text-center ${paymentStatus === 'Payment successful!' ? 'text-success' : 'text-danger'}`}>
+                                        {paymentStatus}
+                                    </p>
+                                )}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+            <Footer />
+        </>
     );
 };
 

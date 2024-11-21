@@ -23,6 +23,10 @@ import AddProduct from "./pages/SellerPage/AddProduct";
 import UpdateProduct from "./pages/SellerPage/UpdateProduct";
 import Cart from "./components/Cart/Cart";
 import PaymentPage from "./components/Cart/PaymentPage";
+import ChangePassword from "./pages/SellerPage/ChangePassword";
+import ForgotPasswordPage from "./pages/Password/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/Password/ResetPasswordPage";
+import PasswordResetSuccessPage from "./pages/Password/PasswordResetSuccessPage";
 
 
 function App() {
@@ -48,6 +52,10 @@ function App() {
                     <Route path="/edit-product/:id" element={<UpdateProduct/>}/>
                     <Route path="/cart" element={<Cart/>}/>
                     <Route path="/payment" element={<PaymentPage/>}/>
+                    <Route path="/change-password" element={<ChangePassword/>}/>
+                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
                 </Routes>
                 <ToastContainer/>
             </BrowserRouter>

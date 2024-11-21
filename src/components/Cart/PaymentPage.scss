@@ -1,0 +1,58 @@
+.payment-page {
+  padding: 20px 0;
+  background-color: #f8f9fa;
+  min-height: 80vh; // Chiều cao tối thiểu để căn giữa nội dung
+
+  .payment-card {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .payment-details {
+      margin: 20px 0;
+
+      p {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        strong {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .payment-status {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .text-success {
+      color: #28a745;
+    }
+
+    .text-danger {
+      color: #dc3545;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .payment-card {
+      padding: 15px;
+    }
+
+    .payment-details {
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .payment-status {
+      font-size: 1rem;
+    }
+  }
+}
