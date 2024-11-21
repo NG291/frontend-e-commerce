@@ -56,10 +56,10 @@ const AddProduct = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-                toast.success("Product added successfully!", { position: toast.POSITION.TOP_RIGHT });
-                setTimeout(() => navigate("/seller-page"), 2000);
+                toast.success("Product added successfully!");
+                setTimeout(() => navigate("/seller-page"), 1000);
             } catch (error) {
-                toast.error("Failed to add product. Please try again.", { position: toast.POSITION.TOP_RIGHT });
+                toast.error("Failed to add product. Please try again.");
             }
         },
     });

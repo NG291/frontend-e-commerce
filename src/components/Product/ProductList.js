@@ -24,6 +24,13 @@ const ProductList = ({ products, loading, error }) => {
         );
     }
 
+    // Sắp xếp sản phẩm ngẫu nhiên
+    const randomizeProducts = (products) => {
+        return products.sort(() => Math.random() - 0.5);
+    };
+
+    const randomizedProducts = randomizeProducts([...products]); // Tạo một bản sao của mảng và sắp xếp ngẫu nhiên
+
     const handleProductClick = (productId) => {
         window.location.href = `/product/${productId}`; // Redirect to ProductDetailPage
     };
@@ -31,8 +38,8 @@ const ProductList = ({ products, loading, error }) => {
     return (
         <div>
         <Row className="g-4 justify-content-center">
-            {products.length > 0 ? (
-                products.map((product) => (
+            {randomizedProducts.length > 0 ? (
+                randomizedProducts.map((product) => (
                     <Col lg={3} md={4} sm={6} xs={12} key={product.id} className="mb-4">
                         <Card className="product-card" onClick={() => handleProductClick(product.id)}>
                             {product.images && product.images.length > 0 ? (

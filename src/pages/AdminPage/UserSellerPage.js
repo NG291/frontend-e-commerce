@@ -89,11 +89,9 @@ const UserSellerPage = () => {
     );
 
     const shouldShowApprovalButtons = (user) => {
-        return user.sellerRequest && // Check if user requested seller role
-            user.roles.some(role => role.name === 'ROLE_USER') &&
+        return user.roles.some(role => role.name === 'ROLE_USER') &&
             !user.roles.some(role => role.name === 'ROLE_SELLER' || role.name === 'ROLE_ADMIN');
     };
-
 
     // Pagination logic
     const indexOfLastUser = currentPage * usersPerPage;

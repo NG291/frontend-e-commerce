@@ -6,8 +6,9 @@ import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ProductList from "../../components/Product/ProductList";
-import {Button, Container } from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import {FaShoppingCart} from "react-icons/fa";
+import {toast} from "react-toastify";
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -17,6 +18,10 @@ const HomePage = () => {
     const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [cartItems, setCartItems] = useState(0);
+    const [isUser, setIsUser] = useState(false); // To check if the logged-in user is a regular user
+    const [isSeller, setIsSeller] = useState(false); // To check if the logged-in user is a regular user
+
+    const [userId, setUserId] = useState(null);
 
     // Fetch products on page load
     useEffect(() => {
@@ -33,6 +38,16 @@ const HomePage = () => {
             }
         };
         fetchProducts();
+
+        // Check if the user has ROLE_USER
+        const role = localStorage.getItem('role');
+        if (role === 'ROLE_USER') {
+            setIsUser(true);
+        }
+        if (role === 'ROLE_SELLER') {
+            setIsSeller(true);
+        }
+
     }, []);
 
     const handleSearch = (e) => {
@@ -49,6 +64,17 @@ const HomePage = () => {
 
     const handleShow = () => setShow(true);
 
+    const handleRequestSellerRole = async () => {
+        try {
+            const username = localStorage.getItem('username');
+            const response = await axiosClient.post(`${BASE_URL}/api/users/request-seller-role`, {username});
+            toast.success(response.data); // You can display a success message
+        } catch (error) {
+            toast.error('Error requesting seller role!');
+            console.error(error);
+        }
+    };
+
     return (
         <>
             <Header/>
@@ -59,6 +85,23 @@ const HomePage = () => {
                           className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
                         <span className="fs-4 fw-bold">E-commerce</span>
                     </Link>
+
+                    {/* Show the button only for ROLE_USER */}
+                    {isUser && (
+                        <div className="text-center d-flex justify-content-center my-4">
+                            <Button onClick={handleRequestSellerRole} variant="success">Request Seller Role</Button>
+                        </div>
+                    )}
+
+                    {/*/!* Forgot Password and Reset Password links *!/*/}
+                    {/*{(isUser || isSeller) && (*/}
+                    {/*    <div className="text-center d-flex justify-content-center my-4">*/}
+                    {/*        <Link to="/forgot-password" className="btn btn-link">Forgot Password?</Link>*/}
+                    {/*        <br/>*/}
+                    {/*        /!* Replace :token dynamically with the actual token *!/*/}
+                    {/*        <Link to="/reset-password/:token" className="btn btn-link">Reset Password</Link>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     {/* Search form and Cart button */}
                     <div className="d-flex align-items-center">
@@ -89,9 +132,6 @@ const HomePage = () => {
                 <div className="hero-section text-center my-4">
                     <h1>Welcome to E-commerce</h1>
                     <p>Find the best products here!</p>
-                    {/*<Link to="/products">*/}
-                    {/*    <Button variant="primary" size="lg">Shop Now</Button>*/}
-                    {/*</Link>*/}
                 </div>
 
                 <h2 className="text-center my-4">Featured Products</h2>

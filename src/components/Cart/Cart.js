@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom'; // Dùng useNavigate để chuyển hướng
+import { Button, Table, Row, Col, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import './Cart.css'; // Thêm file CSS để tuỳ chỉnh style
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [paymentMethod, setPaymentMethod] = useState('CREDIT_CARD'); // Phương thức thanh toán
+    const [paymentMethod, setPaymentMethod] = useState('CREDIT_CARD');
     const navigate = useNavigate();
 
-    // Hàm lấy thông tin giỏ hàng từ API
     const fetchCartItems = async () => {
         try {
-            const response = await axiosClient.get(`${BASE_URL}/api/cart/view`); // Gọi API lấy giỏ hàng
+            const response = await axiosClient.get(`${BASE_URL}/api/cart/view`);
             setCartItems(response.data);
         } catch (error) {
             console.error('Error fetching cart items:', error);
-            toast.error("Failed to load cart items. Please try again later."); // Thông báo lỗi
+            toast.error("Failed to load cart items. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -70,92 +70,94 @@ const Cart = () => {
         const totalAmount = calculateTotalAmount();
 
         if (totalAmount > 0) {
-            // Chuyển hướng tới trang thanh toán với thông tin giỏ hàng
             navigate('/payment', { state: { totalAmount, paymentMethod } });
         } else {
-            toast.warning("Giỏ hàng của bạn đang trống!");
+            toast.warning("Your cart is empty!");
         }
     };
 
     useEffect(() => {
-        fetchCartItems(); // Lấy giỏ hàng khi component được render
+        fetchCartItems();
     }, []);
 
     return (
-        <div>
-            <Header/>
-        <div className="cart-page">
-            <h2>Shopping Cart</h2>
-            {loading ? (
-                <p>Loading cart...</p>
-            ) : cartItems.length === 0 ? (
-                <p>Your cart is empty!</p>
-            ) : (
-                <>
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {cartItems.map((item) => (
-                            <tr key={item.product.id}>
-                                <td>{item.product.name}</td>
-                                <td>${item.product.price}</td>
-                                <td>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                                    >
-                                        -
-                                    </Button>
-                                    <span>{item.quantity}</span>
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                                    >
-                                        +
-                                    </Button>
-                                </td>
-                                <td>${(item.product.price * item.quantity).toFixed(2)}</td>
-                                <td>
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => removeItemFromCart(item.product.id)}
-                                    >
-                                        Remove
-                                    </Button>
-                                </td>
+        <>
+            <Header />
+            <div className="cart-page">
+                <h2 className="cart-title">Shopping Cart</h2>
+                {loading ? (
+                    <p>Loading cart...</p>
+                ) : cartItems.length === 0 ? (
+                    <p>Your cart is empty!</p>
+                ) : (
+                    <>
+                        <Table striped bordered hover responsive>
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Action</th>
                             </tr>
-                        ))}
-                        </tbody>
-                    </Table>
-                    <div className="cart-total">
-                        <h4>Total Amount: ${calculateTotalAmount().toFixed(2)}</h4>
-                    </div>
-                    <div className="payment-method">
-                        <label>
-                            Phương thức thanh toán:
-                            <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                                <option value="CREDIT_CARD">Thẻ tín dụng</option>
-                                <option value="PAYPAL">PayPal</option>
-                            </select>
-                        </label>
-                    </div>
-                    <Button variant="primary" onClick={handleCheckout}>
-                        Thanh toán
-                    </Button>
-                </>
-            )}
-        </div>
-            <Footer/>
-        </div>
-
+                            </thead>
+                            <tbody>
+                            {cartItems.map((item) => (
+                                <tr key={item.product.id}>
+                                    <td>{item.product.name}</td>
+                                    <td>${item.product.price}</td>
+                                    <td>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                                        >
+                                            -
+                                        </Button>
+                                        <span className="quantity-display">{item.quantity}</span>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                                        >
+                                            +
+                                        </Button>
+                                    </td>
+                                    <td>${(item.product.price * item.quantity).toFixed(2)}</td>
+                                    <td>
+                                        <Button
+                                            variant="danger"
+                                            onClick={() => removeItemFromCart(item.product.id)}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </Table>
+                        <div className="cart-summary">
+                            <h4>Total Amount: ${calculateTotalAmount().toFixed(2)}</h4>
+                        </div>
+                        <Row className="payment-section">
+                            <Col sm={12} md={6}>
+                                <Form.Group>
+                                    <Form.Label>Payment method:</Form.Label>
+                                    <Form.Control as="select" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                                        <option value="CREDIT_CARD">Credit Card</option>
+                                        <option value="PAYPAL">PayPal</option>
+                                    </Form.Control>
+                                </Form.Group>
+                            </Col>
+                            <Col sm={12} md={6}>
+                                <Button variant="primary" onClick={handleCheckout} block>
+                                    Thanh toán
+                                </Button>
+                            </Col>
+                        </Row>
+                    </>
+                )}
+            </div>
+            <Footer />
+        </>
     );
 };
 

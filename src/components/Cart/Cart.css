@@ -1,0 +1,42 @@
+.cart-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cart-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.quantity-display {
+    margin: 0 10px;
+}
+
+.payment-section {
+    margin-top: 30px;
+}
+
+.payment-section .form-group {
+    margin-bottom: 15px;
+}
+
+.payment-section button {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .cart-title {
+        font-size: 1.5rem;
+    }
+
+    .cart-summary {
+        text-align: center;
+    }
+}
