@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Card, Row, Col, Spinner } from 'react-bootstrap';
 import { Carousel } from 'antd';
 import { BASE_URL } from '../../utils/apiURL';
 import AddToCartButton from '../Cart/AddToCartButton'; // Import AddToCartButton
 import './ProductList.scss';
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const ProductList = ({ products, loading, error }) => {
     if (loading) {
@@ -29,6 +29,7 @@ const ProductList = ({ products, loading, error }) => {
     };
 
     return (
+        <div>
         <Row className="g-4 justify-content-center">
             {products.length > 0 ? (
                 products.map((product) => (
@@ -63,6 +64,7 @@ const ProductList = ({ products, loading, error }) => {
                 <p className="text-center">No products available.</p>
             )}
         </Row>
+        </div>
     );
 };
 

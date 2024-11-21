@@ -9,13 +9,18 @@ const axiosClient = Axios.create();
 
 axiosClient.interceptors.request.use(
     (config) => {
-        config.headers.setAuthorization(parsedToken);
+        // Lấy token từ localStorage và gắn vào header Authorization
+        const parsedToken = localStorage.getItem('jwtToken');
+        if (parsedToken) {
+            config.headers['Authorization'] = `Bearer ${parsedToken}`;
+        }
         return config;
     },
     (err) => {
         console.log({err});
-        toast.error(err.respond?.err, {position: "top-center"})
+        toast.error(err.response?.data?.message || 'Request failed', {position: "top-center"});
         return Promise.reject(err);
-    });
+    }
+);
 
 export default axiosClient;

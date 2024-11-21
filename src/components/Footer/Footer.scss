@@ -1,6 +1,43 @@
-.footer{
-    .copyright-text{
-        display: block;
-        margin-top: 0.7rem;
+.footer {
+    background-color: #dd4813; /* Màu cam */
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    .footer-link {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+    }
+
+    .footer-divider {
+        display: inline-block;
+        height: 12px;
+        width: 1px;
+        background-color: white;
+        margin: 0 10px;
+    }
+
+    .footer-bottom {
+        margin-top: 20px;
+        text-align: center;
+
+        .copyright-text {
+            font-size: 14px;
+            font-weight: 300;
+        }
     }
 }

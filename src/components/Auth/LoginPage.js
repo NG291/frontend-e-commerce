@@ -25,10 +25,10 @@ const LoginPage = () => {
                 const { id, token, username, authorities } = response.data;
                 const role = authorities && authorities.length > 0 && authorities[0].authority;
                 toast.success("Logged in successfully!");
-                localStorage.setItem('userId', id);
-                localStorage.setItem('jwtToken', token);
-                localStorage.setItem('username', username);
-                localStorage.setItem('role', role);
+                    localStorage.setItem('userId', id);
+                    localStorage.setItem('jwtToken', token);
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('role', role);
 
                 if (role === 'ROLE_ADMIN') {
                     navigate('/admin');

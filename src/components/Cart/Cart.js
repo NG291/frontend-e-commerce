@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'; // Dùng useNavigate để chuy�
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -80,6 +82,8 @@ const Cart = () => {
     }, []);
 
     return (
+        <div>
+            <Header/>
         <div className="cart-page">
             <h2>Shopping Cart</h2>
             {loading ? (
@@ -149,6 +153,9 @@ const Cart = () => {
                 </>
             )}
         </div>
+            <Footer/>
+        </div>
+
     );
 };
 

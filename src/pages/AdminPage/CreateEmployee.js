@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import {useNavigate} from "react-router-dom";
+import {Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import { toast, ToastContainer } from "react-toastify";
-import { BASE_URL } from "../../utils/apiURL";
+import {toast, ToastContainer} from "react-toastify";
+import {BASE_URL} from "../../utils/apiURL";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "../../components/Header/Header";
 
 const CreateEmployee = () => {
     const navigate = useNavigate();
@@ -36,7 +37,7 @@ const CreateEmployee = () => {
             .required("Salary is required"),
     });
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+    const handleSubmit = async (values, {setSubmitting}) => {
         try {
             await axios.post(`${BASE_URL}/api/admin/create`, values, {
                 headers: {
@@ -55,121 +56,125 @@ const CreateEmployee = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="card p-4 shadow" style={{ width: "600px" }}>
-                <h3 className="text-center mb-4">Create Employee</h3>
-                <Formik
-                    initialValues={{
-                        username: "",
-                        email: "",
-                        name: "",
-                        birthDate: "",
-                        phone: "",
-                        address: "",
-                        salary: "",
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                    {({ isSubmitting }) => (
-                        <Form>
-                            <div className="row">
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="username" className="form-label">Username</label>
-                                    <Field
-                                        name="username"
-                                        type="text"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage name="username" component="div" className="text-danger" />
+        <div>
+            <Header/>
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <div className="card p-4 shadow" style={{width: "600px"}}>
+                    <h3 className="text-center mb-4">Create Employee</h3>
+                    <Formik
+                        initialValues={{
+                            username: "",
+                            email: "",
+                            name: "",
+                            birthDate: "",
+                            phone: "",
+                            address: "",
+                            salary: "",
+                        }}
+                        validationSchema={validationSchema}
+                        onSubmit={handleSubmit}
+                    >
+                        {({isSubmitting}) => (
+                            <Form>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="username" className="form-label">Username</label>
+                                        <Field
+                                            name="username"
+                                            type="text"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="username" component="div" className="text-danger"/>
+                                    </div>
+
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="email" className="form-label">Email</label>
+                                        <Field
+                                            name="email"
+                                            type="email"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="email" component="div" className="text-danger"/>
+                                    </div>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="email" className="form-label">Email</label>
-                                    <Field
-                                        name="email"
-                                        type="email"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage name="email" component="div" className="text-danger" />
-                                </div>
-                            </div>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="name" className="form-label">Name</label>
+                                        <Field
+                                            name="name"
+                                            type="text"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="name" component="div" className="text-danger"/>
+                                    </div>
 
-                            <div className="row">
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="name" className="form-label">Name</label>
-                                    <Field
-                                        name="name"
-                                        type="text"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage name="name" component="div" className="text-danger" />
-                                </div>
-
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="birthDate" className="form-label">Birth Date</label>
-                                    <Field
-                                        name="birthDate"
-                                        type="date"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage name="birthDate" component="div" className="text-danger" />
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="phone" className="form-label">Phone</label>
-                                    <Field
-                                        name="phone"
-                                        type="text"
-                                        className="form-control"
-                                    />
-                                    <ErrorMessage name="phone" component="div" className="text-danger" />
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="birthDate" className="form-label">Birth Date</label>
+                                        <Field
+                                            name="birthDate"
+                                            type="date"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="birthDate" component="div" className="text-danger"/>
+                                    </div>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <label htmlFor="address" className="form-label">Address</label>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="phone" className="form-label">Phone</label>
+                                        <Field
+                                            name="phone"
+                                            type="text"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="phone" component="div" className="text-danger"/>
+                                    </div>
+
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="address" className="form-label">Address</label>
+                                        <Field
+                                            name="address"
+                                            type="text"
+                                            className="form-control"
+                                        />
+                                        <ErrorMessage name="address" component="div" className="text-danger"/>
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="salary" className="form-label">Salary</label>
                                     <Field
-                                        name="address"
-                                        type="text"
+                                        name="salary"
+                                        type="number"
                                         className="form-control"
                                     />
-                                    <ErrorMessage name="address" component="div" className="text-danger" />
+                                    <ErrorMessage name="salary" component="div" className="text-danger"/>
                                 </div>
-                            </div>
 
-                            <div className="mb-3">
-                                <label htmlFor="salary" className="form-label">Salary</label>
-                                <Field
-                                    name="salary"
-                                    type="number"
-                                    className="form-control"
-                                />
-                                <ErrorMessage name="salary" component="div" className="text-danger" />
-                            </div>
-
-                            <div className="d-flex justify-content-between">
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? "Submitting..." : "Create"}
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={() => navigate("/admin")}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
+                                <div className="d-flex justify-content-between">
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? "Submitting..." : "Create"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => navigate("/admin")}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+                <ToastContainer/>
             </div>
-            <ToastContainer />
+            <footer/>
         </div>
     );
 };
