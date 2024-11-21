@@ -15,7 +15,7 @@ const AddToCartButton = ({ productId }) => {
             const token = localStorage.getItem('jwtToken'); // Lấy token từ localStorage
             // Kiểm tra nếu không có token, yêu cầu người dùng đăng nhập
             if (!token) {
-                alert("Token not found. Please login.");
+                toast.success("Token not found. Please login.");
                 return;
             }
 
@@ -38,7 +38,7 @@ const AddToCartButton = ({ productId }) => {
 
             // Xử lý lỗi từ server (khi có phản hồi từ server)
             if (error.response) {
-                alert(`Failed to add product to cart: ${error.response.data.message || error.response.statusText}`);
+                toast.error(`Failed to add product to cart: ${error.response.data.message || error.response.statusText}`);
             }
             // Xử lý khi không nhận được phản hồi từ server
             else if (error.request) {
