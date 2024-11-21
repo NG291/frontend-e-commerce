@@ -36,7 +36,7 @@ const Cart = () => {
             await axiosClient.put(`${BASE_URL}/api/cart/update/${productId}`,
                 { productId },
                 {
-                    params: { quantity },
+                    params: { quantity }, // Params đúng vị trí
                     headers: {
                         "Content-type": "application/json",
                         "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -55,7 +55,7 @@ const Cart = () => {
         try {
             await axiosClient.delete(`${BASE_URL}/api/cart/remove/${productId}`);
             fetchCartItems();
-            toast.success("Product removed from cart!");
+            toast.success("Product removed from cart!"); // Thông báo thành công
         } catch (error) {
             console.error('Error removing item from cart:', error);
             toast.error("Failed to remove item. Please try again later.");

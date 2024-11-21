@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Card, Container, Row, Col } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import React, { useState} from 'react';
+import {Button, Card, Col, Container, Row} from 'react-bootstrap';
+import { useLocation } from 'react-router-dom'; // Dùng useLocation và useNavigate để lấy thông tin và chuyển hướng
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
@@ -9,8 +9,8 @@ import Footer from "../Footer/Footer";
 import './PaymentPage.scss'; // Import file SCSS tùy chỉnh
 
 const PaymentPage = () => {
-    const location = useLocation();
-    const { totalAmount, paymentMethod } = location.state || {};
+    const location = useLocation(); // Để lấy thông tin từ đường dẫn
+    const { totalAmount, paymentMethod } = location.state || {}; // Lấy thông tin totalAmount và paymentMethod từ đường dẫn
 
     const [paymentStatus, setPaymentStatus] = useState('');
 
