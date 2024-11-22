@@ -28,7 +28,7 @@ const Header = () => {
 
     return (
         <>
-            <nav className="py-2 bg-body-tertiary border-bottom">
+            <nav className="sticky-top py-2 bg-body-tertiary border-bottom">
                 <div className="container d-flex flex-wrap">
                     <ul className="nav me-auto">
                         <li className="nav-item">
@@ -58,31 +58,6 @@ const Header = () => {
                             </li>
                         )}
                     </ul>
-                    <ul className="nav me-auto">
-                        {isSeller && (
-                            <ul className="nav me-auto">
-                                <li className="nav-item">
-                                    <Button
-                                        variant="link"
-                                        onClick={() => navigate('/seller-page')}
-                                        className="nav-link link-body-emphasis px-2"
-                                    >
-                                        <FaUserShield className="me-1"/> Seller Page
-                                    </Button>
-                                </li>
-
-                                <li className="nav-item">
-                                    <Link to="/SellerOrders" className="nav-link link-body-emphasis px-2">Đơn
-                                        hàng</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/PendingOrders" className="nav-link link-body-emphasis px-2">Đơn
-                                        hàng moi </Link>
-                                </li>
-                            </ul>
-                        )}
-                    </ul>
-
                     <ul className="nav">
                         {isLoggedIn ? (
                             <ul className="nav me-auto">

@@ -135,7 +135,7 @@ const SellerPage = () => {
 
     return (
         <>
-            <Header/>
+
             <Container fluid className="mt-5">
                 <Row className="mb-4">
                     <Col md={8}>
@@ -193,7 +193,8 @@ const SellerPage = () => {
                                 <tbody>{renderProducts()}</tbody>
                             </Table>
                             <div className="d-flex justify-content-between mt-3">
-                                <Button variant="secondary" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                <Button variant="secondary" onClick={handlePreviousPage}
+                                        disabled={currentPage === 1}>
                                     Previous
                                 </Button>
                                 <span>Page {currentPage} of {totalPages}</span>
@@ -210,7 +211,6 @@ const SellerPage = () => {
                     <Link to="/" className="text-decoration-none">&larr; Back to Homepage</Link>
                 </div>
             </Container>
-            <Footer/>
         </>
     );
 };

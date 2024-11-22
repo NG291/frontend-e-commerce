@@ -77,8 +77,7 @@ const PendingOrders = () => {
     }, []);
 
     return (
-        <div className="pending-orders">
-            <Header />
+        <div className="pending-orders py-5 my-5">
             <h2>Danh sách đơn hàng chờ xử lý</h2>
             {loading ? (
                 <p>Đang tải danh sách đơn hàng...</p>
@@ -126,7 +125,6 @@ const PendingOrders = () => {
                     </tbody>
                 </Table>
             )}
-            <Footer />
         </div>
     );
 };
