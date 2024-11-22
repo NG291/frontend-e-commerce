@@ -1,7 +1,6 @@
 import { Card, Row, Col, Spinner } from 'react-bootstrap';
 import { Carousel } from 'antd';
 import { BASE_URL } from '../../utils/apiURL';
-import AddToCartButton from '../Cart/AddToCartButton'; // Import AddToCartButton
 import './ProductList.scss';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -37,42 +36,43 @@ const ProductList = ({ products, loading, error }) => {
 
     return (
         <div>
-        <Row className="g-4 justify-content-center">
-            {randomizedProducts.length > 0 ? (
-                randomizedProducts.map((product) => (
-                    <Col lg={3} md={4} sm={6} xs={12} key={product.id} className="mb-4">
-                        <Card className="product-card" onClick={() => handleProductClick(product.id)}>
-                            {product.images && product.images.length > 0 ? (
-                                <div className="carousel">
-                                    <Carousel autoplay>
-                                        {product.images.map((image, index) => (
-                                            <Card.Img
-                                                key={index}
-                                                variant="top"
-                                                src={`${BASE_URL}/images/${image.fileName}`}
-                                                alt={product.name}
-                                            />
-                                        ))}
-                                    </Carousel>
-                                </div>
-                            ) : (
-                                <Card.Img variant="top" src="/path/to/default-image.jpg" alt="Default image" />
-                            )}
-                            <Card.Body>
-                                <Card.Title as="h5">{product.name}</Card.Title>
-                                <Card.Text>{product.description}</Card.Text>
-                                <Card.Text className="price">${product.price || 'N/A'}</Card.Text>
-                                <AddToCartButton productId={product.id} /> {/* Add to Cart button */}
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))
-            ) : (
-                <p className="text-center">No products available.</p>
-            )}
-        </Row>
+            <Row className="g-4 justify-content-center">
+                {randomizedProducts.length > 0 ? (
+                    randomizedProducts.map((product) => (
+                        <Col lg={3} md={4} sm={6} xs={12} key={product.id} className="mb-4">
+                            <Card className="product-card" onClick={() => handleProductClick(product.id)}>
+                                {product.images && product.images.length > 0 ? (
+                                    <div className="carousel">
+                                        <Carousel autoplay>
+                                            {product.images.map((image, index) => (
+                                                <Card.Img
+                                                    key={index}
+                                                    variant="top"
+                                                    src={`${BASE_URL}/images/${image.fileName}`}
+                                                    alt={product.name}
+                                                />
+                                            ))}
+                                        </Carousel>
+                                    </div>
+                                ) : (
+                                    <Card.Img variant="top" src="/path/to/default-image.jpg" alt="Default image" />
+                                )}
+                                <Card.Body>
+                                    <Card.Title as="h5">{product.name}</Card.Title>
+                                    <Card.Text>{product.description}</Card.Text>
+                                    {/* Sửa giá thành VND */}
+                                    <Card.Text className="price">{product.price ? `${product.price.toLocaleString()} VND` : 'N/A'}</Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))
+                ) : (
+                    <p className="text-center">No products available.</p>
+                )}
+            </Row>
         </div>
     );
 };
 
 export default ProductList;
+    

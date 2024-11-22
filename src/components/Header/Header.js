@@ -89,6 +89,9 @@ const Header = () => {
                                 <li className="nav-item">
                                     <Link to="/UserOrders" className="nav-link link-body-emphasis px-2">Đơn hàng</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link to="/UserPendingOrders" className="nav-link link-body-emphasis px-2">Đơn hàng của bạn</Link>
+                                </li>
 
                                 <li className="nav-item">
                                     <Button variant="link" onClick={handleLogout}
