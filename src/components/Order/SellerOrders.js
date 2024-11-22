@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from "../../utils/axiosClient";
 import { toast } from "react-toastify";
-import { Container, Row, Col, Card, ListGroup, Spinner, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, ListGroup, Spinner, Badge, DropdownButton, Dropdown } from 'react-bootstrap';
 import { BASE_URL } from '../../utils/apiURL';
 import Header from "../Header/Header";
-import Footer from "../Footer/Footer"; // Giả sử BASE_URL là URL gốc của bạn
+import Footer from "../Footer/Footer";
 
 const SellerOrders = ({ sellerId }) => {
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [filterStatus, setFilterStatus] = useState('all');
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -25,6 +27,7 @@ const SellerOrders = ({ sellerId }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setOrders(response.data);
+                setFilteredOrders(response.data); // Hiển thị tất cả đơn hàng ban đầu
             } catch (error) {
                 setError(error.response?.data || 'Lỗi khi lấy đơn hàng');
             } finally {
@@ -38,27 +41,15 @@ const SellerOrders = ({ sellerId }) => {
     const formatDate = (date) => {
         if (!date) return "Không xác định";
         try {
-            if (Array.isArray(date)) {
-                const formattedDate = new Date(
-                    date[0],
-                    date[1] - 1,
-                    date[2],
-                    date[3] || 0,
-                    date[4] || 0,
-                    date[5] || 0,
-                    date[6] || 0
-                );
-                const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-                return formattedDate.toLocaleDateString('vi-VN', options);
-            }
             return new Date(date).toLocaleDateString('vi-VN');
         } catch {
             return "Không xác định";
         }
     };
+
     const formatPrice = (price) => {
         if (isNaN(price) || price === null || price === undefined) return "0 VND";
-        return `${price.toLocaleString('vi-VN')} VND`;  // Định dạng giá
+        return `${price.toLocaleString('vi-VN')} VND`;
     };
 
     const getStatusLabel = (status) => {
@@ -72,6 +63,17 @@ const SellerOrders = ({ sellerId }) => {
                 return { label: 'Chờ xử lý', color: 'warning' };
             default:
                 return { label: "Không xác định", color: "secondary" };
+        }
+    };
+
+    // Hàm lọc đơn hàng theo trạng thái
+    const handleFilterChange = (status) => {
+        setFilterStatus(status);
+        if (status === 'all') {
+            setFilteredOrders(orders); // Hiển thị tất cả đơn hàng
+        } else {
+            const filtered = orders.filter(order => order.status.toLowerCase() === status.toLowerCase());
+            setFilteredOrders(filtered); // Lọc theo trạng thái
         }
     };
 
@@ -96,13 +98,26 @@ const SellerOrders = ({ sellerId }) => {
 
     return (
         <div>
-            <Header />
             <Container className="my-5">
                 <h2 className="text-center mb-4">Đơn Hàng Của Seller</h2>
-                {orders.length === 0 ? (
+
+                <div className="mb-4 d-flex justify-content-end">
+                        <DropdownButton
+                            id="dropdown-basic-button"
+                            title="Lọc theo trạng thái"
+                            onSelect={handleFilterChange}  // Sử dụng handleFilterChange để thay đổi trạng thái lọc
+                        >
+                            <Dropdown.Item eventKey="all">Tất cả</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Đơn hàng thành công</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Đơn hàng chờ xác nhận</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Đơn hàng đã hủy</Dropdown.Item>
+                        </DropdownButton>
+                </div>
+
+                {filteredOrders.length === 0 ? (
                     <p className="text-center text-muted">Không tìm thấy đơn hàng nào.</p>
                 ) : (
-                    orders.map((order) => {
+                    filteredOrders.map((order) => {
                         const { label, color } = getStatusLabel(order.status);
                         return (
                             <Card key={order.id} className="mb-4 shadow-sm rounded-lg border-0">
@@ -128,10 +143,10 @@ const SellerOrders = ({ sellerId }) => {
                                                     <div className="d-flex align-items-center">
                                                         <img
                                                             src={`${BASE_URL}${item.imageUrl}`}
-                                                            alt="Ảnh sản phẩm"
+                                                            alt={item.productName}
                                                             width="70"
                                                             height="70"
-                                                            className="me-3"
+                                                            className="object-fit-cover border rounded me-3"
                                                         />
                                                         <div>
                                                             <h6 className="mb-1">{item.productName || "Không xác định"}</h6>
@@ -139,7 +154,7 @@ const SellerOrders = ({ sellerId }) => {
                                                         </div>
                                                     </div>
                                                     <div className="text-end">
-                                                        <small>{formatPrice(item.price)}</small>
+                                                        <small className="text-danger">{formatPrice(item.price)}</small>
                                                     </div>
                                                 </ListGroup.Item>
                                             ))
@@ -151,7 +166,7 @@ const SellerOrders = ({ sellerId }) => {
                                     <Row>
                                         <Col>
                                             <h5 className="text-end">
-                                                Tổng cộng: {formatPrice(order.totalAmount)}
+                                                Tổng cộng: <span className="text-danger">{formatPrice(order.totalAmount)}</span>
                                             </h5>
                                         </Col>
                                     </Row>
@@ -161,7 +176,6 @@ const SellerOrders = ({ sellerId }) => {
                     })
                 )}
             </Container>
-            <Footer />
         </div>
     );
 };

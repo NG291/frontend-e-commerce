@@ -32,6 +32,8 @@ const LoginPage = () => {
 
                 if (role === 'ROLE_ADMIN') {
                     navigate('/admin');
+                } else if (role === 'ROLE_SELLER') {
+                    navigate('/seller-page');
                 } else {
                     navigate('/');
                 }
