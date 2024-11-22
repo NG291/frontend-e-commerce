@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from "../../utils/axiosClient";
 import { toast } from "react-toastify";
-import { Container, Row, Col, Card, ListGroup, Spinner, Badge } from 'react-bootstrap';
+import {Container, Row, Col, Card, ListGroup, Spinner, Badge, DropdownButton, Dropdown} from 'react-bootstrap';
 import { BASE_URL } from '../../utils/apiURL';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer"; // Giả sử BASE_URL là URL gốc của bạn
@@ -10,6 +10,9 @@ const SellerOrders = ({ sellerId }) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [filterStatus, setFilterStatus] = useState('all'); // Lọc theo trạng thái
+    const [filteredOrders, setFilteredOrders] = useState([]);
+
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -34,6 +37,15 @@ const SellerOrders = ({ sellerId }) => {
 
         fetchOrders();
     }, [sellerId]);
+
+    useEffect(() => {
+        // Lọc đơn hàng theo trạng thái
+        if (filterStatus === 'all') {
+            setFilteredOrders(orders);
+        } else {
+            setFilteredOrders(orders.filter(order => order.status.toLowerCase() === filterStatus));
+        }
+    }, [orders, filterStatus]);
 
     const formatDate = (date) => {
         if (!date) return "Không xác định";
@@ -99,6 +111,20 @@ const SellerOrders = ({ sellerId }) => {
             <Header />
             <Container className="my-5">
                 <h2 className="text-center mb-4">Order of Seller</h2>
+                <Row className="mb-4">
+                    <Col>
+                        <DropdownButton
+                            id="dropdown-basic-button"
+                            title="Filter on status"
+                            onSelect={(status) => setFilterStatus(status)}
+                        >
+                            <Dropdown.Item eventKey="all">All</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Completed</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Pending</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Cancelled</Dropdown.Item>
+                        </DropdownButton>
+                    </Col>
+                </Row>
                 {orders.length === 0 ? (
                     <p className="text-center text-muted">Order not found</p>
                 ) : (
