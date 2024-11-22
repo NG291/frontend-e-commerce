@@ -27,7 +27,7 @@ const SellerOrders = ({ sellerId }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setOrders(response.data);
-                setFilteredOrders(response.data); // Hiển thị tất cả đơn hàng ban đầu
+                setFilteredOrders(response.data);
             } catch (error) {
                 setError(error.response?.data || 'Error when taking order!');
             } finally {
@@ -39,7 +39,7 @@ const SellerOrders = ({ sellerId }) => {
     }, [sellerId]);
 
     useEffect(() => {
-        // Lọc đơn hàng theo trạng thái
+
         if (filterStatus === 'all') {
             setFilteredOrders(orders);
         } else {
@@ -48,7 +48,7 @@ const SellerOrders = ({ sellerId }) => {
     }, [orders, filterStatus]);
 
     const formatDate = (date) => {
-        if (!date) return "Không xác định";
+        if (!date) return "Undefined";
         try {
             return new Date(date).toLocaleDateString('vi-VN');
         } catch {
@@ -79,10 +79,10 @@ const SellerOrders = ({ sellerId }) => {
     const handleFilterChange = (status) => {
         setFilterStatus(status);
         if (status === 'all') {
-            setFilteredOrders(orders); // Hiển thị tất cả đơn hàng
+            setFilteredOrders(orders);
         } else {
             const filtered = orders.filter(order => order.status.toLowerCase() === status.toLowerCase());
-            setFilteredOrders(filtered); // Lọc theo trạng thái
+            setFilteredOrders(filtered);
         }
     };
 
@@ -108,23 +108,22 @@ const SellerOrders = ({ sellerId }) => {
     return (
         <div>
             <Container className="my-5">
-                <h2 className="text-center mb-4">Đơn Hàng Của Seller</h2>
+                <h2 className="text-center mb-4">Seller Order</h2>
 
                 <div className="mb-4 d-flex justify-content-end">
                         <DropdownButton
                             id="dropdown-basic-button"
-                            title="Lọc theo trạng thái"
-                            onSelect={handleFilterChange}  // Sử dụng handleFilterChange để thay đổi trạng thái lọc
-                        >
-                            <Dropdown.Item eventKey="all">Tất cả</Dropdown.Item>
-                            <Dropdown.Item eventKey="success">Đơn hàng thành công</Dropdown.Item>
-                            <Dropdown.Item eventKey="pending">Đơn hàng chờ xác nhận</Dropdown.Item>
-                            <Dropdown.Item eventKey="cancel">Đơn hàng đã hủy</Dropdown.Item>
+                            title="Filter by status"
+                            onSelect={handleFilterChange}                          >
+                            <Dropdown.Item eventKey="all">All</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Completed order</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Pending order</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Cancelled order</Dropdown.Item>
                         </DropdownButton>
                 </div>
 
                 {filteredOrders.length === 0 ? (
-                    <p className="text-center text-muted">Không tìm thấy đơn hàng nào.</p>
+                    <p className="text-center text-muted">Order not found!</p>
                 ) : (
                     filteredOrders.map((order) => {
                         const { label, color } = getStatusLabel(order.status);
@@ -175,7 +174,7 @@ const SellerOrders = ({ sellerId }) => {
                                     <Row>
                                         <Col>
                                             <h5 className="text-end">
-                                                Tổng cộng: <span className="text-danger">{formatPrice(order.totalAmount)}</span>
+                                                Total amount: <span className="text-danger">{formatPrice(order.totalAmount)}</span>
                                             </h5>
                                         </Col>
                                     </Row>

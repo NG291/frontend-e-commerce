@@ -23,7 +23,7 @@ const UserPendingOrders = () => {
             setOrders(response.data);
         } catch (error) {
             console.error('Error fetching pending orders:', error);
-            toast.error("Lỗi khi tải danh sách đơn hàng chờ xử lý. Vui lòng thử lại sau.");
+            toast.error("Error loading pending orders list. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -33,8 +33,8 @@ const UserPendingOrders = () => {
     const cancelOrder = async (orderId) => {
         // Hiển thị hộp thoại xác nhận
         confirmAlert({
-            title: 'Xác nhận hủy đơn hàng',
-            message: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+            title: 'Confirm cancel order',
+            message: 'Are you sure to cancel this order?',
             buttons: [
                 {
                     label: 'Yes',
@@ -42,34 +42,34 @@ const UserPendingOrders = () => {
                         try {
                             // Gọi API hủy đơn hàng
                             const response = await axiosClient.put(`${BASE_URL}/api/orders/cancel/${orderId}`);
-                            toast.success(response.data); // Hiển thị thông báo thành công
-                            loadPendingOrders(); // Cập nhật lại danh sách đơn hàng
+                            toast.success(response.data);
+                            loadPendingOrders();
                         } catch (error) {
                             console.error('Error canceling order:', error);
-                            toast.error("Lỗi khi hủy đơn hàng. Vui lòng thử lại sau.");
+                            toast.error("Order cancel error. Try again later!");
                         }
                     }
                 },
                 {
                     label: 'No',
-                    onClick: () => toast.info("Hành động hủy đã bị hủy.")
+                    onClick: () => toast.info("Action cancelled!")
                 }
             ]
         });
     };
 
     useEffect(() => {
-        loadPendingOrders(); // Lấy danh sách đơn hàng khi component được render
+        loadPendingOrders();
     }, []);
 
     return (
         <div className="user-pending-orders">
             <Header />
-            <h2>Danh sách đơn hàng chờ xử lý</h2>
+            <h2>Pending orders</h2>
             {loading ? (
-                <p>Đang tải danh sách đơn hàng...</p>
+                <p>Loading...</p>
             ) : orders.length === 0 ? (
-                <p>Không có đơn hàng chờ xử lý hiện tại. Hãy kiểm tra lại sau.</p>
+                <p>There are no current pending orders. Please check back later.</p>
             ) : (
                 <Table striped bordered hover>
                     <thead>
@@ -93,12 +93,12 @@ const UserPendingOrders = () => {
                                             variant="danger"
                                             onClick={() => cancelOrder(order.id)} // Gọi hàm hủy đơn
                                         >
-                                            Hủy đơn hàng
+                                            Cancel order
                                         </Button>
                                     </>
                                 )}
                                 {(order.status === 'CONFIRMED' || order.status === 'CANCELLED') && (
-                                    <span>Đơn hàng đã được xử lý.</span>
+                                    <span>Order has been processed.</span>
                                 )}
                             </td>
                         </tr>

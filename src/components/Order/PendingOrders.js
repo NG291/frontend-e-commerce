@@ -31,11 +31,11 @@ const PendingOrders = () => {
     const handleOrderAction = async (orderId, actionType) => {
         const confirmationMessage =
             actionType === "reject"
-                ? "Bạn có chắc chắn muốn từ chối đơn hàng này?"
-                : "Bạn có chắc chắn muốn xác nhận đơn hàng này?";
+                ? "Are you sure you want to reject this order?"
+                : "Are you sure you want to confirm this order?";
 
         confirmAlert({
-            title: 'Xác nhận hành động',
+            title: 'Confirm action!',
             message: confirmationMessage,
             buttons: [
                 {
@@ -47,33 +47,33 @@ const PendingOrders = () => {
                                     ? `${BASE_URL}/api/orders/reject/${orderId}`
                                     : `${BASE_URL}/api/orders/success/${orderId}`;
                             await axiosClient.put(endpoint);
-                            fetchPendingOrders(); // Lấy lại danh sách đơn hàng sau khi xử lý
+                            fetchPendingOrders();
 
                             const successMessage =
                                 actionType === "reject"
-                                    ? "Đơn hàng đã bị từ chối thành công."
-                                    : "Đơn hàng đã được xác nhận thành công.";
+                                    ? "The order was successfully rejected."
+                                    : "Order has been confirmed successfully.";
                             toast.success(successMessage);
                         } catch (error) {
                             console.error('Error processing order:', error);
                             const errorMessage =
                                 actionType === "reject"
-                                    ? "Lỗi khi từ chối đơn hàng. Vui lòng thử lại sau."
-                                    : "Lỗi khi xác nhận đơn hàng. Vui lòng thử lại sau.";
+                                    ? "Error rejecting order. Please try again later."
+                                    : "Error confirming order. Please try again later.";
                             toast.error(errorMessage);
                         }
                     }
                 },
                 {
                     label: 'No',
-                    onClick: () => toast.info("Hành động đã bị hủy.")
+                    onClick: () => toast.info("Action terminated!")
                 }
             ]
         });
     };
 
     useEffect(() => {
-        fetchPendingOrders(); // Lấy danh sách đơn hàng khi component được render
+        fetchPendingOrders();
     }, []);
 
     return (

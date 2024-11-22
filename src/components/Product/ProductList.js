@@ -1,15 +1,15 @@
 import React from 'react';
-import { Card, Row, Col, Spinner } from 'react-bootstrap';
-import { Carousel } from 'antd';
-import { BASE_URL } from '../../utils/apiURL';
+import {Card, Row, Col, Spinner} from 'react-bootstrap';
+import {Carousel} from 'antd';
+import {BASE_URL} from '../../utils/apiURL';
 import './ProductList.scss';
 
-const ProductList = ({ products, loading, error }) => {
+const ProductList = ({products, loading, error}) => {
     // Hiển thị spinner khi đang tải
     if (loading) {
         return (
             <div className="text-center">
-                <Spinner animation="border" variant="primary" />
+                <Spinner animation="border" variant="primary"/>
                 <p>Loading products...</p>
             </div>
         );
@@ -79,7 +79,7 @@ const ProductList = ({ products, loading, error }) => {
                                         Category: {product.category?.name || 'N/A'}
                                     </Card.Text>
                                     <Card.Text className="price">
-                                        VND {product.price || 'N/A'}
+                                        {product.price || 'N/A'} VND
                                     </Card.Text>
                                     <Card.Text className="number">
                                         Quantity: {product.quantity || 'N/A'}

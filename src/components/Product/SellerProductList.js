@@ -77,7 +77,7 @@ const SellerProductList = ({ sellerId: userId }) => {
                                 <Card.Body>
                                     <Card.Title as="h5">{product.name}</Card.Title>
                                     <Card.Text>{product.description}</Card.Text>
-                                    <Card.Text className="price">VND {product.price || 'N/A'}</Card.Text>
+                                    <Card.Text className="price">{product.price || 'N/A'} VND</Card.Text>
                                     <Card.Text className="number">Quantity: {product.quantity || 'N/A'}</Card.Text>
                                 </Card.Body>
                             </Card>

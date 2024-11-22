@@ -55,8 +55,8 @@ const LoginPage = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/api/users/reset?email=${resetEmail}`);
                 toast.success(response.data || 'Reset password email sent successfully!');
-                setShowResetModal(false); // Đóng modal sau khi gửi email
-                setResetEmail(''); // Xóa email sau khi reset
+                setShowResetModal(false); //
+                setResetEmail('');
             } catch (error) {
                 console.error(error);
                 toast.error('Failed to reset password. Please try again.');

@@ -77,7 +77,7 @@ const ProductDetailPage = () => {
                                     className="product-thumbnails-scrollable"
                                     onWheel={(e) => {
                                         const container = e.currentTarget;
-                                        container.scrollLeft += e.deltaY; // Cuộn ngang theo hướng chuột
+                                        container.scrollLeft += e.deltaY;
                                     }}
                                 >
                                     <div className="product-thumbnails">
