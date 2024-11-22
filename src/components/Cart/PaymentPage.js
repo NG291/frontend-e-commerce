@@ -49,7 +49,7 @@ const PaymentPage = () => {
                             <Card.Body>
                                 <h2 className="text-center mb-4">Payment</h2>
                                 <div className="payment-details">
-                                    <p><strong>Total Amount:</strong> ${totalAmount}</p>
+                                    <p><strong>Total Amount:</strong> VND {totalAmount}</p>
                                     <p><strong>Payment Method:</strong> {paymentMethod}</p>
                                 </div>
                                 <Button

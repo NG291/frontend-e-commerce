@@ -28,8 +28,8 @@ import SellerOrders from "./components/Order/SellerOrders";
 import PendingOrders from "./components/Order/PendingOrders";
 import ChangePassword from "./pages/SellerPage/ChangePassword";
 import ForgotPasswordPage from "./pages/Password/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/Password/ResetPasswordPage";
-import PasswordResetSuccessPage from "./pages/Password/PasswordResetSuccessPage";
+import ResetPasswordPage from "./pages/Password/PasswordResetPage";
+import SellerProductList from "./components/Product/SellerProductList";
 import UserPendingOrders from "./components/Order/UserPendingOrders";
 import Layout from "./pages/Layout";
 
@@ -65,7 +65,7 @@ function App() {
                     <Route path="/change-password" element={<ChangePassword/>}/>
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
-                    <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
+                    <Route path="/seller/products" element={<SellerProductList />} />
                     <Route path="/UserPendingOrders" element={<UserPendingOrders/>} />
                 </Routes>
                 <ToastContainer/>

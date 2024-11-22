@@ -2,53 +2,56 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
-import { Card, Spinner, Row, Col } from 'react-bootstrap';
+import { Card, Spinner, Row, Col, Container } from 'react-bootstrap';
 import { Carousel } from 'antd';
-import Header from "../../components/Header/Header"; // Import Header
-import Footer from "../../components/Footer/Footer"; // Import Footer
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import './ProductDetailPage.scss';
-import AddToCartButton from "../Cart/AddToCartButton"; // Import button Thêm vào giỏ hàng
+import AddToCartButton from "../Cart/AddToCartButton";
+import SellerProductList from "./SellerProductList"; // Import SellerProductList
 
 const ProductDetailPage = () => {
-    const { id } = useParams(); // Lấy ID sản phẩm từ URL
+    const { id } = useParams(); // Get product ID from URL
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Quản lý ảnh chính
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // Manage the main image
+    const [sellerId, setSellerId] = useState(null); // State to store the seller's ID
 
-    // Fetch sản phẩm từ API khi component mount
+    // Fetch product data from API
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const response = await axiosClient.get(`${BASE_URL}/api/products/view/${id}`);
                 setProduct(response.data);
-                setCurrentImageIndex(0); // Chọn ảnh đầu tiên làm ảnh chính
+                setSellerId(response.data.sellerId); // Set the seller ID
+                setCurrentImageIndex(0); // Set the first image as the main image
             } catch (error) {
                 console.error("Error fetching product:", error);
             } finally {
-                setLoading(false); // Kết thúc việc tải dữ liệu
+                setLoading(false); // Finish loading
             }
         };
 
         fetchProduct();
-    }, [id]); // Chạy lại khi ID thay đổi
+    }, [id]); // Refetch if product ID changes
 
-    // Nếu đang tải dữ liệu hoặc không tìm thấy sản phẩm
+    // If loading or product not found
     if (loading) {
         return (
             <div className="text-center">
                 <Spinner animation="border" variant="primary" />
-                <p>Đang tải sản phẩm...</p>
+                <p>Loading...</p>
             </div>
         );
     }
 
     if (!product) {
-        return <p className="text-center">Không tìm thấy sản phẩm</p>;
+        return <p className="text-center">Product not found!</p>;
     }
 
     return (
         <>
-            <Header /> {/* Hiển thị Header */}
+            <Header />
             <div className="product-detail-page">
                 <div className="container product-detail-container">
                     <Row>
@@ -56,8 +59,8 @@ const ProductDetailPage = () => {
                             <div className="product-image-container">
                                 <Carousel
                                     autoplay
-                                    selectedIndex={currentImageIndex} // Chọn ảnh chính từ state
-                                    afterChange={setCurrentImageIndex} // Cập nhật ảnh chính khi thay đổi
+                                    selectedIndex={currentImageIndex}
+                                    afterChange={setCurrentImageIndex}
                                 >
                                     {product.images.map((image, index) => (
                                         <div key={index}>
@@ -70,19 +73,28 @@ const ProductDetailPage = () => {
                                     ))}
                                 </Carousel>
 
-                                {/* Ảnh thu nhỏ */}
-                                <div className="product-thumbnails">
-                                    {product.images.map((image, index) => (
-                                        <div key={index} className="product-thumbnail-col">
-                                            <img
-                                                src={`${BASE_URL}/images/${image.fileName}`}
-                                                alt={`thumbnail-${index}`}
-                                                className="product-thumbnail"
-                                                onClick={() => setCurrentImageIndex(index)} // Thay đổi ảnh chính khi click vào ảnh thu nhỏ
-                                            />
-                                        </div>
-                                    ))}
+                                <div
+                                    className="product-thumbnails-scrollable"
+                                    onWheel={(e) => {
+                                        const container = e.currentTarget;
+                                        container.scrollLeft += e.deltaY;
+                                    }}
+                                >
+                                    <div className="product-thumbnails">
+                                        {product.images.map((image, index) => (
+                                            <div key={index}
+                                                 className={`product-thumbnail-col ${currentImageIndex === index ? 'active' : ''}`}>
+                                                <img
+                                                    src={`${BASE_URL}/images/${image.fileName}`}
+                                                    alt={`thumbnail-${index}`}
+                                                    className="product-thumbnail"
+                                                    onClick={() => setCurrentImageIndex(index)} // Set image index on click
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
+
                             </div>
                         </Col>
 
@@ -92,19 +104,19 @@ const ProductDetailPage = () => {
                                     <Card.Title className="product-title">{product.name}</Card.Title>
 
                                     <div className="product-description">
-                                        <strong>Mô tả:</strong>
+                                        <strong>Description:</strong>
                                         <p>{product.description}</p>
                                     </div>
 
                                     <div className="product-price">
-                                        <strong>Giá:</strong>
+                                        <strong>Price: </strong>
                                         <span className="price">
                                             {product.price.toLocaleString('vi-VN')} VND
                                         </span>
                                     </div>
 
-                                    <div className={"add-to-cart-button"}>
-                                    <AddToCartButton productId={product.id} />
+                                    <div className="add-to-cart-button">
+                                        <AddToCartButton productId={product.id} />
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -112,6 +124,19 @@ const ProductDetailPage = () => {
                     </Row>
                 </div>
             </div>
+
+            {/* Display related products from the same seller */}
+            <div className="seller-products-section">
+                <Container>
+                    <h2 className="mb-4">Other Products from the Seller</h2>
+                    {sellerId ? (
+                        <SellerProductList sellerId={sellerId} />
+                    ) : (
+                        <p className="text-center">Unable to load seller's products.</p>
+                    )}
+                </Container>
+            </div>
+
             <Footer />
         </>
     );

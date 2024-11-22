@@ -22,7 +22,7 @@ const PendingOrders = () => {
             setOrders(response.data);
         } catch (error) {
             console.error('Error fetching pending orders:', error);
-            toast.error("Lỗi khi tải danh sách đơn hàng chờ xử lý. Vui lòng thử lại sau.");
+            toast.error("Error loading pending orders list. Please try again later!");
         } finally {
             setLoading(false);
         }
@@ -31,11 +31,11 @@ const PendingOrders = () => {
     const handleOrderAction = async (orderId, actionType) => {
         const confirmationMessage =
             actionType === "reject"
-                ? "Bạn có chắc chắn muốn từ chối đơn hàng này?"
-                : "Bạn có chắc chắn muốn xác nhận đơn hàng này?";
+                ? "Are you sure you want to reject this order?"
+                : "Are you sure you want to confirm this order?";
 
         confirmAlert({
-            title: 'Xác nhận hành động',
+            title: 'Confirm action!',
             message: confirmationMessage,
             buttons: [
                 {
@@ -47,42 +47,42 @@ const PendingOrders = () => {
                                     ? `${BASE_URL}/api/orders/reject/${orderId}`
                                     : `${BASE_URL}/api/orders/success/${orderId}`;
                             await axiosClient.put(endpoint);
-                            fetchPendingOrders(); // Lấy lại danh sách đơn hàng sau khi xử lý
+                            fetchPendingOrders();
 
                             const successMessage =
                                 actionType === "reject"
-                                    ? "Đơn hàng đã bị từ chối thành công."
-                                    : "Đơn hàng đã được xác nhận thành công.";
+                                    ? "The order was successfully rejected."
+                                    : "Order has been confirmed successfully.";
                             toast.success(successMessage);
                         } catch (error) {
                             console.error('Error processing order:', error);
                             const errorMessage =
                                 actionType === "reject"
-                                    ? "Lỗi khi từ chối đơn hàng. Vui lòng thử lại sau."
-                                    : "Lỗi khi xác nhận đơn hàng. Vui lòng thử lại sau.";
+                                    ? "Error rejecting order. Please try again later."
+                                    : "Error confirming order. Please try again later.";
                             toast.error(errorMessage);
                         }
                     }
                 },
                 {
                     label: 'No',
-                    onClick: () => toast.info("Hành động đã bị hủy.")
+                    onClick: () => toast.info("Action terminated!")
                 }
             ]
         });
     };
 
     useEffect(() => {
-        fetchPendingOrders(); // Lấy danh sách đơn hàng khi component được render
+        fetchPendingOrders();
     }, []);
 
     return (
         <div className="pending-orders py-5 my-5">
-            <h2>Danh sách đơn hàng chờ xử lý</h2>
+            <h2>List of pending orders</h2>
             {loading ? (
-                <p>Đang tải danh sách đơn hàng...</p>
+                <p>Loading order list...</p>
             ) : orders.length === 0 ? (
-                <p>Không có đơn hàng chờ xử lý hiện tại. Hãy kiểm tra lại sau.</p>
+                <p>There are no current pending orders. Please check back later!</p>
             ) : (
                 <Table striped bordered hover>
                     <thead>
@@ -106,18 +106,18 @@ const PendingOrders = () => {
                                             variant="success"
                                             onClick={() => handleOrderAction(order.id, "confirm")}
                                         >
-                                            Xác nhận
+                                            Confirm
                                         </Button>
                                         <Button
                                             variant="danger"
                                             onClick={() => handleOrderAction(order.id, "reject")}
                                         >
-                                            Từ chối
+                                            Reject
                                         </Button>
                                     </>
                                 )}
                                 {(order.status === 'CONFIRMED' || order.status === 'REJECTED') && (
-                                    <span>Đơn hàng đã được xử lý.</span>
+                                    <span>Order has been processed!</span>
                                 )}
                             </td>
                         </tr>

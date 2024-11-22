@@ -38,15 +38,15 @@ function Layout() {
                             <ul className="nav flex-column list-unstyled">
                                 <li className="nav-item">
                                     <Link to="/seller-page" className="nav-link d-flex align-items-center gap-2">
-                                        <FaUserShield/> Seller Page</Link>
+                                        <FaUserShield/>Seller Page</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to="/SellerOrders" className="nav-link d-flex align-items-center gap-2">
-                                        <BsFileEarmark/> Đơn hàng</Link>
+                                        <BsFileEarmark/>Orders</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to="/PendingOrders" className="nav-link d-flex align-items-center gap-2">
-                                        <BsFileEarmark/> Đơn hàng mới</Link>
+                                        <BsFileEarmark/>New order</Link>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link d-flex align-items-center gap-2" href="#">
@@ -94,6 +94,7 @@ function Layout() {
 
                 </div>
                 <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <Header/>
                     <Outlet/>
                     <Footer/>
                 </main>

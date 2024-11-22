@@ -105,7 +105,7 @@ const Cart = () => {
                             {cartItems.map((item) => (
                                 <tr key={item.product.id}>
                                     <td>{item.product.name}</td>
-                                    <td>${item.product.price}</td>
+                                    <td>VND {item.product.price}</td>
                                     <td>
                                         <Button
                                             variant="secondary"
@@ -121,7 +121,7 @@ const Cart = () => {
                                             +
                                         </Button>
                                     </td>
-                                    <td>${(item.product.price * item.quantity).toFixed(2)}</td>
+                                    <td>VND {(item.product.price * item.quantity).toFixed(2)}</td>
                                     <td>
                                         <Button
                                             variant="danger"
@@ -135,7 +135,7 @@ const Cart = () => {
                             </tbody>
                         </Table>
                         <div className="cart-summary">
-                            <h4>Total Amount: ${calculateTotalAmount().toFixed(2)}</h4>
+                            <h4>Total Amount: VND {calculateTotalAmount().toFixed(2)}</h4>
                         </div>
                         <Row className="payment-section">
                             <Col sm={12} md={6}>

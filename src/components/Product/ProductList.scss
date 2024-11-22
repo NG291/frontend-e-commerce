@@ -15,44 +15,42 @@
 
   /* Phần carousel chiếm 70% chiều cao */
   .carousel {
-    height: 70%; /* Phần hình ảnh chiếm 70% chiều cao của card */
+    height: 50%; /* Giảm chiều cao của carousel để nhường không gian cho Card Body */
     overflow: hidden;
     border-bottom: 1px solid #ddd;
     border-radius: 8px 8px 0 0;
-    position: relative;
-  }
 
-  .carousel .slick-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  img {
-    width: 100%; /* Đảm bảo ảnh chiếm 100% chiều rộng của phần carousel */
-    height: 100%; /* Đảm bảo ảnh chiếm 100% chiều cao của phần carousel */
-    object-fit: cover; /* Đảm bảo ảnh phủ đầy khung mà không bị méo */
-    border-radius: 8px 8px 0 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px 8px 0 0;
+    }
   }
 
   .card-body {
+    flex: 1; /* Đảm bảo chiếm toàn bộ chiều cao còn lại */
     padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Đảm bảo phần thông tin không bị đẩy lên trên */
-    height: 30%; /* Phần thông tin chiếm 30% chiều cao của card */
+    justify-content: space-between; /* Giãn đều các phần tử */
+    overflow: hidden;
 
     h5 {
       font-size: 16px;
       font-weight: bold;
       margin: 10px 0;
+      white-space: nowrap; /* Không xuống dòng */
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     p {
       font-size: 14px;
       color: #555;
-      margin-bottom: 10px;
-      height: 50px; /* Cố định chiều cao cho mô tả sản phẩm */
+      margin: 5px 0;
+      height: auto; /* Tự điều chỉnh chiều cao */
+      max-height: 40px; /* Giới hạn chiều cao tối đa */
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -61,7 +59,7 @@
       font-weight: bold;
       color: #007bff;
       font-size: 18px;
-      margin-top: auto; /* Đẩy giá xuống dưới cùng của card-body */
+      margin: 5px 0;
     }
   }
 }

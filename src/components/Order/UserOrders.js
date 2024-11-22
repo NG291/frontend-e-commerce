@@ -42,7 +42,7 @@ const UserOrders = () => {
     }, [orders, filterStatus]);
 
     const formatDate = (date) => {
-        if (!date) return "Không xác định";
+        if (!date) return "Undefined";
         try {
             if (Array.isArray(date)) {
                 const formattedDate = new Date(
@@ -59,7 +59,7 @@ const UserOrders = () => {
             }
             return new Date(date).toLocaleDateString('vi-VN');
         } catch {
-            return "Không xác định";
+            return "Undefined";
         }
     };
 
@@ -69,16 +69,16 @@ const UserOrders = () => {
     };
 
     const getStatusLabel = (status) => {
-        if (!status) return { label: "Không xác định", color: "secondary" };
+        if (!status) return { label: "Undefined", color: "secondary" };
         switch (status.toLowerCase()) {
             case 'success':
-                return { label: 'Đã hoàn thành', color: 'success' };
+                return { label: 'Completed', color: 'success' };
             case 'cancel':
-                return { label: 'Đã hủy', color: 'danger' };
+                return { label: 'Cancelled', color: 'danger' };
             case 'pending':
-                return { label: 'Chờ xử lý', color: 'warning' };
+                return { label: 'Pending', color: 'warning' };
             default:
-                return { label: "Không xác định", color: "secondary" };
+                return { label: "Undefined", color: "secondary" };
         }
     };
 
@@ -105,23 +105,23 @@ const UserOrders = () => {
         <div>
             <Header />
             <Container className="my-5">
-                <h2 className="text-center mb-4">Đơn Hàng Của Bạn</h2>
+                <h2 className="text-center mb-4">Your order</h2>
                 <Row className="mb-4">
                     <Col>
                         <DropdownButton
                             id="dropdown-basic-button"
-                            title="Lọc theo trạng thái"
+                            title="Filter by status"
                             onSelect={(status) => setFilterStatus(status)}
                         >
-                            <Dropdown.Item eventKey="all">Tất cả</Dropdown.Item>
-                            <Dropdown.Item eventKey="success">Đơn hàng thành công</Dropdown.Item>
-                            <Dropdown.Item eventKey="pending">Đơn hàng chờ xác nhận</Dropdown.Item>
-                            <Dropdown.Item eventKey="cancel">Đơn hàng đã hủy</Dropdown.Item>
+                            <Dropdown.Item eventKey="all">All</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Completed order</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Pending order</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Cancelled order</Dropdown.Item>
                         </DropdownButton>
                     </Col>
                 </Row>
                 {filteredOrders.length === 0 ? (
-                    <p className="text-center text-muted">Không tìm thấy đơn hàng nào.</p>
+                    <p className="text-center text-muted">Order not found!</p>
                 ) : (
                     filteredOrders.map((order) => {
                         const { label, color } = getStatusLabel(order.status);
@@ -130,9 +130,9 @@ const UserOrders = () => {
                                 <Card.Body>
                                     <Row className="align-items-center">
                                         <Col md={6}>
-                                            <h5 className="mb-2">Mã đơn: <strong>{order.id || "Không xác định"}</strong></h5>
+                                            <h5 className="mb-2">Order code: <strong>{order.id || "Undefined"}</strong></h5>
                                             <p className="text-muted">
-                                                <strong>Ngày tạo:</strong> {formatDate(order.orderDate)}
+                                                <strong>Date created:</strong> {formatDate(order.orderDate)}
                                             </p>
                                         </Col>
                                         <Col md={6} className="text-md-end">
@@ -149,14 +149,14 @@ const UserOrders = () => {
                                                     <div className="d-flex align-items-center">
                                                         <Image
                                                             src={`${BASE_URL}${item.imageUrl}`}
-                                                            alt={"ảnh bị lỗi"}
+                                                            alt={item.productName}
                                                             width="70"
                                                             height="70"
                                                             className="me-3 rounded-circle"
                                                         />
                                                         <div>
-                                                            <h6 className="mb-1">{item.productName || "Không xác định"}</h6>
-                                                            <small>Số lượng: {item.quantity || 0}</small>
+                                                            <h6 className="mb-1">{item.productName || "Undefined"}</h6>
+                                                            <small>Quantity: {item.quantity || 0}</small>
                                                         </div>
                                                     </div>
                                                     <div className="text-end">
@@ -165,14 +165,14 @@ const UserOrders = () => {
                                                 </ListGroup.Item>
                                             ))
                                         ) : (
-                                            <ListGroup.Item className="text-muted">Không có sản phẩm</ListGroup.Item>
+                                            <ListGroup.Item className="text-muted">Product not found</ListGroup.Item>
                                         )}
                                     </ListGroup>
 
                                     <Row>
                                         <Col>
                                             <h5 className="text-end">
-                                                Tổng cộng: {formatPrice(order.totalAmount)}
+                                                Total amount: {formatPrice(order.totalAmount)}
                                             </h5>
                                         </Col>
                                     </Row>
