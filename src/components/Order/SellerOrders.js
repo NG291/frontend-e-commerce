@@ -35,6 +35,27 @@ const SellerOrders = ({ sellerId }) => {
         fetchOrders();
     }, [sellerId]);
 
+    const formatDate = (date) => {
+        if (!date) return "Không xác định";
+        try {
+            if (Array.isArray(date)) {
+                const formattedDate = new Date(
+                    date[0],
+                    date[1] - 1,
+                    date[2],
+                    date[3] || 0,
+                    date[4] || 0,
+                    date[5] || 0,
+                    date[6] || 0
+                );
+                const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                return formattedDate.toLocaleDateString('vi-VN', options);
+            }
+            return new Date(date).toLocaleDateString('vi-VN');
+        } catch {
+            return "Undefined";
+        }
+    };
     const formatPrice = (price) => {
         if (isNaN(price) || price === null || price === undefined) return "0 VND";
         return `${price.toLocaleString('vi-VN')} VND`;  // Định dạng giá
@@ -90,7 +111,7 @@ const SellerOrders = ({ sellerId }) => {
                                         <Col md={6}>
                                             <h5 className="mb-2">Order code: <strong>{order.id || "Undefined"}</strong></h5>
                                             <p className="text-muted">
-                                                <strong>Date created:</strong> {new Date(order.orderDate).toLocaleDateString('vi-VN')}
+                                                <strong>Date created:</strong> {formatDate(order.orderDate)}
                                             </p>
                                         </Col>
                                         <Col md={6} className="text-md-end">

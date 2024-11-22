@@ -86,7 +86,12 @@ const Header = () => {
                     {isUser && (
                         <ul className="nav me-auto">
                             <li className="nav-item">
-                                <Link to="/UserOrders" className="nav-link link-body-emphasis px-2">Order</Link>
+                                <Link to="/UserOrders" className="nav-link link-body-emphasis px-2">Order
+                                    Completed</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/UserPendingOrders" className="nav-link link-body-emphasis px-2">Pending
+                                    orders</Link>
                             </li>
                             <Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>
                                 <Link to="/cart" className="text-decoration-none text-dark">
@@ -95,14 +100,14 @@ const Header = () => {
                             </Button>
                         </ul>
 
-                )}
+                    )}
 
-            </ul>
+                </ul>
 
-            <ul className="nav">
-                {isLoggedIn ? (
-                    <ul className="nav me-auto">
-                        <li className="nav-item">
+                <ul className="nav">
+                    {isLoggedIn ? (
+                        <ul className="nav me-auto">
+                            <li className="nav-item">
                             <Button variant="link" onClick={handleLogout}
                                     className="nav-link link-body-emphasis px-2">
                                 Logout

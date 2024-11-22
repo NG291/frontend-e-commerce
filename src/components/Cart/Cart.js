@@ -6,7 +6,7 @@ import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import './Cart.css'; // Thêm file CSS để tuỳ chỉnh style
+import './Cart.css';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
