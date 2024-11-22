@@ -31,6 +31,7 @@ import ForgotPasswordPage from "./pages/Password/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Password/PasswordResetPage";
 import SellerProductList from "./components/Product/SellerProductList";
 import UserPendingOrders from "./components/Order/UserPendingOrders";
+import Layout from "./pages/Layout";
 
 
 function App() {
@@ -51,14 +52,16 @@ function App() {
                     <Route path="/product/:id" element={<ProductDetailPage/>}></Route>
                     <Route path="/edit-employee/:id" element={<EditEmployeePage/>}/>
                     <Route path="/user-seller-list" element={<UserSellerPage/>}/>
-                    <Route path="/seller-page" element={<SellerPage/>}/>
+                    <Route element={<Layout/>}>
+                        <Route path="/seller-page" element={<SellerPage/>}/>
+                        <Route path="/SellerOrders" element={<SellerOrders/>}/>
+                        <Route path="/PendingOrders" element={<PendingOrders/>}/>
+                    </Route>
                     <Route path="/add-product" element={<AddProduct/>}/>
                     <Route path="/edit-product/:id" element={<UpdateProduct/>}/>
                     <Route path="/cart" element={<Cart/>}/>
                     <Route path="/payment" element={<PaymentPage/>}/>
                     <Route path="/UserOrders" element={<UserOrders/>}/>
-                    <Route path="/SellerOrders" element={<SellerOrders/>}/>
-                    <Route path="/PendingOrders" element={<PendingOrders/>}/>
                     <Route path="/change-password" element={<ChangePassword/>}/>
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />

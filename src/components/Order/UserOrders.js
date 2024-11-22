@@ -105,23 +105,23 @@ const UserOrders = () => {
         <div>
             <Header />
             <Container className="my-5">
-                <h2 className="text-center mb-4">Your order</h2>
+                <h2 className="text-center mb-4">Đơn Hàng Của Bạn</h2>
                 <Row className="mb-4">
                     <Col>
                         <DropdownButton
                             id="dropdown-basic-button"
-                            title="Filter on status"
+                            title="Lọc theo trạng thái"
                             onSelect={(status) => setFilterStatus(status)}
                         >
-                            <Dropdown.Item eventKey="all">All</Dropdown.Item>
-                            <Dropdown.Item eventKey="success">Completed</Dropdown.Item>
-                            <Dropdown.Item eventKey="pending">Pending</Dropdown.Item>
-                            <Dropdown.Item eventKey="cancel">Cancelled</Dropdown.Item>
+                            <Dropdown.Item eventKey="all">Tất cả</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Đơn hàng thành công</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Đơn hàng chờ xác nhận</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Đơn hàng đã hủy</Dropdown.Item>
                         </DropdownButton>
                     </Col>
                 </Row>
                 {filteredOrders.length === 0 ? (
-                    <p className="text-center text-muted">Order not found!</p>
+                    <p className="text-center text-muted">Không tìm thấy đơn hàng nào.</p>
                 ) : (
                     filteredOrders.map((order) => {
                         const { label, color } = getStatusLabel(order.status);
@@ -130,9 +130,9 @@ const UserOrders = () => {
                                 <Card.Body>
                                     <Row className="align-items-center">
                                         <Col md={6}>
-                                            <h5 className="mb-2">Order code: <strong>{order.id || "Undefined"}</strong></h5>
+                                            <h5 className="mb-2">Mã đơn: <strong>{order.id || "Không xác định"}</strong></h5>
                                             <p className="text-muted">
-                                                <strong>Date created:</strong> {formatDate(order.orderDate)}
+                                                <strong>Ngày tạo:</strong> {formatDate(order.orderDate)}
                                             </p>
                                         </Col>
                                         <Col md={6} className="text-md-end">
@@ -142,36 +142,37 @@ const UserOrders = () => {
                                         </Col>
                                     </Row>
 
-                                    <ListGroup variant="flush" className="my-3">{order.orderItems && order.orderItems.length > 0 ? (
-                                        order.orderItems.map((item) => (
-                                            <ListGroup.Item key={item.id} className="d-flex justify-content-between align-items-center border-0 py-2 rounded">
-                                                <div className="d-flex align-items-center">
-                                                    <Image
-                                                        src={`${BASE_URL}${item.imageUrl}`}
-                                                        alt={"Photo error"}
-                                                        width="70"
-                                                        height="70"
-                                                        className="me-3 rounded-circle"
-                                                    />
-                                                    <div>
-                                                        <h6 className="mb-1">{item.productName || "Undefined"}</h6>
-                                                        <small>Number: {item.quantity || 0}</small>
+                                    <ListGroup variant="flush" className="my-3">
+                                        {order.orderItems && order.orderItems.length > 0 ? (
+                                            order.orderItems.map((item) => (
+                                                <ListGroup.Item key={item.id} className="d-flex justify-content-between align-items-center border-0 py-2 rounded">
+                                                    <div className="d-flex align-items-center">
+                                                        <Image
+                                                            src={`${BASE_URL}${item.imageUrl}`}
+                                                            alt={"ảnh bị lỗi"}
+                                                            width="70"
+                                                            height="70"
+                                                            className="me-3 rounded-circle"
+                                                        />
+                                                        <div>
+                                                            <h6 className="mb-1">{item.productName || "Không xác định"}</h6>
+                                                            <small>Số lượng: {item.quantity || 0}</small>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="text-end">
-                                                    <small>{formatPrice(item.price)}</small>
-                                                </div>
-                                            </ListGroup.Item>
-                                        ))
-                                    ) : (
-                                        <ListGroup.Item className="text-muted">Product not found</ListGroup.Item>
-                                    )}
+                                                    <div className="text-end">
+                                                        <small>{formatPrice(item.price)}</small>
+                                                    </div>
+                                                </ListGroup.Item>
+                                            ))
+                                        ) : (
+                                            <ListGroup.Item className="text-muted">Không có sản phẩm</ListGroup.Item>
+                                        )}
                                     </ListGroup>
 
                                     <Row>
                                         <Col>
                                             <h5 className="text-end">
-                                                Total amount: {formatPrice(order.totalAmount)}
+                                                Tổng cộng: {formatPrice(order.totalAmount)}
                                             </h5>
                                         </Col>
                                     </Row>

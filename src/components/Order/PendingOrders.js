@@ -15,7 +15,6 @@ const PendingOrders = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Hàm lấy danh sách đơn hàng chờ xử lý
     const fetchPendingOrders = async () => {
         try {
             const sellerId = localStorage.getItem("userId");
@@ -78,8 +77,7 @@ const PendingOrders = () => {
     }, []);
 
     return (
-        <div className="pending-orders">
-            <Header />
+        <div className="pending-orders py-5 my-5">
             <h2>List of pending orders</h2>
             {loading ? (
                 <p>Loading order list...</p>
@@ -118,7 +116,6 @@ const PendingOrders = () => {
                                         </Button>
                                     </>
                                 )}
-                                {/* Nếu đơn hàng đã được xác nhận/từ chối, ẩn nút hành động */}
                                 {(order.status === 'CONFIRMED' || order.status === 'REJECTED') && (
                                     <span>Order has been processed!</span>
                                 )}
@@ -128,7 +125,6 @@ const PendingOrders = () => {
                     </tbody>
                 </Table>
             )}
-            <Footer />
         </div>
     );
 };

@@ -1,5 +1,5 @@
 .product-card {
-  height: 400px;
+  height: 400px; /* Tăng chiều cao của card để có thêm không gian cho nội dung */
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -13,6 +13,7 @@
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   }
 
+  /* Phần carousel chiếm 70% chiều cao */
   .carousel {
     height: 50%; /* Giảm chiều cao của carousel để nhường không gian cho Card Body */
     overflow: hidden;
@@ -60,39 +61,5 @@
       font-size: 18px;
       margin: 5px 0;
     }
-
-    .number {
-      font-size: 14px;
-      color: #666;
-    }
-  }
-}
-
-/* Điều chỉnh layout theo kích thước màn hình */
-@media (min-width: 1200px) {
-  .col-lg-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
-}
-
-@media (max-width: 1199px) {
-  .col-md-4 {
-    flex: 0 0 33.333%;
-    max-width: 33.333%;
-  }
-}
-
-@media (max-width: 991px) {
-  .col-sm-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-}
-
-@media (max-width: 575px) {
-  .col-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
   }
 }
