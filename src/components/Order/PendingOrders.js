@@ -21,7 +21,7 @@ const PendingOrders = () => {
             setOrders(response.data);
         } catch (error) {
             console.error('Error fetching pending orders:', error);
-            toast.error("Lỗi khi tải danh sách đơn hàng chờ xử lý. Vui lòng thử lại sau.");
+            toast.error("Error loading pending orders list. Please try again later!");
         } finally {
             setLoading(false);
         }
@@ -32,10 +32,10 @@ const PendingOrders = () => {
         try {
             await axiosClient.put(`${BASE_URL}/api/orders/reject/${orderId}`);
             fetchPendingOrders(); // Lấy lại danh sách đơn hàng sau khi từ chối
-            toast.success("Đơn hàng đã bị từ chối thành công.");
+            toast.success("The order was successfully rejected!");
         } catch (error) {
             console.error('Error rejecting order:', error);
-            toast.error("Lỗi khi từ chối đơn hàng. Vui lòng thử lại sau.");
+            toast.error("Error rejecting order. Please try again later!");
         }
     };
 
@@ -44,10 +44,10 @@ const PendingOrders = () => {
         try {
             await axiosClient.put(`${BASE_URL}/api/orders/success/${orderId}`);
             fetchPendingOrders(); // Lấy lại danh sách đơn hàng sau khi xác nhận
-            toast.success("Đơn hàng đã được xác nhận thành công.");
+            toast.success("Order has been confirmed successfully!");
         } catch (error) {
             console.error('Error confirming order:', error);
-            toast.error("Lỗi khi xác nhận đơn hàng. Vui lòng thử lại sau.");
+            toast.error("Error confirming order. Please try again later!");
         }
     };
 
@@ -58,11 +58,11 @@ const PendingOrders = () => {
     return (
         <div className="pending-orders">
             <Header />
-            <h2>Danh sách đơn hàng chờ xử lý</h2>
+            <h2>List of pending orders</h2>
             {loading ? (
-                <p>Đang tải danh sách đơn hàng...</p>
+                <p>Loading order list...</p>
             ) : orders.length === 0 ? (
-                <p>Không có đơn hàng chờ xử lý hiện tại. Hãy kiểm tra lại sau.</p>
+                <p>There are no current pending orders. Please check back later!</p>
             ) : (
                 <Table striped bordered hover>
                     <thead>
@@ -88,19 +88,19 @@ const PendingOrders = () => {
                                             variant="success"
                                             onClick={() => confirmOrder(order.id)}
                                         >
-                                            Xác nhận
+                                            Confirm
                                         </Button>
                                         <Button
                                             variant="danger"
                                             onClick={() => rejectOrder(order.id)}
                                         >
-                                            Từ chối
+                                            Reject
                                         </Button>
                                     </>
                                 )}
                                 {/* Nếu đơn hàng đã được xác nhận/từ chối, ẩn nút hành động */}
                                 {(order.status === 'CONFIRMED' || order.status === 'REJECTED') && (
-                                    <span>Đơn hàng đã được xử lý.</span>
+                                    <span>Order has been processed!</span>
                                 )}
                             </td>
                         </tr>

@@ -120,11 +120,11 @@ const HomePage = () => {
                         </form>
 
                         {/* Cart button */}
-                        <Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>
-                            <Link to="/cart" className="text-decoration-none text-dark">
-                                <FaShoppingCart/>
-                            </Link>
-                        </Button>
+                        {/*<Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>*/}
+                        {/*    <Link to="/cart" className="text-decoration-none text-dark">*/}
+                        {/*        <FaShoppingCart/>*/}
+                        {/*    </Link>*/}
+                        {/*</Button>*/}
                     </div>
                 </div>
             </div>

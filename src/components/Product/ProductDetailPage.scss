@@ -1,3 +1,29 @@
+// ProductDetailPage.scss
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';
+
+.product-thumbnails-slider {
+  margin-top: 10px;
+  .slick-slide {
+    padding: 5px;
+    img {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      &:hover {
+        border: 2px solid #007bff;
+      }
+    }
+  }
+
+  .slick-prev, .slick-next {
+    z-index: 1;
+    &:before {
+      color: #007bff;
+    }
+  }
+}
 
 .product-detail-page {
   padding: 50px 0;

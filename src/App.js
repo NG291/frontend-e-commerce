@@ -30,6 +30,7 @@ import ChangePassword from "./pages/SellerPage/ChangePassword";
 import ForgotPasswordPage from "./pages/Password/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/Password/ResetPasswordPage";
 import PasswordResetSuccessPage from "./pages/Password/PasswordResetSuccessPage";
+import SellerProductList from "./components/Product/SellerProductList";
 
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
+                    <Route path="/seller/products" element={<SellerProductList />} />
                 </Routes>
                 <ToastContainer/>
             </BrowserRouter>

@@ -1,14 +1,44 @@
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Spinner } from 'react-bootstrap';
 import { Carousel } from 'antd';
+import axios from 'axios';
 import { BASE_URL } from '../../utils/apiURL';
+import { toast } from 'react-toastify';
 import './ProductList.scss';
 
-const ProductList = ({ products, loading, error }) => {
+const SellerProductList = ({ sellerId: userId }) => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (!userId) return;
+
+        const fetchSellerProducts = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/api/products/seller/${userId}`, {
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                });
+                setProducts(response.data);
+            } catch (err) {
+                console.error("Error fetching seller products:", err);
+                setError("Failed to load seller products.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSellerProducts();
+    }, [userId]);
+
     if (loading) {
         return (
             <div className="text-center">
                 <Spinner animation="border" variant="primary" />
-                <p>Loading products...</p>
+                <p>Loading seller's products...</p>
             </div>
         );
     }
@@ -21,24 +51,13 @@ const ProductList = ({ products, loading, error }) => {
         );
     }
 
-    // Sắp xếp sản phẩm ngẫu nhiên
-    const randomizeProducts = (products) => {
-        return products.sort(() => Math.random() - 0.5);
-    };
-
-    const randomizedProducts = randomizeProducts([...products]); // Tạo một bản sao của mảng và sắp xếp ngẫu nhiên
-
-    const handleProductClick = (productId) => {
-        window.location.href = `/product/${productId}`; // Redirect to ProductDetailPage
-    };
-
     return (
         <div>
             <Row className="g-4 justify-content-center">
-                {randomizedProducts.length > 0 ? (
-                    randomizedProducts.map((product) => (
+                {products.length > 0 ? (
+                    products.map((product) => (
                         <Col lg={3} md={4} sm={6} xs={12} key={product.id} className="mb-4">
-                            <Card className="product-card" onClick={() => handleProductClick(product.id)}>
+                            <Card className="product-card">
                                 {product.images && product.images.length > 0 ? (
                                     <div className="carousel">
                                         <Carousel autoplay>
@@ -65,11 +84,11 @@ const ProductList = ({ products, loading, error }) => {
                         </Col>
                     ))
                 ) : (
-                    <p className="text-center">No products available.</p>
+                    <p className="text-center">No other products available.</p>
                 )}
             </Row>
         </div>
     );
 };
 
-export default ProductList;
+export default SellerProductList;
