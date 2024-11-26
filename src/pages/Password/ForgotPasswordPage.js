@@ -3,12 +3,14 @@ import axiosClient from '../../utils/axiosClient';
 import { Container, Button, Form, Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {BASE_URL} from "../../utils/apiURL";
+import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
@@ -19,6 +21,7 @@ const ForgotPasswordPage = () => {
             const response = await axiosClient.get(`${BASE_URL}/api/users/send-reset-link?email=${email}`);
             setMessage(response.data);
             toast.success(response.data);
+            navigate('/');
         } catch (err) {
             setError(err.response?.data || 'Error sending reset link.');
             toast.error(err.response?.data || 'Error sending reset link.');

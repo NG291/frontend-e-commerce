@@ -9,6 +9,7 @@ import ProductList from "../../components/Product/ProductList";
 import {Button, Container} from "react-bootstrap";
 import {FaShoppingCart} from "react-icons/fa";
 import {toast} from "react-toastify";
+import ProductFilter from "../../components/Product/ProductFilter";
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -20,7 +21,7 @@ const HomePage = () => {
     const [cartItems, setCartItems] = useState(0);
     const [isUser, setIsUser] = useState(false); // To check if the logged-in user is a regular user
     const [isSeller, setIsSeller] = useState(false); // To check if the logged-in user is a regular user
-
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [userId, setUserId] = useState(null);
 
     // Fetch products on page load
@@ -79,6 +80,7 @@ const HomePage = () => {
         <>
             <Header/>
             <div className="py-3 mb-4 border-bottom"> {/* Search and Cart button container */}
+                {/* Search and Cart button container */}
                 <div className="container d-flex flex-wrap justify-content-between align-items-center">
                     {/* Logo */}
                     <Link to="/"
@@ -86,45 +88,36 @@ const HomePage = () => {
                         <span className="fs-4 fw-bold">E-commerce</span>
                     </Link>
 
-                    {/* Show the button only for ROLE_USER */}
-                    {isUser && (
-                        <div className="text-center d-flex justify-content-center my-4">
-                            <Button onClick={handleRequestSellerRole} variant="success">Request Seller Role</Button>
-                        </div>
-                    )}
+                    <div className="d-flex align-items-center justify-content-end flex-grow-1">
+                        {/* Show the button only for ROLE_USER */}
+                        {isUser && (
+                            <Button
+                                onClick={handleRequestSellerRole}
+                                variant="success"
+                                className="me-3" // Add margin to separate from the search box
+                            >
+                                Request Seller Role
+                            </Button>
+                        )}
 
-                    {/*/!* Forgot Password and Reset Password links *!/*/}
-                    {/*{(isUser || isSeller) && (*/}
-                    {/*    <div className="text-center d-flex justify-content-center my-4">*/}
-                    {/*        <Link to="/forgot-password" className="btn btn-link">Forgot Password?</Link>*/}
-                    {/*        <br/>*/}
-                    {/*        /!* Replace :token dynamically with the actual token *!/*/}
-                    {/*        <Link to="/reset-password/:token" className="btn btn-link">Reset Password</Link>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
-
-                    {/* Search form and Cart button */}
-                    <div className="d-flex align-items-center">
-                        <form onSubmit={handleSearch} className="d-flex flex-grow-1" style={{maxWidth: '500px'}}>
+                        {/* Search form */}
+                        <form
+                            onSubmit={handleSearch}
+                            className="d-flex flex-grow-1 justify-content-end"
+                            style={{maxWidth: '500px'}}
+                        >
                             <input
                                 type="search"
-                                className="form-control"
+                                className="form-control me-2" // Add margin to the right
                                 placeholder="Search products..."
                                 aria-label="Search"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
-                            <Button type="submit" variant="outline-primary" className="ms-2">
+                            <Button type="submit" variant="outline-primary">
                                 Search
                             </Button>
                         </form>
-
-                        {/* Cart button */}
-                        {/*<Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>*/}
-                        {/*    <Link to="/cart" className="text-decoration-none text-dark">*/}
-                        {/*        <FaShoppingCart/>*/}
-                        {/*    </Link>*/}
-                        {/*</Button>*/}
                     </div>
                 </div>
             </div>
@@ -135,6 +128,8 @@ const HomePage = () => {
                 </div>
 
                 <h2 className="text-center my-4">Featured Products</h2>
+
+                {/*<ProductFilter setFilteredProducts={setFilteredProducts} setLoading={setLoading} />*/}
 
                 <ProductList products={products} loading={loading} error={error}/>
 

@@ -34,7 +34,8 @@ function Layout() {
                         aria-labelledby="sidebarMenuLabel"
                     >
 
-                        <div className="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto bg-light text-dark">
+                        <div
+                            className="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto bg-light text-dark">
                             <ul className="nav flex-column list-unstyled">
                                 <li className="nav-item">
                                     <Link to="/seller-page" className="nav-link d-flex align-items-center gap-2">
@@ -94,9 +95,9 @@ function Layout() {
 
                 </div>
                 <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <Header/>
+                    {/*<Header/>*/}
                     <Outlet/>
-                    <Footer/>
+                    {/*<Footer/>*/}
                 </main>
             </div>
         </div>

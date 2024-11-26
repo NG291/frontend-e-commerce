@@ -85,7 +85,7 @@ const UserPendingOrders = () => {
                         <tr key={order.id}>
                             <td>{order.id}</td>
                             <td>{order.buyerName}</td>
-                            <td>{order.totalAmount} VND</td>
+                            <td>{order.totalAmount.toLocaleString('vi-VN')} VND</td>
                             <td>
                                 {order.status === 'PENDING' && (
                                     <>

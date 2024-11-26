@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer"; // Import Footer component
 import { confirmAlert } from 'react-confirm-alert'; // Import thư viện react-confirm-alert
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import CSS mặc định của react-confirm-alert
 import './customConfirmAlert.css'; // Import CSS tùy chỉnh của bạn
@@ -98,7 +96,7 @@ const PendingOrders = () => {
                         <tr key={order.id}>
                             <td>{order.id}</td>
                             <td>{order.buyerName}</td>
-                            <td>{order.totalAmount} VND</td>
+                            <td>{order.totalAmount.toLocaleString('vi-VN')} VND</td>
                             <td>
                                 {order.status === 'PENDING' && (
                                     <>
