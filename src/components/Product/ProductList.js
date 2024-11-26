@@ -54,7 +54,7 @@ const ProductList = ({products, loading, error}) => {
                                 {/* Hiển thị carousel nếu có ảnh, nếu không thì hiển thị ảnh mặc định */}
                                 {product.images && product.images.length > 0 ? (
                                     <div className="carousel">
-                                        <Carousel autoplay>
+                                        <Carousel autoplay = {false}>
                                             {product.images.map((image, index) => (
                                                 <Card.Img
                                                     key={index}
@@ -79,7 +79,7 @@ const ProductList = ({products, loading, error}) => {
                                         Category: {product.category?.name || 'N/A'}
                                     </Card.Text>
                                     <Card.Text className="price">
-                                        {product.price || 'N/A'} VND
+                                        {product.price.toLocaleString('vi-VN') || 'N/A'} VND
                                     </Card.Text>
                                     <Card.Text className="number">
                                         Quantity: {product.quantity || 'N/A'}

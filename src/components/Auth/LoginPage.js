@@ -105,21 +105,21 @@ const LoginPage = () => {
                     Do not have an account? <Link to="/register">Register now!</Link>
                 </p>
                 <div className="text-center d-flex justify-content-center my-4">
-                    <Link to="/forgot-password" className="btn btn-link">
+                    <Link to="/forgot-password" className="btn btn-link mb-0">
                         Forgot Password?
                     </Link>
                 </div>
-                <div className="text-center">
+                <div className="text-center d-flex justify-content-center my-4">
                     <button
-                        className="btn btn-link"
+                        className="btn btn-link mb-0"
                         onClick={() => setShowResetModal(true)}
                         style={{ cursor: 'pointer', textDecoration: 'underline' }}
                     >
                         Reset Password
                     </button>
                 </div>
-                <div className="text-center mt-3">
-                    <Link to="/" className="text-decoration-none">
+                <div className="text-center d-flex justify-content-center my-4">
+                    <Link to="/" className="text-decoration-none mb-0">
                         &larr; Back to Homepage
                     </Link>
                 </div>

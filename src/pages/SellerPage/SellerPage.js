@@ -15,8 +15,6 @@ import {
     DropdownButton
 } from "react-bootstrap";
 import {BASE_URL} from "../../utils/apiURL";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
 
@@ -111,7 +109,7 @@ const SellerPage = () => {
             <tr key={product.id}>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
-                <td>${product.price.toFixed(2)}</td>
+                <td>{product.price.toLocaleString('vi-VN')} VND</td>
                 <td>{product.quantity}</td>
                 <td className="d-flex justify-content-center gap-2">
                     <Button variant="info" size="sm" onClick={() => handleEditProduct(product.id)}>
