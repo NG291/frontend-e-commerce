@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';  // Import GoogleLogin
 import './LoginPage.scss';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
 import { BASE_URL } from '../../utils/apiURL';
@@ -16,7 +17,6 @@ const LoginPage = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(`${BASE_URL}/api/auth/login`, {
                 username,
@@ -65,6 +65,40 @@ const LoginPage = () => {
             toast.error('Please enter a valid email.');
         }
     };
+
+    // Handle Google login callback
+    const handleGoogleLogin = async (response) => {
+        if (response.credential) {
+            const token = response.credential;
+            try {
+                const userResponse = await axios.get(`${BASE_URL}/oauth2/success`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const { token: jwtToken, role, username } = userResponse.data;
+
+                // Lưu token và chi tiết người dùng
+                localStorage.setItem('jwtToken', jwtToken);
+                localStorage.setItem('role', role);
+                localStorage.setItem('username', username);
+
+                // Điều hướng dựa trên vai trò người dùng
+                if (role === 'ROLE_ADMIN') {
+                    navigate('/admin');
+                } else if (role === 'ROLE_SELLER') {
+                    navigate('/seller-page');
+                } else {
+                    navigate('/');
+                }
+
+                toast.success('Google login successful!');
+            } catch (error) {
+                console.error('Google login error', error);
+                toast.error('Failed to authenticate with Google. Please try again.');
+            }
+        }
+    };
+
 
     return (
         <main className="form-signin w-100 m-auto p-3" style={{ maxWidth: '400px' }}>
@@ -123,6 +157,13 @@ const LoginPage = () => {
                         &larr; Back to Homepage
                     </Link>
                 </div>
+
+                <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={() => toast.error('Google login failed!')}
+                    useOneTap
+                />
+
                 <p className="mt-5 mb-3 text-center text-body-secondary">&copy; 2017–2024</p>
             </form>
 

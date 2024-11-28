@@ -95,9 +95,9 @@ function Layout() {
 
                 </div>
                 <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    {/*<Header/>*/}
+                    <Header/>
                     <Outlet/>
-                    {/*<Footer/>*/}
+                    <Footer/>
                 </main>
             </div>
         </div>
