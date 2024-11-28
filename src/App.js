@@ -32,6 +32,7 @@ import ResetPasswordPage from "./pages/Password/PasswordResetPage";
 import SellerProductList from "./components/Product/SellerProductList";
 import UserPendingOrders from "./components/Order/UserPendingOrders";
 import Layout from "./pages/Layout";
+import OAuth2Callback from "./components/Auth/OAuth2Callback";
 
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/seller/products" element={<SellerProductList />} />
                     <Route path="/UserPendingOrders" element={<UserPendingOrders/>} />
+                    <Route path="/oauth2/callback" element={<OAuth2Callback />} />
                 </Routes>
                 <ToastContainer/>
             </BrowserRouter>
