@@ -1,10 +1,10 @@
-
 .product-detail-page {
   padding: 50px 0;
   .product-detail-container {
     margin: 0 auto;
     max-width: 1200px;
   }
+
   .product-image {
     width: 100%;
     height: auto;
@@ -36,11 +36,13 @@
       }
     }
   }
+
   .product-detail-card {
     display: flex;
     flex-direction: column;
-    height: 472px; /* Chiều cao cố định của khung */
-    padding: 15px; /* Khoảng cách bên trong */
+    height: auto; /* Allow card to expand based on content */
+    padding: 15px; /* Add padding */
+    box-sizing: border-box; /* Include padding in height calculations */
 
     .product-title {
       font-size: 1.8rem;
@@ -49,30 +51,32 @@
     }
 
     .product-description {
-      flex: 1; /* Cho phép mô tả chiếm không gian còn lại */
-      overflow-y: auto; /* Cho phép cuộn khi nội dung dài */
+      flex-grow: 1; /* Allow description to take remaining space */
+      overflow-y: auto; /* Allow scrolling if content is too long */
       margin-bottom: 20px;
     }
 
     .product-price {
       font-size: 1.5rem;
       font-weight: bold;
-      margin-top: 230px;
+      margin-bottom: 20px; /* Add spacing after the price */
     }
 
     .add-to-cart-button {
-      margin-left:280px; /* Khoảng cách giữa giá và nút giỏ hàng */
+      align-self: flex-start; /* Align the button to the left */
+      margin-top: auto; /* Push button to the bottom of the card */
+      margin-left: 0; /* Reset margin */
     }
   }
 
   .product-thumbnails-scrollable {
     display: flex;
-    overflow-x: auto; /* Bật cuộn ngang */
-    white-space: nowrap; /* Ngăn nội dung xuống dòng */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping */
     margin-top: 15px;
     padding: 10px 0;
 
-    /* Ẩn thanh cuộn */
+    /* Hide scrollbars */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     &::-webkit-scrollbar {
@@ -88,7 +92,7 @@
         display: inline-block;
 
         &.active {
-          border: 2px solid #007bff; /* Highlight thumbnail đang được chọn */
+          border: 2px solid #007bff;
           border-radius: 5px;
         }
       }
@@ -107,6 +111,4 @@
       }
     }
   }
-
-
 }

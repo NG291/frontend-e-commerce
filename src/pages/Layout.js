@@ -38,10 +38,6 @@ function Layout() {
                             className="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto bg-light text-dark">
                             <ul className="nav flex-column list-unstyled">
                                 <li className="nav-item">
-                                    <Link to="/seller-page" className="nav-link d-flex align-items-center gap-2">
-                                        <FaUserShield/>Seller Page</Link>
-                                </li>
-                                <li className="nav-item">
                                     <Link to="/SellerOrders" className="nav-link d-flex align-items-center gap-2">
                                         <BsFileEarmark/>Orders</Link>
                                 </li>
@@ -49,30 +45,7 @@ function Layout() {
                                     <Link to="/PendingOrders" className="nav-link d-flex align-items-center gap-2">
                                         <BsFileEarmark/>New order</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <a className="nav-link d-flex align-items-center gap-2" href="#">
-                                        <svg className="bi">
-                                            <use xlinkHref="#people"/>
-                                        </svg>
-                                        Customers
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link d-flex align-items-center gap-2" href="#">
-                                        <svg className="bi">
-                                            <use xlinkHref="#graph-up"/>
-                                        </svg>
-                                        Reports
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link d-flex align-items-center gap-2" href="#">
-                                        <svg className="bi">
-                                            <use xlinkHref="#puzzle"/>
-                                        </svg>
-                                        Integrations
-                                    </a>
-                                </li>
+
                             </ul>
                             <hr className="my-3"/>
                             <ul className="nav flex-column mb-auto ">

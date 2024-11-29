@@ -32,6 +32,10 @@ import ResetPasswordPage from "./pages/Password/PasswordResetPage";
 import SellerProductList from "./components/Product/SellerProductList";
 import UserPendingOrders from "./components/Order/UserPendingOrders";
 import Layout from "./pages/Layout";
+import Notification from "./components/notification/Notification";
+import Profile from "./components/profile/Profile";
+import EditProfile from "./components/profile/EditProfile";
+import Info from "./components/profile/Info";
 
 
 function App() {
@@ -67,6 +71,10 @@ function App() {
                     <Route path="/reset-password" element={<ResetPasswordPage />} />
                     <Route path="/seller/products" element={<SellerProductList />} />
                     <Route path="/UserPendingOrders" element={<UserPendingOrders/>} />
+                    <Route path="/notification" element={<Notification/>} />
+                    <Route path="/profile" element={<Profile/>} />
+                    <Route path="/editprofile" element={<EditProfile/>} />
+                    <Route path="/info" element={<Info/>} />
                 </Routes>
                 <ToastContainer/>
             </BrowserRouter>

@@ -1,22 +1,38 @@
-import React, {useState, useEffect} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {FaHome, FaShoppingCart, FaSignInAlt, FaUserShield} from "react-icons/fa";
-import {Button} from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaHome, FaShoppingCart, FaSignInAlt, FaUserShield, FaBell } from 'react-icons/fa';
+import { Button, Dropdown } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { BASE_URL } from "../../utils/apiURL";
+import axiosClient from "../../utils/axiosClient";
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isSeller, setIsSeller] = useState(false);
-    const [isUser, setIsUser] = useState(false);
+    const [role, setRole] = useState('');
+    const [avatar, setAvatar] = useState('');
+    const [username, setUsername] = useState('');
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
+        const userRole = localStorage.getItem('role');
         setIsLoggedIn(!!token);
-        setIsAdmin(localStorage.getItem('role') === 'ROLE_ADMIN');
-        setIsSeller(localStorage.getItem('role') === 'ROLE_SELLER');
-        setIsUser(localStorage.getItem('role') === 'ROLE_USER');
+        setRole(userRole);
+
+        if (token) {
+            // Lấy thông tin người dùng từ API
+            const fetchUserInfo = async () => {
+                try {
+                    const userID = localStorage.getItem('userId');
+                    const response = await axiosClient.get(`${BASE_URL}/api/users/${userID}`);
+                    setUsername(response.data.name);
+                    setAvatar(response.data.avatar || 'https://static.vecteezy.com/system/resources/previews/020/911/740/original/user-profile-icon-profile-avatar-user-icon-male-icon-face-icon-profile-icon-free-png.png');
+                } catch (error) {
+                    console.error('Lỗi khi lấy thông tin người dùng:', error);
+                }
+            };
+            fetchUserInfo();
+        }
     }, []);
 
     const handleLogout = () => {
@@ -27,101 +43,114 @@ const Header = () => {
         navigate('/login');
     };
 
-    const handleShow = () => setShow(true);
+    const handleRequestSellerRole = async () => {
+        try {
+            const userID = localStorage.getItem('userId');
+            const response = await axiosClient.post(`${BASE_URL}/api/users/request-seller-role`, { userID });
+            toast.success(response.data); // Hiển thị thông báo thành công
+        } catch (error) {
+            toast.error('Error requesting seller role!');
+            console.error(error);
+        }
+    };
 
     return (
-        <>
-        <nav className="py-2 bg-body-tertiary border-bottom">
-            <div className="container d-flex flex-wrap">
-                <ul className="nav me-auto">
-                    <li className="nav-item">
-                        <Link to="/" className="nav-link link-body-emphasis px-2 d-flex align-items-center">
-                            <FaHome className="me-1"/> Home
-                        </Link>
-                    </li>
-                    {isUser && (<li className="nav-item">
-                        <Link to="/change-password" className="nav-link link-body-emphasis px-2">
-                            Change Password
-                        </Link>
-                    </li>)}
-                </ul>
-                <ul className="nav me-auto">
-                    {isAdmin && (
-                        <li className="nav-item">
-                            <Button
-                                variant="link"
-                                onClick={() => navigate('/admin')}
-                                className="nav-link link-body-emphasis px-2"
-                            >
-                                <FaUserShield className="me-1"/> Admin Page
-                            </Button>
-                        </li>
-                    )}
-                </ul>
-                <ul className="nav me-auto">
-                    {isSeller && (
-                        <ul className="nav me-auto">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div className="container">
+                {/* Logo and Home Link */}
+                <Link to="/" className="nav-link link-body-emphasis px-2 d-flex align-items-center">
+                    <FaHome className="me-1" /> Home
+                </Link>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ms-auto">
+                        {/* User's specific navigation */}
+                        {role === 'ROLE_USER' && (
                             <li className="nav-item">
-                                <Button
-                                    variant="link"
-                                    onClick={() => navigate('/seller-page')}
-                                    className="nav-link link-body-emphasis px-2"
-                                >
-                                    <FaUserShield className="me-1"/> Seller Page
+                                <Button variant="outline-primary" className="position-relative"
+                                        onClick={() => navigate('/cart')}>
+                                    <FaShoppingCart />
                                 </Button>
                             </li>
+                        )}
 
-                        </ul>
-                    )}
-                    {isUser && (
-                        <ul className="nav me-auto">
+                        {/* Seller's specific navigation */}
+                        {role === 'ROLE_SELLER' && (
                             <li className="nav-item">
-                                <Link to="/UserOrders" className="nav-link link-body-emphasis px-2">Order
-                                    Completed</Link>
+                                <Button variant="link" onClick={() => navigate('/seller-page')} className="nav-link">
+                                    <FaUserShield className="me-1" /> Seller Page
+                                </Button>
                             </li>
+                        )}
+
+                        {/* Admin's specific navigation */}
+                        {role === 'ROLE_ADMIN' && (
                             <li className="nav-item">
-                                <Link to="/UserPendingOrders" className="nav-link link-body-emphasis px-2">Pending
-                                    orders</Link>
+                                <Button variant="link" onClick={() => navigate('/admin')} className="nav-link">
+                                    <FaUserShield className="me-1" /> Admin Page
+                                </Button>
                             </li>
-                            <Button className="ms-4 position-relative" variant="outline-primary" onClick={handleShow}>
-                                <Link to="/cart" className="text-decoration-none text-dark">
-                                    <FaShoppingCart/>
-                                </Link>
-                            </Button>
-                        </ul>
+                        )}
 
-                    )}
-
-                </ul>
-
-                <ul className="nav">
-                    {isLoggedIn ? (
-                        <ul className="nav me-auto">
-                            <li className="nav-item">
-                            <Button variant="link" onClick={handleLogout}
-                                    className="nav-link link-body-emphasis px-2">
-                                Logout
-                            </Button>
-                        </li>
-                    </ul>
-                ) : (
-                    <>
+                        {/* Notification button */}
                         <li className="nav-item">
-                            <Link to="/login" className="nav-link link-body-emphasis px-2">
-                                <FaSignInAlt/> Login
+                            <Link to="/notification" className="nav-link">
+                                <FaBell className="me-1" />
                             </Link>
                         </li>
+
+                        {/* User Profile and Auth dropdown */}
                         <li className="nav-item">
-                            <Link to="/register" className="nav-link link-body-emphasis px-2">Sign up</Link>
+                            <Dropdown>
+                                <Dropdown.Toggle variant="link" id="dropdown-basic" className="nav-link">
+                                    {isLoggedIn ? (
+                                        <>
+                                            <img
+                                                src={`${BASE_URL}/images/${avatar}`}
+                                                alt="Avatar"
+                                                className="rounded-circle" width="30" height="30" />
+                                            <span className="ms-2">{username}</span>
+                                        </>
+                                    ) : (
+                                        'Account'
+                                    )}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {isLoggedIn ? (
+                                        <>
+                                            <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
+                                            {role === 'ROLE_USER' && (
+                                                <>
+                                                    <Dropdown.Item as={Link} to="/UserOrders">Completed Orders</Dropdown.Item>
+                                                    <Dropdown.Item as={Link} to="/UserPendingOrders">Pending Orders</Dropdown.Item>
+                                                </>
+                                            )}
+                                            {role === 'ROLE_USER' && (
+                                                <Dropdown.Item onClick={handleRequestSellerRole} className="text-dark">
+                                                    Request Seller Role
+                                                </Dropdown.Item>
+                                            )}
+                                            <Dropdown.Item as={Link} to="/change-password">Change Password</Dropdown.Item>
+                                            <Dropdown.Divider />
+                                            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Dropdown.Item as={Link} to="/login">
+                                                <FaSignInAlt /> Login
+                                            </Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/register">
+                                                Sign up
+                                            </Dropdown.Item>
+                                        </>
+                                    )}
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </li>
-                    </>
-                )}
-            </ul>
-        </div>
+                    </ul>
+                </div>
+            </div>
         </nav>
-</>
-)
-    ;
-}
+    );
+};
 
 export default Header;

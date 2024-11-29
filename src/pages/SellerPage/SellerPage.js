@@ -1,22 +1,12 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
-import {
-    Table,
-    Button,
-    Container,
-    Spinner,
-    Alert,
-    Row,
-    Col,
-    Card,
-    Form,
-    Dropdown,
-    DropdownButton
-} from "react-bootstrap";
+import {Table, Button, Container, Spinner, Alert, Row, Col, Card, Form, Dropdown, DropdownButton} from "react-bootstrap";
 import {BASE_URL} from "../../utils/apiURL";
 import {toast} from "react-toastify";
 import Swal from 'sweetalert2';
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
 
 const SellerPage = () => {
     const [products, setProducts] = useState([]);
@@ -133,7 +123,7 @@ const SellerPage = () => {
 
     return (
         <>
-
+            <Header/>
             <Container fluid className="mt-5">
                 <Row className="mb-4">
                     <Col md={8}>
@@ -204,11 +194,8 @@ const SellerPage = () => {
                         </Card.Body>
                     </Card>
                 )}
-
-                <div className="text-center mt-2">
-                    <Link to="/" className="text-decoration-none">&larr; Back to Homepage</Link>
-                </div>
             </Container>
+            <Footer/>
         </>
     );
 };

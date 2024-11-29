@@ -1,36 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axiosClient from "../../utils/axiosClient";
-import {BASE_URL} from '../../utils/apiURL';
+import { BASE_URL } from '../../utils/apiURL';
 import './HomePage.scss';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ProductList from "../../components/Product/ProductList";
-import {Button, Container} from "react-bootstrap";
-import {FaShoppingCart} from "react-icons/fa";
-import {toast} from "react-toastify";
-import ProductFilter from "../../components/Product/ProductFilter";
-
+import { Button, Container, Dropdown, InputGroup, FormControl, Row, Col } from "react-bootstrap";
+import unorm from 'unorm';
 const HomePage = () => {
-    const [products, setProducts] = useState([]);
-    const [originalProducts, setOriginalProducts] = useState([]); // Store the original products
+    const [products, setProducts] = useState([]);  // Sản phẩm đã lọc
+    const [originalProducts, setOriginalProducts] = useState([]); // Sản phẩm gốc
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [show, setShow] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [cartItems, setCartItems] = useState(0);
-    const [isUser, setIsUser] = useState(false); // To check if the logged-in user is a regular user
-    const [isSeller, setIsSeller] = useState(false); // To check if the logged-in user is a regular user
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [userId, setUserId] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [categoryProducts, setCategoryProducts] = useState([]);
 
-    // Fetch products on page load
+    // Fetch products và categories khi trang được load
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axiosClient.get(`${BASE_URL}/api/products/all`);
                 setProducts(response.data);
-                setOriginalProducts(response.data); // Save original products
+                setOriginalProducts(response.data);
             } catch (error) {
                 setError("Error fetching products.");
                 console.error("Error fetching products:", error);
@@ -38,103 +34,143 @@ const HomePage = () => {
                 setLoading(false);
             }
         };
+
+        const fetchCategories = async () => {
+            try {
+                const response = await axiosClient.get(`${BASE_URL}/api/categories`);
+                setCategories(response.data);
+            } catch (error) {
+                setError("Error fetching categories.");
+                console.error("Error fetching categories:", error);
+            }
+        };
+
         fetchProducts();
-
-        // Check if the user has ROLE_USER
-        const role = localStorage.getItem('role');
-        if (role === 'ROLE_USER') {
-            setIsUser(true);
-        }
-        if (role === 'ROLE_SELLER') {
-            setIsSeller(true);
-        }
-
+        fetchCategories();
     }, []);
 
+    // Tìm kiếm sản phẩm
     const handleSearch = (e) => {
         e.preventDefault();
-        if (searchTerm === '') {
-            setProducts(originalProducts); // Reset to original products if search term is empty
-        } else {
-            const filteredProducts = originalProducts.filter(product =>
-                product.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setProducts(filteredProducts);
+        let filteredProducts = [...categoryProducts]; // Dữ liệu đã lọc theo danh mục
+        const normalizedSearchTerm = unorm.nfd(searchTerm).replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        if (normalizedSearchTerm !== '') {
+            filteredProducts = filteredProducts.filter(product => {
+                const normalizedProductName = unorm.nfd(product.name).replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                return normalizedProductName.includes(normalizedSearchTerm);
+            });
         }
+        setProducts(filteredProducts);
     };
 
-    const handleShow = () => setShow(true);
+    // Lọc theo danh mục
+    const handleCategoryChange = async (category) => {
+        setSelectedCategory(category);
 
-    const handleRequestSellerRole = async () => {
-        try {
-            const username = localStorage.getItem('username');
-            const response = await axiosClient.post(`${BASE_URL}/api/users/request-seller-role`, {username});
-            toast.success(response.data); // You can display a success message
-        } catch (error) {
-            toast.error('Error requesting seller role!');
-            console.error(error);
+        let filteredProducts = [...originalProducts]; // Bắt đầu từ toàn bộ sản phẩm gốc
+
+        if (category !== '') {
+            try {
+                const response = await axiosClient.get(`${BASE_URL}/api/products/category?categoryName=${category}`);
+                filteredProducts = response.data;
+            } catch (error) {
+                setError("Error fetching products by category.");
+                console.error("Error fetching products by category:", error);
+            }
         }
+
+        // Cập nhật sản phẩm sau khi lọc danh mục
+        setCategoryProducts(filteredProducts); // Lưu lại sản phẩm đã lọc theo danh mục
+        setProducts(filteredProducts); // Cập nhật dữ liệu hiển thị
+    };
+
+    // Lọc theo giá
+    const handlePriceFilter = () => {
+        let filteredProducts = [...categoryProducts]; // Dữ liệu đã lọc theo danh mục
+
+        filteredProducts = filteredProducts.filter(product => {
+            const price = product.price;
+            return (minPrice ? price >= minPrice : true) && (maxPrice ? price <= maxPrice : true);
+        });
+
+        // Cập nhật sản phẩm sau khi lọc giá
+        setProducts(filteredProducts);
     };
 
     return (
         <>
-            <Header/>
-            <div className="py-3 mb-4 border-bottom"> {/* Search and Cart button container */}
-                {/* Search and Cart button container */}
-                <div className="container d-flex flex-wrap justify-content-between align-items-center">
-                    {/* Logo */}
-                    <Link to="/"
-                          className="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
-                        <span className="fs-4 fw-bold">E-commerce</span>
-                    </Link>
+            <Header />
+            <div className="py-3 mb-4 border-bottom">
+                <div className="container">
+                    <Row className="align-items-center">
+                        {/* Bộ lọc giá - Bên trái */}
+                        <Col xs={12} md={6} lg={4} className="d-flex mb-3 mb-md-0 justify-content-start">
+                            <InputGroup className="w-auto">
+                                <FormControl
+                                    type="number"
+                                    placeholder="Min Price"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    style={{ fontSize: '0.9rem', padding: '0.375rem 0.75rem', width: '120px' }}
+                                />
+                                <FormControl
+                                    type="number"
+                                    placeholder="Max Price"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    style={{ fontSize: '0.9rem', padding: '0.375rem 0.75rem', width: '120px' }}
+                                />
+                                <Button variant="outline-primary" onClick={handlePriceFilter}
+                                        style={{ fontSize: '0.9rem', width: 'auto' }}>
+                                    Lọc
+                                </Button>
+                            </InputGroup>
+                        </Col>
 
-                    <div className="d-flex align-items-center justify-content-end flex-grow-1">
-                        {/* Show the button only for ROLE_USER */}
-                        {isUser && (
-                            <Button
-                                onClick={handleRequestSellerRole}
-                                variant="success"
-                                className="me-3" // Add margin to separate from the search box
-                            >
-                                Request Seller Role
-                            </Button>
-                        )}
+                        {/* Tìm kiếm theo tên và lọc theo danh mục - Bên phải */}
+                        <Col xs={12} md={6} lg={8} className="d-flex mb-3 mb-md-0 justify-content-end">
+                            <InputGroup className="w-auto">
+                                {/* Tìm kiếm theo tên */}
+                                <FormControl
+                                    type="search"
+                                    placeholder="Search products..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{ fontSize: '0.9rem', padding: '0.375rem 0.75rem', width: '200px' }}
+                                />
+                                <Button type="submit" variant="outline-primary" onClick={handleSearch}
+                                        style={{ fontSize: '0.9rem' }}>
+                                    Search
+                                </Button>
 
-                        {/* Search form */}
-                        <form
-                            onSubmit={handleSearch}
-                            className="d-flex flex-grow-1 justify-content-end"
-                            style={{maxWidth: '500px'}}
-                        >
-                            <input
-                                type="search"
-                                className="form-control me-2" // Add margin to the right
-                                placeholder="Search products..."
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            <Button type="submit" variant="outline-primary">
-                                Search
-                            </Button>
-                        </form>
-                    </div>
+                                {/* Dropdown lọc theo danh mục */}
+                                <Dropdown className="ms-2">
+                                    <Dropdown.Toggle variant="outline-primary" id="category-dropdown"
+                                                     style={{ fontSize: '0.9rem' }}>
+                                        {selectedCategory || "Category"}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={() => handleCategoryChange('')}>All
+                                            Categories</Dropdown.Item>
+                                        {categories.map((category) => (
+                                            <Dropdown.Item key={category.id}
+                                                           onClick={() => handleCategoryChange(category.name)}>
+                                                {category.name}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </InputGroup>
+                        </Col>
+                    </Row>
                 </div>
             </div>
-            <Container className="home-page">
-                <div className="hero-section text-center my-4">
-                    <h1>Welcome to E-commerce</h1>
-                    <p>Find the best products here!</p>
-                </div>
 
-                <h2 className="text-center my-4">Featured Products</h2>
-
-                {/*<ProductFilter setFilteredProducts={setFilteredProducts} setLoading={setLoading} />*/}
-
-                <ProductList products={products} loading={loading} error={error}/>
-
+            <Container>
+                <ProductList products={products} loading={loading} error={error} />
             </Container>
-            <Footer/>
+
+            <Footer />
         </>
     );
 };

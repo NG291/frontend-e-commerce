@@ -3,9 +3,9 @@ import {Card, Row, Col, Spinner} from 'react-bootstrap';
 import {Carousel} from 'antd';
 import {BASE_URL} from '../../utils/apiURL';
 import './ProductList.scss';
+import {toast} from "react-toastify";
 
 const ProductList = ({products, loading, error}) => {
-    // Hiển thị spinner khi đang tải
     if (loading) {
         return (
             <div className="text-center">
@@ -15,7 +15,6 @@ const ProductList = ({products, loading, error}) => {
         );
     }
 
-    // Hiển thị thông báo lỗi
     if (error) {
         return (
             <div className="text-center text-danger">
@@ -24,14 +23,19 @@ const ProductList = ({products, loading, error}) => {
         );
     }
 
-    // Hàm sắp xếp ngẫu nhiên sản phẩm
     const randomizeProducts = (products) => products.sort(() => Math.random() - 0.5);
 
     const randomizedProducts = randomizeProducts([...products]);
 
-    // Xử lý khi click vào sản phẩm
     const handleProductClick = (productId) => {
-        window.location.href = `/product/${productId}`;
+
+        const userRole = localStorage.getItem('role');
+
+        if (userRole === 'ROLE_SELLER' || userRole === 'ROLE_ADMIN') {
+            toast("You are not allowed to view product details.");
+        } else {
+            window.location.href = `/product/${productId}`;
+        }
     };
 
     return (

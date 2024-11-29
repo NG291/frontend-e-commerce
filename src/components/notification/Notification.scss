@@ -1,0 +1,58 @@
+.notifications-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1890ff;
+}
+
+.ant-list-item-meta-title {
+  font-weight: bold;
+}
+
+.notification-time {
+  color: gray;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+
+.notification-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+}
+
+.notification-message {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  background-color: #e2e3e5;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.notification-message:hover {
+  background-color: #d6d8db;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.notification-message {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

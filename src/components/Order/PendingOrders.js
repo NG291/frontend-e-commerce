@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Modal, Form } from 'react-bootstrap'; // Thêm Modal và Form để nhập lý do
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
-import { confirmAlert } from 'react-confirm-alert'; // Import thư viện react-confirm-alert
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import CSS mặc định của react-confirm-alert
-import './customConfirmAlert.css'; // Import CSS tùy chỉnh của bạn
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import './customConfirmAlert.css';
 
 const PendingOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showRejectModal, setShowRejectModal] = useState(false); // Trạng thái hiển thị modal nhập lý do
+    const [rejectionReason, setRejectionReason] = useState(''); // Lý do từ chối
+    const [currentOrderId, setCurrentOrderId] = useState(null); // Đơn hàng hiện tại
     const navigate = useNavigate();
 
     const fetchPendingOrders = async () => {
@@ -38,27 +41,14 @@ const PendingOrders = () => {
             buttons: [
                 {
                     label: 'Yes',
-                    onClick: async () => {
-                        try {
-                            const endpoint =
-                                actionType === "reject"
-                                    ? `${BASE_URL}/api/orders/reject/${orderId}`
-                                    : `${BASE_URL}/api/orders/success/${orderId}`;
-                            await axiosClient.put(endpoint);
-                            fetchPendingOrders();
-
-                            const successMessage =
-                                actionType === "reject"
-                                    ? "The order was successfully rejected."
-                                    : "Order has been confirmed successfully.";
-                            toast.success(successMessage);
-                        } catch (error) {
-                            console.error('Error processing order:', error);
-                            const errorMessage =
-                                actionType === "reject"
-                                    ? "Error rejecting order. Please try again later."
-                                    : "Error confirming order. Please try again later.";
-                            toast.error(errorMessage);
+                    onClick: () => {
+                        if (actionType === "reject") {
+                            // Mở modal nhập lý do khi từ chối
+                            setCurrentOrderId(orderId);
+                            setShowRejectModal(true);
+                        } else {
+                            // Xử lý Confirm order
+                            confirmOrder(orderId);
                         }
                     }
                 },
@@ -68,6 +58,36 @@ const PendingOrders = () => {
                 }
             ]
         });
+    };
+
+    const confirmOrder = async (orderId) => {
+        try {
+            const endpoint = `${BASE_URL}/api/orders/success/${orderId}`;
+            await axiosClient.put(endpoint);
+            fetchPendingOrders();
+            toast.success("Order has been confirmed successfully.");
+        } catch (error) {
+            console.error('Error confirming order:', error);
+            toast.error("Error confirming order. Please try again later.");
+        }
+    };
+
+    const rejectOrder = async () => {
+        if (!rejectionReason.trim()) {
+            toast.error("Please enter a rejection reason.");
+            return;
+        }
+
+        try {
+            const endpoint = `${BASE_URL}/api/orders/reject/${currentOrderId}`;
+            await axiosClient.put(endpoint, null, { params: { rejectionReason } });
+            fetchPendingOrders();
+            setShowRejectModal(false);
+            toast.success("The order was successfully rejected.");
+        } catch (error) {
+            console.error('Error rejecting order:', error);
+            toast.error("Error rejecting order. Please try again later.");
+        }
     };
 
     useEffect(() => {
@@ -123,6 +143,35 @@ const PendingOrders = () => {
                     </tbody>
                 </Table>
             )}
+
+            {/* Modal nhập lý do từ chối */}
+            <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Reject Order</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="rejectionReason">
+                            <Form.Label>Reason for rejection</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={rejectionReason}
+                                onChange={(e) => setRejectionReason(e.target.value)}
+                                placeholder="Enter rejection reason..."
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={rejectOrder}>
+                        Reject Order
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

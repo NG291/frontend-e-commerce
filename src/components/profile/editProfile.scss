@@ -1,0 +1,56 @@
+.edit-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.edit-profile-card {
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+}
+
+.form-control {
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 12px;
+}
+
+.avatar-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-label {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 16px;
+}
+
+.avatar-icon {
+  font-size: 24px;
+  color: #007bff;
+}
+
+.btn {
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.btn-outline-primary {
+  text-align: center;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #555;
+}
+
+.mt-3 {
+  margin-top: 20px;
+}
