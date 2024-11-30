@@ -50,11 +50,45 @@ const SellerOrders = ({ sellerId }) => {
     const formatDate = (date) => {
         if (!date) return "Undefined";
         try {
-            return new Date(date).toLocaleDateString('vi-VN');
+            let formattedDate;
+
+            // Kiểm tra nếu date là một mảng
+            if (Array.isArray(date)) {
+                formattedDate = new Date(
+                    date[0],
+                    date[1] - 1, // Tháng phải trừ đi 1 vì JavaScript sử dụng tháng bắt đầu từ 0
+                    date[2],
+                    date[3] || 0,
+                    date[4] || 0,
+                    date[5] || 0,
+                    date[6] || 0
+                );
+            } else {
+                formattedDate = new Date(date);
+            }
+
+            // Kiểm tra xem nếu ngày hợp lệ không
+            if (isNaN(formattedDate)) {
+                return "Undefined";
+            }
+
+            // Định dạng ngày và giờ (bao gồm giờ, phút và giây)
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false // Đặt false để hiển thị theo định dạng 24 giờ
+            };
+
+            return formattedDate.toLocaleString('vi-VN', options);
         } catch {
             return "Undefined";
         }
     };
+
 
     const formatPrice = (price) => {
         if (isNaN(price) || price === null || price === undefined) return "0 VND";

@@ -30,10 +30,10 @@ const AddReviewForm = ({ productId, userId, onReviewAdded }) => {
 
     return (
         <div className="add-review-form">
-            <h3>Write a Review</h3>
+            <h3> Comment </h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Rating:</label>
+                    <label>Star Rating:</label>
                     <ReactStars
                         count={5}
                         value={rating}

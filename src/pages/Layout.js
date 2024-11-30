@@ -45,6 +45,10 @@ function Layout() {
                                     <Link to="/PendingOrders" className="nav-link d-flex align-items-center gap-2">
                                         <BsFileEarmark/>New order</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link to="/Revenue" className="nav-link d-flex align-items-center gap-2">
+                                        <BsFileEarmark/>Revenue</Link>
+                                </li>
 
                             </ul>
                             <hr className="my-3"/>

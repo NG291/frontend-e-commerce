@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, Spinner, Row, Col, Container } from 'react-bootstrap';
+import { Card, Spinner, Row, Col, Container, Button } from 'react-bootstrap';
 import { Carousel } from 'antd';
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -9,8 +9,9 @@ import AddToCartButton from "../Cart/AddToCartButton";
 import SellerProductList from "./SellerProductList";
 import AddReviewForm from "../review/AddReviewForm";
 import ReactStars from "react-stars/dist/react-stars";
-import {BASE_URL} from "../../utils/apiURL";
+import { BASE_URL } from "../../utils/apiURL";
 import axiosClient from "../../utils/axiosClient";
+import ProductListTop5 from "./ProductListTop5";
 
 const ProductDetailPage = () => {
     const { id } = useParams();
@@ -20,7 +21,10 @@ const ProductDetailPage = () => {
     const [sellerId, setSellerId] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
+    const [top5Products, setTop5Product] = useState([]);
+    const [error, setError] = useState(null);
 
+    // Fetch product details
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -37,6 +41,16 @@ const ProductDetailPage = () => {
 
         fetchProduct();
     }, [id]);
+
+    const fetchProductTop5 = async () => {
+        try {
+            const response = await axiosClient.get(`${BASE_URL}/api/products/related/${id}`);
+            setTop5Product(response.data);
+        } catch (error) {
+            setError("Error fetching top 5 products from the seller");
+            console.error("Error fetching top 5:", error);
+        }
+    };
 
     const fetchReviews = async () => {
         try {
@@ -60,12 +74,13 @@ const ProductDetailPage = () => {
         if (id) {
             fetchReviews();
             fetchAverageRating();
+            fetchProductTop5();
         }
     }, [id]);
 
     const handleReviewAdded = () => {
-        fetchReviews();  // Fetch updated reviews after a new review is added
-        fetchAverageRating();  // Fetch updated average rating after a new review is added
+        fetchReviews();
+        fetchAverageRating();
     };
 
     if (loading) {
@@ -85,8 +100,8 @@ const ProductDetailPage = () => {
         <>
             <Header />
             <div className="product-detail-page">
-                <div className="container product-detail-container">
-                    <Row>
+                <Container className="product-detail-container">
+                    <Row className="my-5">
                         <Col md={6}>
                             <div className="product-image-container">
                                 <Carousel autoplay selectedIndex={currentImageIndex} afterChange={setCurrentImageIndex}>
@@ -100,7 +115,6 @@ const ProductDetailPage = () => {
                                         </div>
                                     ))}
                                 </Carousel>
-
                                 <div
                                     className="product-thumbnails-scrollable"
                                     onWheel={(e) => {
@@ -131,97 +145,83 @@ const ProductDetailPage = () => {
                             <Card className="product-detail-card">
                                 <Card.Body>
                                     <Card.Title className="product-title">{product.name}</Card.Title>
-
-                                    <div className="product-description">
-                                        <strong>Description:</strong>
-                                        <p>{product.description}</p>
-                                    </div>
+                                    <p>{product.description}</p>
 
                                     <div className="product-price">
                                         <strong>Price: </strong>
                                         <span className="price">{product.price.toLocaleString('vi-VN')} VND</span>
                                     </div>
 
-                                    {/* Display average rating as stars */}
-                                    <div className="product-rating">
+                                    <div className="product-rating my-3">
                                         <strong>Average Rating:</strong>
                                         <ReactStars
                                             count={5}
                                             value={averageRating}
                                             size={24}
                                             activeColor="#ffd700"
-                                            edit={false} // Make it read-only
+                                            edit={false}
                                         />
                                     </div>
 
-                                    <div className="add-to-cart-button">
-                                        <AddToCartButton productId={product.id} />
-                                    </div>
+                                    <AddToCartButton productId={product.id} />
+
                                 </Card.Body>
                             </Card>
                         </Col>
                     </Row>
-                </div>
-            </div>
 
-            {/* Display reviews */}
-            <div className="reviews-section">
-                <Container>
-                    <h2 className="mb-4">Product Reviews</h2>
-                    {reviews.length > 0 ? (
-                        reviews.map((review) => (
-                            <div key={review.id} className="review-card">
-                                <div className="review-header">
-                                    <h5>{review.userName}</h5>
-                                    <p className="review-date">
-                                        {new Date(review.createdAt).toLocaleString('vi-VN', {
-                                            weekday: 'long', // 'short' hoặc 'long'
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: 'numeric',
-                                            minute: 'numeric',
-                                            second: 'numeric',
-                                        })}
-                                    </p>
-                                </div>
-                                <div className="review-rating">
-                                    <ReactStars
-                                        count={5}
-                                        value={review.rating}
-                                        size={24}
-                                        activeColor="#ffd700"
-                                        edit={false}
-                                    />
-                                </div>
-                                <p className="review-comment">{review.comment}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No Reviews Yet.</p>
-                    )}
+                    {/* Product List Top 5 */}
+                    <Row className="my-5">
+                        <Col>
+                            <h3 className= "my-5">Top 5 best selling products of the store</h3>
+
+                            <ProductListTop5 products={top5Products} error={error} loading={loading} />
+                        </Col>
+                    </Row>
+
+                    {/* Product Reviews Section */}
+                    <Row className="my-5">
+                        <Col>
+                            <h3>Product Reviews</h3>
+                            {reviews.length > 0 ? (
+                                reviews.map((review) => (
+                                    <Card key={review.id} className="review-card mb-3">
+                                        <Card.Body>
+                                            <h5>{review.userName}</h5>
+                                            <p className="review-date">
+                                                {new Date(review.createdAt).toLocaleString('vi-VN', {
+                                                    weekday: 'long',
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                })}
+                                            </p>
+                                            <ReactStars
+                                                count={5}
+                                                value={review.rating}
+                                                size={24}
+                                                activeColor="#ffd700"
+                                                edit={false}
+                                            />
+                                            <p>{review.comment}</p>
+                                        </Card.Body>
+                                    </Card>
+                                ))
+                            ) : (
+                                <p>No Reviews Yet!</p>
+                            )}
+                        </Col>
+                    </Row>
+
+                    {/* Add Review Form */}
+                    <Row className="my-5">
+                        <Col>
+                            <AddReviewForm productId={id} userId={1} onReviewAdded={handleReviewAdded} />
+                        </Col>
+                    </Row>
+
                 </Container>
             </div>
-
-            {/* Add Review Form */}
-            <div className="add-review-form-section">
-                <Container>
-                    <AddReviewForm productId={id} userId={1} onReviewAdded={handleReviewAdded} />
-                </Container>
-            </div>
-
-            {/* Display related products from the same seller */}
-            <div className="seller-products-section">
-                <Container>
-                    <h2 className="mb-4">Other Products from the Seller</h2>
-                    {sellerId ? (
-                        <SellerProductList sellerId={sellerId} />
-                    ) : (
-                        <p className="text-center">Unable to load seller's products.</p>
-                    )}
-                </Container>
-            </div>
-
             <Footer />
         </>
     );

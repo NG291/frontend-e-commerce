@@ -3,7 +3,6 @@ import { Card, Row, Col, Spinner } from 'react-bootstrap';
 import { Carousel } from 'antd';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/apiURL';
-import { toast } from 'react-toastify';
 import './ProductList.scss';
 
 const SellerProductList = ({ sellerId: userId }) => {
