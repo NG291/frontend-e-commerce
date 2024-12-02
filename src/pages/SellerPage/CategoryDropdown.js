@@ -28,10 +28,8 @@ const CategoryDropdown = ({ category, setCategory }) => {
         <Form.Group className="mb-3" controlId="formCategory">
             <Form.Label>Category</Form.Label>
 
-            {/* Show loading spinner while fetching data */}
             {loading && <Spinner animation="border" size="sm" />}
 
-            {/* Show error message if fetching categories fails */}
             {error && <Alert variant="danger">{error}</Alert>}
 
             {/* Show a message when no categories are available */}
@@ -39,11 +37,10 @@ const CategoryDropdown = ({ category, setCategory }) => {
                 <Alert variant="info">No categories available. Please add some categories first.</Alert>
             )}
 
-            {/* Show dropdown if categories are loaded successfully */}
             {!loading && !error && categories.length > 0 && (
                 <Form.Select
                     value={category || ''}
-                    onChange={(e) => setCategory(e.target.value)} // Set the category name
+                    onChange={(e) => setCategory(e.target.value)}
                     required
                 >
                     <option value="">Select a category</option>

@@ -3,7 +3,7 @@ import axiosClient from '../../utils/axiosClient';
 import { Container, Button, Form, Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {BASE_URL} from "../../utils/apiURL";
-import { Link, useNavigate } from "react-router-dom";
+import  {useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');

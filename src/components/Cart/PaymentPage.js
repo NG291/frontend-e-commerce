@@ -1,16 +1,17 @@
-import React, { useState} from 'react';
-import {Button, Card, Col, Container, Row} from 'react-bootstrap';
-import { useLocation } from 'react-router-dom'; // Dùng useLocation và useNavigate để lấy thông tin và chuyển hướng
+import React, { useState } from 'react';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axiosClient from '../../utils/axiosClient';
 import { BASE_URL } from '../../utils/apiURL';
 import { toast } from 'react-toastify';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import './PaymentPage.scss'; // Import file SCSS tùy chỉnh
+import './PaymentPage.scss';
 
 const PaymentPage = () => {
-    const location = useLocation(); // Để lấy thông tin từ đường dẫn
-    const { totalAmount, paymentMethod } = location.state || {}; // Lấy thông tin totalAmount và paymentMethod từ đường dẫn
+    const location = useLocation();
+    const navigate = useNavigate(); // Khởi tạo useNavigate
+    const { totalAmount, paymentMethod } = location.state || {};
 
     const [paymentStatus, setPaymentStatus] = useState('');
 
@@ -32,6 +33,10 @@ const PaymentPage = () => {
 
             toast.success("Payment successful!");
             setPaymentStatus('Payment successful!');
+
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
         } catch (error) {
             console.error('Error during payment:', error);
             toast.error("Payment failed. Please try again.");
@@ -49,7 +54,7 @@ const PaymentPage = () => {
                             <Card.Body>
                                 <h2 className="text-center mb-4">Payment</h2>
                                 <div className="payment-details">
-                                    <p><strong>Total Amount:</strong> VND {totalAmount}</p>
+                                    <p><strong>Total Amount:</strong> {totalAmount?.toLocaleString('vi-VN')} VND</p>
                                     <p><strong>Payment Method:</strong> {paymentMethod}</p>
                                 </div>
                                 <Button

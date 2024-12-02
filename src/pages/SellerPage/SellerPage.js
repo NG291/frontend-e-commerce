@@ -44,7 +44,7 @@ const SellerPage = () => {
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredProducts(filtered);
-        setCurrentPage(1); // Reset lại trang khi tìm kiếm
+        setCurrentPage(1);
     }, [searchTerm, products]);
 
     const handleAddProduct = () => navigate("/add-product");

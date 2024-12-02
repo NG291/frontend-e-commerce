@@ -1,10 +1,10 @@
 import React from 'react';
-import {Card, Row, Col, Spinner} from 'react-bootstrap';
-import {Carousel} from 'antd';
-import {BASE_URL} from '../../utils/apiURL';
+import { Card, Row, Col, Spinner } from 'react-bootstrap';
+import { Carousel } from 'antd';
+import { BASE_URL } from '../../utils/apiURL';
 import './ProductList.scss';
 
-const ProductListTop5 = ({products, loading, error}) => {
+const ProductListTop5 = ({ products, loading, error }) => {
     if (loading) {
         return (
             <div className="text-center">
@@ -32,8 +32,8 @@ const ProductListTop5 = ({products, loading, error}) => {
                 {products && products.length > 0 ? (
                     products.map((product) => (
                         <Col
-                            lg={2}
-                            md={4}
+                            lg={2.4}  // 5 sản phẩm trên một hàng
+                            md={3}
                             sm={6}
                             xs={12}
                             key={product.id}

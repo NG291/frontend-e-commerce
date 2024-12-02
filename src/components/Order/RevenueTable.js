@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { Button, Table, Form, Spinner, Alert } from "react-bootstrap"; // Sử dụng React Bootstrap
+import React, {useState} from "react";
+import {Button, Table, Form, Spinner, Alert} from "react-bootstrap"; // Sử dụng React Bootstrap
 import axios from "axios";
-import { toast } from "react-toastify"; // Thêm thông báo
+import {toast} from "react-toastify"; // Thêm thông báo
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../../utils/apiURL"; // Import BASE_URL từ file cấu hình
-import * as XLSX from "xlsx"; // Import thư viện SheetJS (xlsx)
+import {BASE_URL} from "../../utils/apiURL"; // Import BASE_URL từ file cấu hình
+import * as XLSX from "xlsx";
+import Footer from "../Footer/Footer"; // Import thư viện SheetJS (xlsx)
 
 const RevenueTable = () => {
     const [startDate, setStartDate] = useState("");
@@ -12,8 +13,6 @@ const RevenueTable = () => {
     const [revenueData, setRevenueData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    // Hàm chuyển đổi định dạng ngày từ YYYY-MM-DD sang DD/MM/YYYY
     const formatDate = (date) => {
         if (!date) return "Undefined";
         try {
@@ -27,7 +26,7 @@ const RevenueTable = () => {
                     date[5] || 0,
                     date[6] || 0
                 );
-                const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                const options = {year: 'numeric', month: '2-digit', day: '2-digit'};
                 return formattedDate.toLocaleDateString('vi-VN', options);
             }
             return new Date(date).toLocaleDateString('vi-VN');
@@ -69,7 +68,7 @@ const RevenueTable = () => {
                     endDate: formattedEndDate,
                 },
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Gửi token trong header
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 
@@ -106,83 +105,86 @@ const RevenueTable = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <h1 className="text-center mb-4">Revenue Management</h1>
+        <>
+            <header/>
+            <div className="container mt-5">
+                <h1 className="text-center mb-4">Revenue Management</h1>
 
-            {/* Form nhập phạm vi ngày */}
-            <Form onSubmit={handleSubmit} className="d-flex justify-content-center mb-4">
-                <Form.Group controlId="startDate" className="mx-2">
-                    <Form.Label>Start Date:</Form.Label>
-                    <Form.Control
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        required
-                    />
-                </Form.Group>
+                {/* Form nhập phạm vi ngày */}
+                <Form onSubmit={handleSubmit} className="d-flex justify-content-center mb-4">
+                    <Form.Group controlId="startDate" className="mx-2">
+                        <Form.Label>Start Date:</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
 
-                <Form.Group controlId="endDate" className="mx-2">
-                    <Form.Label>End Date:</Form.Label>
-                    <Form.Control
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        required
-                    />
-                </Form.Group>
+                    <Form.Group controlId="endDate" className="mx-2">
+                        <Form.Label>End Date:</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
 
-                <Button type="submit" variant="primary" className="align-self-end mx-2">
-                    {loading ? <Spinner animation="border" size="sm" /> : "Fetch Revenue"}
-                </Button>
-            </Form>
-
-            {/* Hiển thị lỗi */}
-            {error && <Alert variant="danger">{error}</Alert>}
-
-            {/* Hiển thị bảng doanh thu */}
-            {revenueData.length > 0 && !loading && (
-                <div>
-                    <Button
-                        variant="success"
-                        onClick={exportToExcel}
-                        className="mb-3"
-                    >
-                        Export to Excel
+                    <Button type="submit" variant="primary" className="align-self-end mx-2">
+                        {loading ? <Spinner animation="border" size="sm"/> : "Fetch Revenue"}
                     </Button>
-                    <Table striped bordered hover className="mt-4">
-                        <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Product Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Quantity Sold</th>
-                            <th>Total Revenue</th>
-                            <th>Order Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {revenueData.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.orderId}</td>
-                                <td>{item.productName}</td>
-                                <td>{item.description}</td>
-                                <td>{item.price.toLocaleString()} VND</td>
-                                <td>{item.quantitySold}</td>
-                                <td>{item.totalRevenue.toLocaleString()} VND</td>
-                                <td>{formatDate(item.orderDate)}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </Table>
-                </div>
-            )}
+                </Form>
 
-            {/* Hiển thị trạng thái không có dữ liệu */}
-            {!loading && revenueData.length === 0 && !error && (
-                <p className="text-center mt-4">No data available for the selected date range.</p>
-            )}
-        </div>
+                {/* Hiển thị lỗi */}
+                {error && <Alert variant="danger">{error}</Alert>}
+
+                {/* Hiển thị bảng doanh thu */}
+                {revenueData.length > 0 && !loading && (
+                    <div>
+                        <Button
+                            variant="success"
+                            onClick={exportToExcel}
+                            className="mb-3"
+                        >
+                            Export to Excel
+                        </Button>
+                        <Table striped bordered hover className="mt-4">
+                            <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Quantity Sold</th>
+                                <th>Total Revenue</th>
+                                <th>Order Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {revenueData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.orderId}</td>
+                                    <td>{item.productName}</td>
+                                    <td>{item.description}</td>
+                                    <td>{item.price.toLocaleString()} VND</td>
+                                    <td>{item.quantitySold}</td>
+                                    <td>{item.totalRevenue.toLocaleString()} VND</td>
+                                    <td>{formatDate(item.orderDate)}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </Table>
+                    </div>
+                )}
+
+                {!loading && revenueData.length === 0 && !error && (
+                    <p className="text-center mt-4">No data available for the selected date range.</p>
+                )}
+            </div>
+            <Footer/>
+        </>
     );
 };
 

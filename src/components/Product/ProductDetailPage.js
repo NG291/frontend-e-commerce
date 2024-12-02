@@ -6,7 +6,6 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import './ProductDetailPage.scss';
 import AddToCartButton from "../Cart/AddToCartButton";
-import SellerProductList from "./SellerProductList";
 import AddReviewForm from "../review/AddReviewForm";
 import ReactStars from "react-stars/dist/react-stars";
 import { BASE_URL } from "../../utils/apiURL";
@@ -24,7 +23,6 @@ const ProductDetailPage = () => {
     const [top5Products, setTop5Product] = useState([]);
     const [error, setError] = useState(null);
 
-    // Fetch product details
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -102,6 +100,7 @@ const ProductDetailPage = () => {
             <div className="product-detail-page">
                 <Container className="product-detail-container">
                     <Row className="my-5">
+                        {/* Product Images */}
                         <Col md={6}>
                             <div className="product-image-container">
                                 <Carousel autoplay selectedIndex={currentImageIndex} afterChange={setCurrentImageIndex}>
@@ -115,6 +114,7 @@ const ProductDetailPage = () => {
                                         </div>
                                     ))}
                                 </Carousel>
+
                                 <div
                                     className="product-thumbnails-scrollable"
                                     onWheel={(e) => {
@@ -141,6 +141,7 @@ const ProductDetailPage = () => {
                             </div>
                         </Col>
 
+                        {/* Product Details */}
                         <Col md={6}>
                             <Card className="product-detail-card">
                                 <Card.Body>
@@ -164,22 +165,20 @@ const ProductDetailPage = () => {
                                     </div>
 
                                     <AddToCartButton productId={product.id} />
-
                                 </Card.Body>
                             </Card>
                         </Col>
                     </Row>
 
-                    {/* Product List Top 5 */}
+                    {/* Top 5 Products */}
                     <Row className="my-5">
                         <Col>
-                            <h3 className= "my-5">Top 5 best selling products of the store</h3>
-
+                            <h3>Top Best Selling Products</h3>
                             <ProductListTop5 products={top5Products} error={error} loading={loading} />
                         </Col>
                     </Row>
 
-                    {/* Product Reviews Section */}
+                    {/* Reviews Section */}
                     <Row className="my-5">
                         <Col>
                             <h3>Product Reviews</h3>
@@ -219,7 +218,6 @@ const ProductDetailPage = () => {
                             <AddReviewForm productId={id} userId={1} onReviewAdded={handleReviewAdded} />
                         </Col>
                     </Row>
-
                 </Container>
             </div>
             <Footer />

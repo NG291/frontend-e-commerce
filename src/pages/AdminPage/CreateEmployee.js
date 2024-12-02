@@ -11,7 +11,6 @@ import Header from "../../components/Header/Header";
 const CreateEmployee = () => {
     const navigate = useNavigate();
 
-    // Validation schema using Yup
     const validationSchema = Yup.object({
         username: Yup.string()
             .min(5, "Username must be at least 5 characters")

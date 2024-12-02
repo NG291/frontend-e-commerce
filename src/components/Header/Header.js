@@ -20,7 +20,6 @@ const Header = () => {
         setRole(userRole);
 
         if (token) {
-            // Lấy thông tin người dùng từ API
             const fetchUserInfo = async () => {
                 try {
                     const userID = localStorage.getItem('userId');
@@ -45,9 +44,9 @@ const Header = () => {
 
     const handleRequestSellerRole = async () => {
         try {
-            const userID = localStorage.getItem('userId');
-            const response = await axiosClient.post(`${BASE_URL}/api/users/request-seller-role`, { userID });
-            toast.success(response.data); // Hiển thị thông báo thành công
+            const username = localStorage.getItem('username');
+            const response = await axiosClient.post(`${BASE_URL}/api/users/request-seller-role`, { username});
+            toast.success(response.data);
         } catch (error) {
             toast.error('Error requesting seller role!');
             console.error(error);
@@ -55,7 +54,7 @@ const Header = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm header-fixed">
             <div className="container">
                 {/* Logo and Home Link */}
                 <Link to="/" className="nav-link link-body-emphasis px-2 d-flex align-items-center">

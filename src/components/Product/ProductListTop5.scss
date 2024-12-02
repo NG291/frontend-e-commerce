@@ -1,18 +1,102 @@
 .product-card {
-  max-width: 200px;
-  margin: auto;
-  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  overflow: hidden;
+  height: 100%;
+  max-width: 240px; /* Giới hạn chiều rộng tối đa của thẻ sản phẩm */
+  margin: 0 auto;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Phần hình ảnh */
+  .carousel {
+    height: 180px;  /* Giảm chiều cao của ảnh carousel */
+    overflow: hidden;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+
+    .slick-slide img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  /* Phần thông tin sản phẩm */
+  .card-body {
+    padding: 12px;  /* Giảm padding để không gian nhỏ lại */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    h5 {
+      font-size: 13px;  /* Giảm font-size của tiêu đề */
+      font-weight: bold;
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #007bff;
+      font-size: 14px;  /* Giảm font-size của giá */
+      margin-top: 5px;
+    }
+
+    .number {
+      font-size: 12px;  /* Giảm font-size của số lượng */
+      color: #777;
+      margin-top: 8px;
+    }
+
+    .card-text {
+      font-size: 12px;
+      color: #555;
+      margin-top: 8px;
+    }
+  }
 }
 
-.product-card img {
-  height: 150px;
-  object-fit: cover;
+/* Đảm bảo rằng các sản phẩm hiển thị đúng trên các kích thước màn hình khác nhau */
+@media (max-width: 1199px) {
+  .product-card {
+    width: 90%;  /* Giảm chiều rộng thẻ sản phẩm cho các màn hình vừa */
+  }
 }
 
-.carousel {
-  height: 150px;
+@media (max-width: 991px) {
+  .product-card {
+    width: 95%;  /* Giảm chiều rộng thẻ sản phẩm cho màn hình nhỏ */
+  }
 }
 
-.price, .number {
-  font-size: 12px;
+@media (max-width: 767px) {
+  .product-card {
+    height: auto;
+    width: 100%;  /* Giảm chiều rộng cho các màn hình di động */
+  }
+
+  .carousel {
+    height: 150px;  /* Giảm chiều cao của ảnh carousel trên điện thoại */
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+
+  .number {
+    font-size: 12px;
+  }
 }

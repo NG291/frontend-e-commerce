@@ -9,8 +9,8 @@ import ProductList from "../../components/Product/ProductList";
 import { Button, Container, Dropdown, InputGroup, FormControl, Row, Col } from "react-bootstrap";
 import unorm from 'unorm';
 const HomePage = () => {
-    const [products, setProducts] = useState([]);  // Sản phẩm đã lọc
-    const [originalProducts, setOriginalProducts] = useState([]); // Sản phẩm gốc
+    const [products, setProducts] = useState([]);
+    const [originalProducts, setOriginalProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,7 +20,6 @@ const HomePage = () => {
     const [maxPrice, setMaxPrice] = useState('');
     const [categoryProducts, setCategoryProducts] = useState([]);
 
-    // Fetch products và categories khi trang được load
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -52,7 +51,7 @@ const HomePage = () => {
     // Tìm kiếm sản phẩm
     const handleSearch = (e) => {
         e.preventDefault();
-        let filteredProducts = [...categoryProducts]; // Dữ liệu đã lọc theo danh mục
+        let filteredProducts = [...categoryProducts];
         const normalizedSearchTerm = unorm.nfd(searchTerm).replace(/[\u0300-\u036f]/g, '').toLowerCase();
         if (normalizedSearchTerm !== '') {
             filteredProducts = filteredProducts.filter(product => {
@@ -67,7 +66,7 @@ const HomePage = () => {
     const handleCategoryChange = async (category) => {
         setSelectedCategory(category);
 
-        let filteredProducts = [...originalProducts]; // Bắt đầu từ toàn bộ sản phẩm gốc
+        let filteredProducts = [...originalProducts];
 
         if (category !== '') {
             try {
@@ -78,32 +77,28 @@ const HomePage = () => {
                 console.error("Error fetching products by category:", error);
             }
         }
-
-        // Cập nhật sản phẩm sau khi lọc danh mục
-        setCategoryProducts(filteredProducts); // Lưu lại sản phẩm đã lọc theo danh mục
-        setProducts(filteredProducts); // Cập nhật dữ liệu hiển thị
+        setCategoryProducts(filteredProducts);
+        setProducts(filteredProducts);
     };
 
     // Lọc theo giá
     const handlePriceFilter = () => {
-        let filteredProducts = [...categoryProducts]; // Dữ liệu đã lọc theo danh mục
+        let filteredProducts = [...categoryProducts];
 
         filteredProducts = filteredProducts.filter(product => {
             const price = product.price;
             return (minPrice ? price >= minPrice : true) && (maxPrice ? price <= maxPrice : true);
         });
 
-        // Cập nhật sản phẩm sau khi lọc giá
         setProducts(filteredProducts);
     };
 
     return (
         <>
-            <Header />
+            <Header className="Header"/>
             <div className="py-3 mb-4 border-bottom">
                 <div className="container">
                     <Row className="align-items-center">
-                        {/* Bộ lọc giá - Bên trái */}
                         <Col xs={12} md={6} lg={4} className="d-flex mb-3 mb-md-0 justify-content-start">
                             <InputGroup className="w-auto">
                                 <FormControl
@@ -126,8 +121,6 @@ const HomePage = () => {
                                 </Button>
                             </InputGroup>
                         </Col>
-
-                        {/* Tìm kiếm theo tên và lọc theo danh mục - Bên phải */}
                         <Col xs={12} md={6} lg={8} className="d-flex mb-3 mb-md-0 justify-content-end">
                             <InputGroup className="w-auto">
                                 {/* Tìm kiếm theo tên */}

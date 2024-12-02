@@ -181,18 +181,6 @@ const UserSellerPage = () => {
                     <Col md={8}>
                         <h1>User & Seller List</h1>
                     </Col>
-                    {/*<Col md={4} className="d-flex justify-content-end gap-2">*/}
-                    {/*    <Button variant="primary" onClick={() => navigate("/admin")}>*/}
-                    {/*        Admin Page*/}
-                    {/*    </Button>*/}
-                    {/*    <Link*/}
-                    {/*        to="/"*/}
-                    {/*        className="btn btn-outline-secondary fw-bold d-flex justify-content-center align-items-center"*/}
-                    {/*        style={{borderRadius: '20px', minWidth: '100px'}}*/}
-                    {/*    >*/}
-                    {/*        Homepage*/}
-                    {/*    </Link>*/}
-                    {/*</Col>*/}
                 </Row>
                 <Row className="mb-4">
                     <Col md={4}>

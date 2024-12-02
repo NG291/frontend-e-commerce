@@ -51,14 +51,8 @@ function Layout() {
                                 </li>
 
                             </ul>
-                            <hr className="my-3"/>
+                            <hr className="my-5"/>
                             <ul className="nav flex-column mb-auto ">
-                                <li className="nav-item">
-                                    <a className="nav-link d-flex align-items-center gap-2" href="#">
-                                        <BsGearWideConnected/>
-                                        Settings
-                                    </a>
-                                </li>
                                 <li className="nav-item">
                                     <a className="nav-link d-flex align-items-center gap-2" href="#"
                                        onClick={handleLogout}>

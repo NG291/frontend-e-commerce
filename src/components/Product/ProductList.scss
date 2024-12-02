@@ -13,9 +13,8 @@
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   }
 
-  /* Phần carousel chiếm 70% chiều cao */
   .carousel {
-    height: 50%; /* Giảm chiều cao của carousel để nhường không gian cho Card Body */
+    height: 52%;
     overflow: hidden;
     border-bottom: 1px solid #ddd;
     border-radius: 8px 8px 0 0;
@@ -23,11 +22,12 @@
     img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; /* Giữ tỉ lệ ảnh mà không bị méo */
       border-radius: 8px 8px 0 0;
     }
   }
 
+  /* Thẻ body chứa thông tin sản phẩm */
   .card-body {
     flex: 1; /* Đảm bảo chiếm toàn bộ chiều cao còn lại */
     padding: 10px;
@@ -42,7 +42,7 @@
       margin: 10px 0;
       white-space: nowrap; /* Không xuống dòng */
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis; /* Cắt bớt văn bản nếu vượt quá */
     }
 
     p {
@@ -52,7 +52,7 @@
       height: auto; /* Tự điều chỉnh chiều cao */
       max-height: 40px; /* Giới hạn chiều cao tối đa */
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis; /* Cắt bớt văn bản nếu quá dài */
     }
 
     .price {
@@ -60,6 +60,12 @@
       color: #007bff;
       font-size: 18px;
       margin: 5px 0;
+    }
+
+    .number {
+      font-size: 14px;
+      color: #777;
+      margin-top: 5px;
     }
   }
 }

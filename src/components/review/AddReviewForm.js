@@ -8,20 +8,31 @@ const AddReviewForm = ({ productId, userId, onReviewAdded }) => {
     const [rating, setRating] = useState(1);
     const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const ratingChanged = (newRating) => {
-        setRating(newRating); // Update the rating when the star rating is changed
+        setRating(newRating);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
+
+        if (!comment.trim()) {
+            setError('Comment is required.');
+            setLoading(false);
+            return;
+        }
 
         try {
             const reviewData = { rating, comment, userId, productId };
             await axiosClient.post(`${BASE_URL}/api/reviews/product/${productId}/user/${userId}`, reviewData);
-            onReviewAdded(); // Refresh reviews after submission
+            setRating(1);
+            setComment('');
+            onReviewAdded();
         } catch (error) {
+            setError('Error submitting review. Please try again.');
             console.error("Error submitting review:", error);
         } finally {
             setLoading(false);
@@ -30,7 +41,8 @@ const AddReviewForm = ({ productId, userId, onReviewAdded }) => {
 
     return (
         <div className="add-review-form">
-            <h3> Comment </h3>
+            <h3>Comment</h3>
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Star Rating:</label>

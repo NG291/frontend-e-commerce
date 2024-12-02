@@ -105,7 +105,7 @@ const Cart = () => {
                             {cartItems.map((item) => (
                                 <tr key={item.product.id}>
                                     <td>{item.product.name}</td>
-                                    <td>VND {item.product.price}</td>
+                                    <td> {item.product.price.toLocaleString('vi-VN')} VND</td>
                                     <td>
                                         <Button
                                             variant="secondary"
@@ -121,7 +121,7 @@ const Cart = () => {
                                             +
                                         </Button>
                                     </td>
-                                    <td>VND {(item.product.price * item.quantity).toFixed(2)}</td>
+                                    <td>{(item.product.price * item.quantity).toLocaleString('vi-VN')} VND</td>
                                     <td>
                                         <Button
                                             variant="danger"
@@ -135,7 +135,7 @@ const Cart = () => {
                             </tbody>
                         </Table>
                         <div className="cart-summary">
-                            <h4>Total Amount: VND {calculateTotalAmount().toFixed(2)}</h4>
+                            <h4>Total Amount:{calculateTotalAmount().toLocaleString('vi-VN')} VND</h4>
                         </div>
                         <Row className="payment-section">
                             <Col sm={12} md={6}>
@@ -149,7 +149,7 @@ const Cart = () => {
                             </Col>
                             <Col sm={12} md={6}>
                                 <Button variant="primary" onClick={handleCheckout} block>
-                                    Thanh toán
+                                    Payment
                                 </Button>
                             </Col>
                         </Row>
@@ -160,5 +160,4 @@ const Cart = () => {
         </>
     );
 };
-
 export default Cart;
