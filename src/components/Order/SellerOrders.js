@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosClient from "../../utils/axiosClient";
-import {toast} from "react-toastify";
-import {Container, Row, Col, Card, ListGroup, Spinner, Badge, DropdownButton, Dropdown} from 'react-bootstrap';
-import {BASE_URL} from '../../utils/apiURL';
+import { toast } from "react-toastify";
+import { Container, Row, Col, Card, ListGroup, Spinner, Badge, DropdownButton, Dropdown } from 'react-bootstrap';
+import { BASE_URL } from '../../utils/apiURL';
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-
-const SellerOrders = ({sellerId}) => {
+const SellerOrders = ({ sellerId }) => {
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,12 +19,12 @@ const SellerOrders = ({sellerId}) => {
                 const sellerId = localStorage.getItem("userId");
                 const token = localStorage.getItem('jwtToken');
                 if (!token) {
-                    toast.error('Token is invalid or expired!', {position: "top-center"});
+                    toast.error('Token is invalid or expired!', { position: "top-center" });
                     return;
                 }
 
                 const response = await axiosClient.get(`${BASE_URL}/api/orders/seller/${sellerId}`, {
-                    headers: {Authorization: `Bearer ${token}`}
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setOrders(response.data);
                 setFilteredOrders(response.data);
@@ -51,45 +50,11 @@ const SellerOrders = ({sellerId}) => {
     const formatDate = (date) => {
         if (!date) return "Undefined";
         try {
-            let formattedDate;
-
-            // Kiểm tra nếu date là một mảng
-            if (Array.isArray(date)) {
-                formattedDate = new Date(
-                    date[0],
-                    date[1] - 1, // Tháng phải trừ đi 1 vì JavaScript sử dụng tháng bắt đầu từ 0
-                    date[2],
-                    date[3] || 0,
-                    date[4] || 0,
-                    date[5] || 0,
-                    date[6] || 0
-                );
-            } else {
-                formattedDate = new Date(date);
-            }
-
-            // Kiểm tra xem nếu ngày hợp lệ không
-            if (isNaN(formattedDate)) {
-                return "Undefined";
-            }
-
-            // Định dạng ngày và giờ (bao gồm giờ, phút và giây)
-            const options = {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false // Đặt false để hiển thị theo định dạng 24 giờ
-            };
-
-            return formattedDate.toLocaleString('vi-VN', options);
+            return new Date(date).toLocaleDateString('vi-VN');
         } catch {
             return "Undefined";
         }
     };
-
 
     const formatPrice = (price) => {
         if (isNaN(price) || price === null || price === undefined) return "0 VND";
@@ -97,16 +62,16 @@ const SellerOrders = ({sellerId}) => {
     };
 
     const getStatusLabel = (status) => {
-        if (!status) return {label: "Undefined", color: "secondary"};
+        if (!status) return { label: "Undefined", color: "secondary" };
         switch (status.toLowerCase()) {
             case 'success':
-                return {label: 'Completed', color: 'success'};
+                return { label: 'Completed', color: 'success' };
             case 'cancel':
-                return {label: 'Cancelled', color: 'danger'};
+                return { label: 'Cancelled', color: 'danger' };
             case 'pending':
-                return {label: 'Pending', color: 'warning'};
+                return { label: 'Pending', color: 'warning' };
             default:
-                return {label: "Undefined", color: "secondary"};
+                return { label: "Undefined", color: "secondary" };
         }
     };
 
@@ -124,7 +89,7 @@ const SellerOrders = ({sellerId}) => {
     if (loading) {
         return (
             <Container className="text-center my-5">
-                <Spinner animation="border" variant="primary"/>
+                <Spinner animation="border" variant="primary" />
                 <p>Loading...</p>
             </Container>
         );
@@ -132,48 +97,42 @@ const SellerOrders = ({sellerId}) => {
 
     if (error) {
         return (
-            <>
-                <Header/>
-                <Container className="text-center my-5">
-                    <div className="alert alert-danger" role="alert">
-                        Error: {error}
-                    </div>
-                </Container>
-                <Footer/>
-            </>
+            <Container className="text-center my-5">
+                <div className="alert alert-danger" role="alert">
+                    Error: {error}
+                </div>
+            </Container>
         );
     }
 
     return (
         <div>
-            <Header/>
             <Container className="my-5">
                 <h2 className="text-center mb-4">Seller Order</h2>
 
                 <div className="mb-4 d-flex justify-content-end">
-                    <DropdownButton
-                        id="dropdown-basic-button"
-                        title="Filter by status"
-                        onSelect={handleFilterChange}>
-                        <Dropdown.Item eventKey="all">All</Dropdown.Item>
-                        <Dropdown.Item eventKey="success">Completed order</Dropdown.Item>
-                        <Dropdown.Item eventKey="pending">Pending order</Dropdown.Item>
-                        <Dropdown.Item eventKey="cancel">Cancelled order</Dropdown.Item>
-                    </DropdownButton>
+                        <DropdownButton
+                            id="dropdown-basic-button"
+                            title="Filter by status"
+                            onSelect={handleFilterChange}                          >
+                            <Dropdown.Item eventKey="all">All</Dropdown.Item>
+                            <Dropdown.Item eventKey="success">Completed order</Dropdown.Item>
+                            <Dropdown.Item eventKey="pending">Pending order</Dropdown.Item>
+                            <Dropdown.Item eventKey="cancel">Cancelled order</Dropdown.Item>
+                        </DropdownButton>
                 </div>
 
                 {filteredOrders.length === 0 ? (
                     <p className="text-center text-muted">Order not found!</p>
                 ) : (
                     filteredOrders.map((order) => {
-                        const {label, color} = getStatusLabel(order.status);
+                        const { label, color } = getStatusLabel(order.status);
                         return (
                             <Card key={order.id} className="mb-4 shadow-sm rounded-lg border-0">
                                 <Card.Body>
                                     <Row className="align-items-center">
                                         <Col md={6}>
-                                            <h5 className="mb-2">Order code: <strong>{order.id || "Undefined"}</strong>
-                                            </h5>
+                                            <h5 className="mb-2">Order code: <strong>{order.id || "Undefined"}</strong></h5>
                                             <p className="text-muted">
                                                 <strong>Date created:</strong> {formatDate(order.orderDate)}
                                             </p>
@@ -188,8 +147,7 @@ const SellerOrders = ({sellerId}) => {
                                     <ListGroup variant="flush" className="my-3">
                                         {order.orderItems && order.orderItems.length > 0 ? (
                                             order.orderItems.map((item) => (
-                                                <ListGroup.Item key={item.id}
-                                                                className="d-flex justify-content-between align-items-center border-0 py-2">
+                                                <ListGroup.Item key={item.id} className="d-flex justify-content-between align-items-center border-0 py-2">
                                                     <div className="d-flex align-items-center">
                                                         <img
                                                             src={`${BASE_URL}${item.imageUrl}`}
@@ -216,8 +174,7 @@ const SellerOrders = ({sellerId}) => {
                                     <Row>
                                         <Col>
                                             <h5 className="text-end">
-                                                Total amount: <span
-                                                className="text-danger">{formatPrice(order.totalAmount)}</span>
+                                                Total amount: <span className="text-danger">{formatPrice(order.totalAmount)}</span>
                                             </h5>
                                         </Col>
                                     </Row>
@@ -227,7 +184,6 @@ const SellerOrders = ({sellerId}) => {
                     })
                 )}
             </Container>
-            <Footer/>
         </div>
     );
 };
