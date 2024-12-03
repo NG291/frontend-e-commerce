@@ -104,7 +104,6 @@ const SellerOrders = ({sellerId}) => {
 
     return (
         <div>
-            <Header/>
             <Container className="my-5">
                 <h2 className="text-center mb-4">Seller Order</h2>
 
@@ -185,7 +184,6 @@ const SellerOrders = ({sellerId}) => {
                     })
                 )}
             </Container>
-            <Footer/>
         </div>
     );
 };

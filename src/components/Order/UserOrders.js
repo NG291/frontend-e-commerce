@@ -63,20 +63,28 @@ const UserOrders = () => {
 
     if (loading) {
         return (
+            <>
+            <Header/>
             <Container className="text-center my-5">
                 <Spinner animation="border" variant="primary" />
                 <p>Loading...</p>
             </Container>
+        <Footer/>
+            </>
         );
     }
 
     if (error) {
         return (
+            <>
+                <Header/>
             <Container className="text-center my-5">
                 <div className="alert alert-danger" role="alert">
                     Error: {error}
                 </div>
             </Container>
+                <Footer/>
+            </>
         );
     }
 
@@ -161,7 +169,7 @@ const UserOrders = () => {
                     })
                 )}
             </Container>
-            <Footer />
+            <Footer/>
         </div>
     );
 };

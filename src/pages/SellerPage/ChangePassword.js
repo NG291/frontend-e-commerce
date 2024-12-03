@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../utils/axiosClient";
 import { BASE_URL } from "../../utils/apiURL";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -43,6 +45,8 @@ const ChangePassword = () => {
     };
 
     return (
+        <>
+        <Header/>
         <Container className="my-5 d-flex justify-content-center">
             <div style={{ maxWidth: "400px", width: "100%" }}>
                 <h2 className="text-center mb-4">Change Password</h2>
@@ -118,6 +122,8 @@ const ChangePassword = () => {
                 </Formik>
             </div>
         </Container>
+            <Footer/>
+            </>
     );
 };
 

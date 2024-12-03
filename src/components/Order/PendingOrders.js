@@ -98,7 +98,6 @@ const PendingOrders = () => {
 
     return (
         <>
-            <Header/>
             <div className="pending-orders py-5 my-5">
                 <h2>List of pending orders</h2>
                 {loading ? (
@@ -177,7 +176,7 @@ const PendingOrders = () => {
                     </Modal.Footer>
                 </Modal>
             </div>
-            <Footer/>
+
         </>
     );
 };

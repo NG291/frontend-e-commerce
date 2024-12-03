@@ -105,7 +105,7 @@ const UserPendingOrders = () => {
                     </tbody>
                 </Table>
             )}
-            <Footer />
+            <Footer/>
         </div>
     );
 };
