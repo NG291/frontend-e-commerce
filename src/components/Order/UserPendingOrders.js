@@ -14,8 +14,7 @@ const UserPendingOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-
-    // Hàm lấy danh sách đơn hàng chờ xử lý của người dùng
+    
     const loadPendingOrders = async () => {
         try {
             const userId = localStorage.getItem("userId");
